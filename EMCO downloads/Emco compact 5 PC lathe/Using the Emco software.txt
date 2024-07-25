@@ -1,0 +1,74 @@
+Using the Emco lathe software
+
+The following instructions are for using the Emco software on a Windows 98SE machine. These instructions will probably work with some other versions of Windows, but I have not tried any.
+
+The Emco software is DOS based and makes direct calls to the mouse driver, this action is regarded as bad programming and is one of the things that Windows eventually eliminated, direct programmer access.
+
+It has proven impossible to find a mouse driver that will load into a DOS-window when running win98SE. This means the Emco software has to be run from DOS so a boot disk is needed to start the computer and side-step launching win98SE. 
+
+The fact that the Emco software makes direct calls to the mouse driver meant that it was a search and half to find a driver that worked. I dug through all my old DOS stuff and found 5 different driver diskettes. The Logitech I have uploaded to the Files section seems to work fine. None of the others worked completely. 
+
+This mouse driver is for the BUS Mouse, that is, the one that plugs into a MOUSE port on the computer and NOT the serial port. I have no way of testing it with a serial mouse to see if it also works for that. My guess is NOT.
+
+I am not sure of the legality of using the Logitech driver as it bears their copyright. I have several Logitech mouse, so I am OK with it, but DOWNLOAD AND USE AT YOUR OWN RISK. 
+
+The process...
+Boot to Windows 98SE, go online and navigate to the newsgroup Files section.
+
+Download the 2.8 Software from the Files section.
+Download the CONFIG.SYS file from the Files section.
+Download the AUTOEXEC.BAT file from the Files section.
+Download the MOUSE.COM file from the Files section.
+
+Save them to a temporary folder on your hard drive.
+
+Use Windows Explorer and navigate to the 2.8 software and double-click it to unzip the contents. If you do not have an unzipper, then got to this website and download and install the free ZipGenius.
+
+http://www.zipgenius.it
+
+With all the files unzipped, look for a file name I.EXE and double-click it. This is the installer for the Emco software.
+
+I accepted all of the defaults except for the Printer, I chose "Epson FX" as it is a common and basic printer that should need no extra drivers.
+
+OK, that's the end of the Emco stuff. You now need to make a boot disk so that the computer will boot straight to DOS as the mouse will not work in the Emco software when run from a DOS-box within windows 98SE. Yell at Emco for that.
+
+Get a floppy disk and insert it in the drive.
+
+Use Windows Explorer and select the floppy drive.
+
+Right click and select "Format..."
+
+Check "Full" for "Format type"
+
+Check "Copy System files" for the "Other options"
+
+Click "Start"
+
+When that's done, use Windows Explorer to find the CONFIG.SYS file you downloaded from the Files section of the group and drag it to the newly formatted floppy.
+
+use Windows Explorer to find the AUTOEXEC.BAT file you downloaded from the Files section of the group and drag it to the newly formatted floppy.
+
+use Windows Explorer to find the MOUSE.COM file you downloaded from the Files section of the group and drag it to the newly formatted floppy.
+
+Use Windows Explorer to navigate to C:\WINDOWS 
+
+Look for a file named HIMEM.SYS and drag it to the newly formatted floppy.
+
+Now you have a DOS boot disk that will allocate enough memory to run the Emco software.
+
+Now it gets a bit trickier as you have to tell the operating system to boot from the floppy and not the hard disk. If you are not comfortable making changes to the computer's CMOS memory, or don't know what that is, then find someone to help you who does. Messing with the CMOS memory can cause serious problems with your computer if you do NOT know what you are doing.
+
+Enough of the scary stuff. Enter the CMOS setup and look for something along the lines of...
+
+Boot sequence
+Boot order
+
+The terms will vary between BIOS systems used n the computer motherboard. They will all provide the same options and you want to set the boot sequence to...
+
+FDD - HDD
+
+Ignore anything after the HDD
+
+Insert your new boot floppy into the drive and save the CMOS memory and exit. The system will automatically reboot. If all goes well, it will boot from the floppy and move to the hard drive, loading the mouse driver and Emco software as it goes.
+
+Go make chips.

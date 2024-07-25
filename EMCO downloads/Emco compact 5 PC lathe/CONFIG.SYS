@@ -1,0 +1,6 @@
+device=himem.sys /testmem:off
+files=10
+buffers=10
+dos=high,umb
+stacks=9,256
+lastdrive=z

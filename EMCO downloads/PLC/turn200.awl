@@ -1,0 +1,3255 @@
+[Info]
+Version=1.28
+CheckChange=00551e76
+//
+//   ***********************************************************************
+//   *                                                                     *
+//   *                SPS-PROGRAMM FUER DIE E200                           *
+//   *                   MIT SIEMENS-Antriebe                              *
+//   *                                                                     *
+//   *      Designed by Schnoell Andreas          27.08.2009               *
+//   *                                                                     *
+//   *                                                                     *
+//   *                                                                     *
+//   ***********************************************************************
+//       U   DB1.DBX 1370.0; // 1.SPS-SCHLEIFENDURCHLAUF
+//   INHALTSVERZEICHNIS:
+//      OB  1   ORGANISATIONSBAUSTEIN
+//      FC  0
+//      FC  1   SCHMIERMITTEL
+//      FC  2   CYCLISCHE ÜBERWACHUNG PIC
+//      FC  3   HA STEUERUNG und LEISTUNG SPINDEL0 (M3/M4/M5)
+//      FC  4   X,Z-ACHSE, Imp.und Reglerfreigabe
+//      FC  5   JOG ACHSEN
+//      FC  6   REF ACHSEN
+//      FC  7   AUX-ON
+//      FC  8   NC-STARTVERR. UND BEDIENTASTEN
+//      FC  9   RESET
+//      FC 10   BEI PROGRAMM ENDE RESET ODER NEUSTART
+//      FC 11   Neues Sicherheitskonzept
+//      FC 12   SONDERBETRIEB
+//      FC 13   INITIALISIERUNGEN UEBERWACHUNGEN UND ALARME
+//      FC 14   PLC NC-UEBERGABE UND AFG/EFG/SFG
+//      FC 15   MELDUNGEN 7000
+//      FC 16   Stillstandsueberwachung
+//      FC 17   ER Modul Netzeinspeisung
+//      FC 18   KUEHLMITTEL Schalter
+//      FC 19   SPINDEL HALT/START
+//      FC 20   BETREIBSARTENUMSCHALTUNG und INC Betrieb
+//      FC 21   WERKZEUGBESTAETIGUNG
+//      FC 22   ENDSCHALTER ACHSEN UND PINOLE
+//      FC 23   LAMPENIMPULS
+//      FC 24   STUECKZAEHLER
+//      FC 25   KUEHLMITTEL_M8_M9
+//      FC 26
+//      FC 27
+//      FC 28
+//      FC 31
+//      FC 32
+//      FC 34
+//      FC 35
+//      FC 40
+//
+//
+//   SET; = 1
+//   CLR; = 0
+//
+//   TIMER:
+//   SI = IMPULS
+//        DIE MAXIMALE IMPULSLÄNGE ENTSPRICHT DER PROGRAMMIERTEN ZEIT
+//        DIE MINIMALE IMPULSLÄNGE ENTSPRICHT DER LÄNGE DES EINGANGSSIGNALES
+//
+//   SV = IMPULS (VERLÄNGERT)
+//        DIE IMPULSLÄNGE ENTSPRICHT DER PROGRAMMIERTEN ZEIT
+//        DIE DAUER DES EINGANGSSIGNALES HAT KEINEN EINFLUSS
+//
+//   SE = EINSCHALTVERZÖGERUNG
+//        DIE VERZÖGERUNGSDAUER ENTSPRICHT DER PROGRAMMIERTEN ZEIT
+//        DAS EINGANGSSIGNAL MUSS MINDESTENS SOLANGE ANLIEGEN
+//
+//   SS = EINSCHALTVERZÖGERUNG (SPEICHERND)
+//        DIE VERZÖGERUNGSDAUER ENTSPRICHT DER PROGRAMMIERTEN ZEIT
+//        DIE DAUER DES EINGANGSSIGNALES HAT KEINEN EINFLUSS
+//
+//   SA = AUSSCHALTIMPULS
+//        DIE IMPULSLÄNGE ENTSPRICHT DER PROGRAMMIERTEN ZEIT
+//        DER TIMER WECHSELT VON "0"AUF "1" UND DIE ZEIT WIRD GESTARTET
+//            WENN DAS EINGANGSSIGNAL VON "1" AUF "0" GEHT.
+//
+// ZEITBASIS     BELEGUNG DES ZEITWORTES
+//               15......8  7.......0
+//    0,01 S     0000 0000  0000 0000
+//    0,1  S     0001 0000  0000 0000
+//    1    S     0010 0000  0000 0000
+//   10    S     0011 0000  0000 0000
+//                     H     Z     E   = ZEITWERT IM BCD-FORMAT
+//                 00                  = BINÄRCODE FUER ZEITBASIS
+//
+//
+//  ÄNDERUNGEN ODER PROBLEME BEI 8**********  oder 8(((((((
+//  1. STECKERBELEGUNG Digitale Servomodule Y5A028000
+//
+//
+//  -A111 X-ACHSE
+//
+//  X3:5  Led H2   E 0.0  // X-ACHSE SERVO-READY
+//  X3:11 Led H1   A 0.0  // X-ACHSE Reglerfreigabe
+//  X3:12 Led H3   A 11.0 // Kopplung aktiv
+//  X3:13 Led H4   A 11.1 // Parkende X-Achse
+//
+//  -A113 Z-ACHSE
+//
+//  X3:5  Led H2   E 0.2  // Z-ACHSE SERVO-READY
+//  X3:11 Led H1   A 0.2  // Z-ACHSE Reglerfreigabe
+//  X3:12 Led H3   A 11.3 // Kopplung aktiv
+//  X3:13 Led H4   A 11.4 // Parkende Z-Achse
+//
+//  -A114 Hauptantrieb
+//
+//  X3:1  Stromistwert HAUPTSPINDEL
+//  X3:2  GND
+//  X3:5  Led H2   E 0.3  // Hauptantrieb SERVO-READY
+//  X3:11 Led H1   A 0.3  // +24V Ausgang  Hauptantrieb Reglerfreigabe
+//  X3:12 Led H3   A 11.5
+//  X3:13 Led H4   A 11.6
+//
+//
+//  4. EIN UND AUSGANGSBELEGUNG AUF DEM REF-MODUL Y5A017000
+//
+//  -A131
+//
+//  X5:1     E 16.0   REF1     // REF Schalter X-Achse
+//  X5:2     E 16.1   REF2
+//  X5:3     E 16.2   REF3     // REF Schalter Z-Achse
+//  X5:4     E 16.3   REF4
+//  X5:5     E 16.4   REF5
+//  X5:6     E 17.0   SYNC1    // SYNC BERO X-Achse
+//  X5:7     E 17.1   SYNC2
+//  X5:8     E 17.2   SYNC3    // SYNC BERO Z-Achse
+//  X5:9     E 17.3   SYNC4
+//  X5:10    E 17.4   SYNC5
+//  X5:11    E 2.3
+//  X6:1     E 2.0
+//  X6:2     E 2.1
+//  X6:3     DB20.DBX 827.0
+//  X6:4     E 2.4 // ENDSCHALTER PINOLE
+//  X6:5     E 2.5
+//  X6:6     E 2.6
+//  X6:7     E 2.7   5V  EINGANG
+//  X6:8     E 3.0   5V  EINGANG
+//  X6:9     A 3.5
+//  X6:10    A 3.4
+//  X6:11    A 3.3
+//
+//
+//  5. PINBELEGUNG AUF ERSTEM EINGANGS-MODUL Y5A018000
+//
+//  -A132
+//
+//  X5:1     DB20.DBX 826.6
+//  X5:2     DB20.DBX 827.3
+//  X5:3     DB20.DBX 828.3
+//  X5:4     DB20.DBX 827.5
+//  X5:5     DB20.DBX 827.7 // QUITTIER TASTE WERKZEUGWECHSEL
+//  X5:6     DB20.DBX 826.2
+//  X5:7     DB20.DBX 826.3
+//  X5:8     E 4.7
+//  X5:9     DB20.DBX 826.1 // TASTE NC START VON BEDIENPULT
+//  X5:10    DB20.DBX 827.1 // TASTE NC STOPP VON BEDIENPULT
+//  X5:11    DB20.DBX 827.4 // TASTE EILGANG
+//  X6:1     E 5.3
+//  X6:2     DB20.DBX 826.0
+//  X6:3     DB20.DBX 826.4
+//  X6:4     E 5.6
+//  X6:5     E 5.7
+//  X6:6     E 6.0
+//  X6:7     E 6.1
+//  X6:8     DB20.DBX 827.6 // Schluesselschalter auf Handbetrieb
+//  X6:9     E 6.3
+//  X6:10    E 6.4
+//  X6:11    E 6.5
+//  6. PINBELEGUNG AUF DEM ZWEITEM EINGANGS-MODUL Y5A018000
+//
+//  -A133
+//
+//  X5:1     E 6.6
+//  X5:2     E 6.7
+//  X5:3     E 7.0
+//  X5:4     E 7.1
+//  X5:5     E 7.2
+//  X5:6     E 7.3
+//  X5:7     E 7.4
+//  X5:8     E 7.5
+//  X5:9     E 7.6
+//  X5:10    E 7.7
+//  X5:11    E 8.0
+//  X6:1     E 8.1
+//  X6:2     E 8.2
+//  X6:3     E 8.3
+//  X6:4     E 8.4
+//  X6:5     E 8.5
+//  X6:6     E 8.6
+//  X6:7     E 8.7
+//  X6:8     E 9.0
+//  X6:9     E 9.1
+//  X6:10    E 9.2
+//  X6:11    E 9.3
+//
+//
+//
+//  7. PINBELEGUNG EINGÄNGE AUF DER BACK-PLANE Y5A023000
+//
+//  -A100
+//
+//  X422:1   E 3.1 // NOT AUS von USBSPS X3.3
+//  X422:2   E 3.2
+//  X422:3   E 3.3
+//  X422:4   E 3.4
+//  X422:5   E 3.5
+//  X422:6   E 3.6 // MOTORSCHUTZ KUEHLMITTELPUMPE
+//  X422:7   E 3.7
+//  X422:8   E 9.4
+//  X422:9   E 9.5 // OELSTAND ZENTRALSCHMIERUNG
+//  X422:10  E 9.6
+//  X422:11  E 9.7
+//
+//
+//
+//  8. PINBELEGUNG AUSGÄNGE AUF DER BACK-PLANE Y5A023000
+//
+//  -A100
+//
+//  X421:1   +24 V     24V VERSORGUNG VON NOTAUSTASTER
+//  X421:2   +24 V
+//  X421:3   GND
+//  X421:4   A 9.0
+//  X421:5   A 9.1
+//  X421:6   A 9.2
+//  X421:7   A 9.3
+//  X421:8   A 9.4 // Leistung Kühlmittelpumpe
+//  X421:9   A 9.5 // NOT AUS für NE Modul Klemme 64
+//  X421:10  A 9.6
+//  X421:11  A 9.7
+//
+//
+//  X420:1   +24 V     24V VERSORGUNG VON Tuer ZU
+//  X420:2   +24 V
+//  X420:3   GND
+//  X420:4   A 10.0
+//  X420:5   A 10.1
+//  X420:6   A 10.2
+//  X420:7   A 10.3 // LAMPE NC START TASTE
+//  X420:8   A 10.4 // LAMPE HILFSANTRIEBE EIN TASTE
+//  X420:9   A 10.5 // LAMPE WERKZEUGBESTAETIGUNG TASTE
+//  X420:10  A 10.6
+//  X420:11  A 10.7  // Tuerfreigaberelais K3 ein auf Sicherheitsmodul Y4B135000
+//
+//
+//  9. PINBELEGUNG AUF DEM ERSTEM AUSGANGS-MODUL Y5A019000
+//
+//  -A134
+//
+//  X5:1     A 4.0
+//  X5:2     A 4.1
+//  X5:3     A 4.2
+//  X5:4     A 4.3
+//  X5:5     A 4.4
+//  X5:6     A 4.5
+//  X5:7     A 4.6
+//  X5:8     A 4.7
+//  X5:9     A 5.0
+//  X5:10    A 5.1
+//
+//
+//  X6:1     A 5.2
+//  X6:2     A 5.3
+//  X6:3     A 5.4
+//  X6:4     A 5.5
+//  X6:5     A 5.6
+//  X6:6     A 5.7
+//  X6:7     A 6.0
+//  X6:8     A 6.1
+//  X6:9     A 6.2
+//  X6:10    A 6.3
+//
+//
+//
+//  10. PINBELEGUNG AUF DEM ZWEITEM AUSGANGS-MODUL Y5A019000
+//
+//  -A135
+//
+//  X5:1     A 6.4 =
+//  X5:2     A 6.5 =
+//  X5:3     A 6.6 =
+//  X5:4     A 6.7 =
+//  X5:5     A 7.0 =
+//  X5:6     A 7.1 =
+//  X5:7     A 7.2 =
+//  X5:8     A 7.3 =
+//  X5:9     A 7.4 =
+//  X5:10    A 7.5 =
+//
+//
+//  X6:1     A 7.6 =
+//  X6:2     A 7.7 =
+//  X6:3     A 8.0 =
+//  X6:4     A 8.1 =
+//  X6:5     A 8.2 =
+//  X6:6     A 8.3 =
+//  X6:7     A 8.4 =
+//  X6:8     A 8.5 =
+//  X6:9     A 8.6
+//  X6:10    A 8.7
+//
+;  BITNUMMERN DER PC-UND MASCHINENSTEUERTAFEL TASTEN:
+;  BITNR.:        PC:     MSTT:      MSTT:
+;DB1.DBX 1374.0   -----     1        ----------
+;DB1.DBX 1374.1   -----     2        | 1| 2| 3|
+;DB1.DBX 1374.7   -----     3        ----------
+;DB1.DBX 1374.6   -----     6        | 4| 5| 6|
+;DB20.DBX 294.7   -----    11        ----------
+;DB20.DBX 295.0   -----    12        | 7| 8| 9|
+;DB20.DBX 294.2   CTRL ^    5        ----------
+;DB20.DBX 294.5   CTRL 1    9        |10|11|12|
+;DB20.DBX 294.6   CTRL 2   10        ----------
+;DB20.DBX 294.1   CTRL 3    4        |13|  |14|
+;DB20.DBX 295.1   CTRL 4    -        ----------
+;DB20.DBX 295.2   CTRL 5    -
+;DB20.DBX 295.3   CTRL 6    -
+;DB20.DBX 295.4   CTRL 7    -
+;DB1.DBX 1374.4   CTRL 8   14
+;DB20.DBX 294.4   CTRL 9    8
+;DB20.DBX 294.3   CTRL 0    7
+;DB1.DBX 1374.3   CTRL ß   13
+;DB1.DBX 1374.2   CTRL `    -
+;DB20.DBX 295.7    // TASTE EILGANGSUEBERLAGERUNG
+FUNCTION FC 16 : VOID
+NAME: Stillstandsueberwachung
+BEGIN
+NETWORK 1
+TITLE =  Stillstandsueberwachung deaktivieren
+// Signale für USBSPS:
+// DB1.DBX 1598.0  // X3.6 Impulsfreigabe ER-ModulHauptantrieb für USBSPS
+// DB1.DBX 1592.6  // X3.7 Impulsfreigabe Hauptantrieb für USBSPS
+// DB1.DBX 1598.2 = 0 Achs-Stillstandsueberwachung aktivieren
+//                = 1 Achs-Stillstandsueberwachung deaktivieren
+// DB1.DBX 1598.3 = 0 Spindel-Stillstandsueberwachung aktivieren
+//                = 1 Spindel-Stillstandsueberwachung deaktivieren
+// Stillstandsüberwachung nur bei Hanradbetrieb deaktivieren!!!
+O   DB20.DBX 324.0  // Programm läuft
+S   M 1.2           // HM Spindel-Stillstandsueberwachung deaktivieren
+UN  DB20.DBX 340.0  // Programm läuft
+U   M 114.3;        // HA ISTDREHZAHL KLEINER 20U/MIN
+R   M 1.2           // HM Spindel-Stillstandsueberwachung deaktivieren
+U   M 1.2           // HM Spindel-Stillstandsueberwachung deaktivieren
+=   DB1.DBX 1598.3  // 1=Spindel-Stillstandsueberwachung deaktivieren
+END_FUNCTION
+FUNCTION FC  2 : VOID
+NAME: CYCLISCHE ÜBERWACHUNG PIC
+BEGIN
+//   A 3.4          // Alive Impuls zum PIC-Controller
+//   E 3.2          // Alive Eingang von PIC-Controller
+//  X422:1   E 3.1  // Nicht NOT AUS von USBSPS X3.3
+NETWORK 2
+TITLE =  Impuls für PIC
+U   M 11.7          // USBSPS auf Ueberwachungsbetrieb eingestellt
+FP  M 10.3          // FM USBSPS auf Ueberwachungsbetrieb eingestellt
+U   E 3.2;          // Alive Eingang von PIC-Controller
+FN  M 24.0;         // Negativ FM Alive Eingang E4.7 von PIC-Controller
+U   E 3.2;          // Alive Eingang von PIC-Controller
+FP  M 24.1;         // Positiv FM Alive Eingang E4.7 von PIC-Controller
+U   E 3.1           // NOT AUS von USBSPS X3.3
+FN  M 24.6;         // Negativ FM NOT AUS von USBSPS X3.3
+U   E 3.1           // NOT AUS von USBSPS X3.3
+FP  M 24.7;         // Positiv FM NOT AUS von USBSPS X3.3
+O   M 24.7;         // Positiv FM NOT AUS von USBSPS X3.3
+O   M 24.0;         // Negativ FM Alive Eingang E4.7 von PIC-Controller
+O   M 10.3          // FM USBSPS auf Ueberwachungsbetrieb eingestellt
+L   S5TIME#30MS
+SV  T 2;            // IMPULS (VERLÄNGERT)
+U   T 2;
+=   A 3.4           // Alive Impuls zum PIC-Controller
+U   A 3.4           // Alive Impuls zum PIC-Controller
+FN  M 24.2;         // Negativ FM Alive Impuls A 3.4 zum PIC-Controller
+U   A 3.4           // Alive Impuls zum PIC-Controller
+FP  M 24.3;         // Positiv FM Alive Impuls A 3.4 zum PIC-Controller
+NETWORK 3
+TITLE =  Zeitüberwachung PIC
+// Überwachungszeit Resetieren:
+O   M 24.3;         // Positiv FM Alive Impuls A 3.4 zum PIC-Controller
+O   M 24.6;         // Negativ FM NOT AUS von USBSPS X3.3
+ON  E 3.1           // NOT AUS von USBSPS X3.3
+R   T 3;
+// Überwachungszeit Starten:
+O   M 24.2;         // Negativ FM Alive Impuls A 3.4 zum PIC-Controller
+O   M 24.1;         // Positiv FM Alive Eingang E 3.2 von PIC-Controller
+U   E 3.1           // NOT AUS von USBSPS X3.3
+L   S5TIME#70MS     // Überwachungszeit 1,5S für PIC
+SS  T 3;            // Einschaltverzögerung (SPEICHERND)
+NETWORK 4
+TITLE =  Alarm 6074 Keine Rückmeldung von USB-SPS
+U   A 3.4           // Alive Impuls zum PIC-Controller
+S   M 24.4          // 8((( AUX ON PIC OK
+U   T 3;
+R   M 24.4          // 8((( AUX ON PIC OK
+U   M 24.4          // 8((( AUX ON PIC OK
+FN  M 24.5          // Meldung Time-Out PIC
+U   M 24.5           // Meldung Time-Out PIC
+;       UN  DB2.DBX 0.0;    // Alarm 6000  NOT AUS
+S   DB2.DBX 9.2;     // Alarm 6074 Keine Rückmeldung von USB-SPS
+O   DB1.DBX 1370.3; // RESETTASTE GEDRÜCKT
+R   DB2.DBX 9.2;    // Alarm 6074 Keine Rückmeldung von USB-SPS
+END_FUNCTION
+FUNCTION FC 21: VOID
+NAME: WERKZEUGBESTAETIGUNG
+BEGIN
+NETWORK
+TITLE = Neue Werkzeugbestätigung aktiv
+U   DB1.DBX 1370.0; // 1.SPS SCHLEIFENDURCHLAUF
+=   DB20.DBX 382.7  // Neue Werkzeugbestätigung aktiv
+NETWORK
+TITLE = FM Werkzeugwechselbestätigungs Taster
+U   DB20.DBX 827.7; // QUITTIER TASTE WERKZEUGWECHSEL
+FP  M 35.2          // FM Werkzeugwechselbestätigungs Taster
+NETWORK
+TITLE = Neues Werkzeug einwechseln
+U   DB20.DBX 182.0; // NEUES T-WORT
+SPBN M2100;
+L   DB20.DBW 184;   // T-WORT
+L   DB20.DBW 356;   // AKTIVES WERKZEUG IN DB20
+<>I;                // VERGLEICH AUF UNGLEICH
+S   M 44.0          // Neues Werkzeug einwechseln
+M2100:NOP 0;
+O   DB1.DBX 1440.0; // RESET AUSGELÖST
+O   DB1.DBX 1370.3; // RESET TASTE GEDRUECKT
+R   M 58.1;         // HM ANFORDERUNG NEUES T-WORT
+R   M 44.0          // Neues Werkzeug einwechseln
+R   M 44.2          // TÜR wurde geöffnet
+NETWORK
+TITLE = Neues Werkzeug rückmelden
+U   M 12.1          // TÜR offen
+FP  M 44.1          // FM TÜR offen
+U   M 44.1          // FM TÜR offen
+S   M 44.2          // TÜR wurde geöffnet
+U   M 35.2          // FM Werkzeugwechselbestätigungs Taster
+U   M 114.3;        // ISTDREHZAHL KLEINER 20U/MIN
+U   M 58.1;         // HM ANFORDERUNG NEUES T-WORT
+U   M 44.2          // TÜR wurde geöffnet
+ON  DB20.DBX 324.0; // Programm läuft
+U   M 44.0          // Neues Werkzeug einwechseln
+SPBN M2101;
+L   DB20.DBW 184;   // T-WORT
+T   DB20.DBW 356;   // AKTIVES WERKZEUG IN DB20
+R   M 44.0          // Neues Werkzeug einwechseln
+R   M 58.1;         // HM ANFORDERUNG NEUES T-WORT
+R   M 44.2          // TÜR wurde geöffnet
+M2101:NOP 0;
+NETWORK
+TITLE = Neues Werkzeug einspannen
+U   DB20.DBX 324.0; // Programm läuft
+U   M 44.0          // Neues Werkzeug einwechseln
+FP  M 58.0;         // FM ANFORDERUNG NEUES T-WORT
+U   M 58.0;         // FM ANFORDERUNG NEUES T-WORT
+S   M 58.1;         // HM ANFORDERUNG NEUES T-WORT
+O   DB1.DBX 1440.0; // RESET AUSGELÖST
+O   DB1.DBX 1370.3; // RESET TASTE GEDRUECKT
+R   M 58.1;         // HM ANFORDERUNG NEUES T-WORT
+R   M 44.0          // Neues Werkzeug einwechseln
+NETWORK
+TITLE = MELDUNG 7066 WERKZUEG BESTAETIGEN
+O   M 59.1;         // HM FREIGABE WERKZEUGBESTAETIGUNG
+O   M 58.1;         // HM ANFORDERUNG NEUES T-WORT
+=   M 20.1          // LAMPE WERKZEUGBESTAETIGUNG TASTE
+=   M 42.3;         // HM MELDUNG 7066 WERKZUEG BESTAETIGEN
+U   M 20.1          // LAMPE WERKZEUGBESTAETIGUNG TASTE
+U   T 47;
+=   DB20.DBX 847.7; // LAMPE WERKZEUGBESTAETIGUNG TASTE
+END_FUNCTION
+FUNCTION FC 24 : VOID
+NAME: STUECKZAEHLER
+BEGIN
+NETWORK
+TITLE = STÜCKZÄHLER
+UN  DB20.DBX 192.2; // M2 dyn
+UN  DB20.DBX 195.6; // M30 dyn
+O   DB20.DBX 324.2; // DRYRUN AKTIV
+SPB   M214;
+SET;
+L   DB15.DBD 4;     // Zähler
+L   DW#16#000F_423F;// 999999 STÜCK
+<>D;
+SPB   M211;
+SET;
+L   DW#16#0000_0000;
+T   DB15.DBD 4;
+M211:  NOP 0;
+L   DB15.DBD 4;
+L   DW#16#0000_0001;
++D;                 // Stückzähler +1 low
+T   DB15.DBD 4;
+L   DB15.DBD 8;     // CHARGENZÄHLER
+L   DW#16#000F_423F;// 999999 STÜCK
+<>D;
+SPB   M213;
+SET;
+L   DW#16#0000_0000;
+T   DB15.DBD 8;
+M213:  NOP 0;
+L   DB15.DBD 8;
+L   DW#16#0000_0001;
++D;                 // Stückzähler +1 low
+T   DB15.DBD 8;
+M214:  L   DB15.DBD 0;     // Sollstückz
+L   DW#16#0000_0000;
+<>D;
+SPB   M202;
+SPA   M201;
+M202:  NOP 0;
+L   DB15.DBD 4;     // Stückz.
+L   DB15.DBD 0;     // Sollstückz.
+<D;
+SPB   M201;
+SET;
+S   M 21.3;         // HM 7043  SOLLSTÜCKZAHL ERREICHT
+L   DW#16#0;
+T   DB15.DBD 4;
+M201:  NOP 0;
+O   DB1.DBX 1370.2; // QUITTIERTASTE GEDRÜCKT
+O   DB1.DBX 1370.3; // RESETTASTE GEDRÜCKT
+R   M 21.3;         // HM 7043  SOLLSTÜCKZAHL ERREICHT
+END_FUNCTION
+FUNCTION FC 20: VOID
+NAME: BETRIEBSARTENUMSCHALTUNG
+BEGIN
+NETWORK
+TITLE = Betriebsartanforderung REFERENZ
+U   DB20.DBX 0.0;   // BA WECHSELANFORDERUNG
+U   DB20.DBX 289.2  // Betriebsartanforderung REFERENZ
+U   M 120.1;        // REF ACHSEN FREIGABE
+=   DB20.DBX 289.2  // Betriebsartanforderung REFERENZ
+NETWORK
+TITLE = INC Umschaltung ausloesen
+ON  DB1.DBX 1370.0; // 1.SPS-SCHLEIFENDURCHLAUF
+FP  M 57.6          // FM 1.SPS-SCHLEIFENDURCHLAUF
+UN   DB20.DBX 826.5;          // INC klein
+UN   M 57.5;         // FM BETREIBSART INC groß
+FP   M 57.3          // FM BETREIBSART INC klein
+;       UN  E 5.6;          // INC 100
+;       UN  E 5.7;          // INC 1
+;       FP  M 57.4          // FM BETREIBSART INC 10
+U   DB20.DBX 826.5;          // INC klein
+UN  M 57.3;         // FM BETREIBSART INC klein
+FP  M 57.5          // FM BETREIBSART INC groß
+O   M 57.6          // FM 1.SPS-SCHLEIFENDURCHLAUF
+O   M 57.3          // FM BETREIBSART INC klein
+;       O   M 57.4          // FM BETREIBSART INC 10
+O   M 57.5          // FM BETREIBSART INC groß
+O   M 122.5;        // FM REFERENZPUNKT AKTIV
+UN  DB20.DBX 327.2; // BETRIEBSART REFEREN
+=   M 57.7          // FM INC Umschaltung ausloesen
+NETWORK
+TITLE = Handrad An-Abwahl
+O   DB20.DBX 289.2  // Anforderung BETREIBSART Referenzieren
+O   DB20.DBX 288.4  // Anforderung BETREIBSART Automatik
+U   DB20.DBX 0.0;   // BA WECHSELANFORDERUNG
+=   DB1.DBX 1440.3; // Handrad Abwahl
+UN  DB20.DBX 289.2  // Anforderung BETREIBSART Referenzieren
+UN  DB20.DBX 288.4  // Anforderung BETREIBSART Automatik
+U   DB20.DBX 0.0;   // BA WECHSELANFORDERUNG
+=   DB1.DBX 1440.2; // Handrad Anwahl
+NETWORK
+TITLE = BETRIEBSARTEN UMSCHALTUNG INC 1/10 KLEIN
+O   M 57.7          // FM INC Umschaltung ausloesen
+UN  DB20.DBX 826.5  // INC klein
+FP  M 57.0;         // FM INC klein
+U   M 57.0;         // FM INC klein
+UN  DB10.DBX 78.1   // ANWAHL INC1/10
+SPBN M001
+=   DB20.DBX 288.5  // BETREIBSART INC 1
+=   DB20.DBX 0.0;   // BA WECHSELANFORDERUNG
+=   DB1.DBX 1440.2; // Handrad Anwahl
+L   +1.0E-06;
+T   DB1.DBD 1736;    // INC Schrittweite
+M001: NOP 0;
+U   M 57.0;         // FM INC klein
+U   DB10.DBX 78.1   // ANWAHL INC10/100
+SPBN M002
+=   DB20.DBX 288.6  // BETREIBSART INC 10
+=   DB20.DBX 0.0;   // BA WECHSELANFORDERUNG
+=   DB1.DBX 1440.2; // Handrad Anwahl
+L   +1.0E-05;
+T   DB1.DBD 1736;    // INC Schrittweite
+M002: NOP 0;
+NETWORK
+TITLE = BETRIEBSARTEN UMSCHALTUNG INC 10/100 GROSS
+O   M 57.7          // FM INC Umschaltung ausloesen
+U   DB20.DBX 826.5; // INC groß
+FP  M 57.2;         // FM INC groß
+U   M 57.2;         // FM INC klein
+UN(
+O   DB10.DBX 78.0   // ANWAHL 1/100
+O   DB10.DBX 78.1   // ANWAHL 10/100
+)
+SPBN M003
+=   DB20.DBX 288.6  // BETREIBSART INC 10
+=   DB20.DBX 0.0;   // BA WECHSELANFORDERUNG
+=   DB1.DBX 1440.2; // Handrad Anwahl
+L   +1.0E-05;
+T   DB1.DBD 1736;    // INC Schrittweite
+M003: NOP 0;
+U   M 57.2;         // FM INC groß
+U(
+O   DB10.DBX 78.0   // ANWAHL 1/100
+O   DB10.DBX 78.1   // ANWAHL 10/100
+)
+SPBN M004
+=   DB20.DBX 288.7  // BETREIBSART INC 100
+=   DB20.DBX 0.0;   // BA WECHSELANFORDERUNG
+=   DB1.DBX 1440.2; // Handrad Anwahl
+=   M 57.5
+L   +1.0E-04;
+T   DB1.DBD 1736;    // INC Schrittweite
+M004: NOP 0;
+NETWORK
+TITLE = BETRIEBSARTEN UMSCHALTUNG VON REF AUF INC UND FREIGABE
+UN  M 59.3;         // FREIGABE WERKZEUG NACH REFERNZIEREN
+U   DB20.DBX 324.4  // REFERENZPUNKT AKTIV
+FP  M 59.0;         // FM REFENZPUNKTE AKTIV
+U   M 59.0;         // FM REFENZPUNKTE AKTIV
+S   M 59.1;         // HM FREIGABE REFENZPUNKT AKTIV
+U   M 59.1;         // HM FREIGABE REFENZPUNKT AKTIV
+U   DB20.DBX 827.7; // TASTE WERKZEUGBESTAETIGUNG
+FP  M 59.2;         // FM TASTE WERKZEUGBESTAETIGUNG NACH REF.
+U   M 59.2;         // FM TASTE WERKZEUGBESTAETIGUNG
+U   M 59.1;         // HM FREIGABE REFENZPUNKT AKTIV
+S   M 59.3;         // FREIGABE WERKZEUG NACH REFERNZIEREN
+FP  M 59.4;         // FM FREIGABE WERKZEUG NACH REFERNZIEREN
+O   M 59.2;         // FM TASTE WERKZEUGBESTAETIGUNG NACH REF.
+R   M 59.1;         // HM FREIGABE REFENZPUNKT AKTIV
+END_FUNCTION
+FUNCTION FC 11 : VOID
+NAME: Neues Sicherheitskonzept
+BEGIN
+NETWORK
+TITLE = NOT-AUS Überlistungsschutz
+//  X421:9   A 9.5 // NOT AUS für NE Modul Klemme 64
+UN  DB20.DBX 827.0  // NICHT NOT-AUS
+U   M 110.0;        // AUX-ON
+U   M 2.0           // SUMME aller NOT-AUS Möglichkeiten
+U   M 114.3;        // HA ISTDREHZAHL KLEINER 20U/MIN
+S   A 9.5           // NOT AUS für NE Modul Klemme 64
+ON  E 3.1;
+O   DB20.DBX 827.0  // NICHT NOT-AUS
+ON  M 2.0           // SUMME aller NOT-AUS Möglichkeiten
+O   DB2.DBX 0.0;    // 6000  NOT-AUS
+R   A 9.5           // NOT AUS für NE Modul Klemme 64
+U   A 9.5           // NOT AUS für NE Modul Klemme 64
+FN  M 14.0
+U   M 14.0
+L   S5TIME#3  S     // 3S Einschaltverzögerung
+SS  T 1;            // 3S Einschaltverzögerung nach NOT AUS für NE Modul Klemme 64
+O   DB1.DBX 1370.2; // QUITTIERTASTE GEDRÜCKT
+O   DB1.DBX 1370.3; // RESETTASTE GEDRÜCKT
+R   T 1;            // 3S Einschaltverzögerung nach NOT AUS für NE Modul Klemme 64
+NETWORK
+TITLE = NOT AUS von USB-Tastatur und USB-SPS
+// USB-Tastatur:
+//  DB20.DBX 827.0 // NOT AUS Taster USB Bedienpult (1-Signal wenn betätigt)
+//  DB20.DBX 847.0 // LED NOT AUS Taster USB Bedienpult
+//  E 6.3          // Überwachung NOT AUS-Relais K1 auf Sicherheitsmodul
+// USB-SPS:
+//  E 3.1          // Nicht NOT AUS von USBSPS X 3.3
+//  DB1.DBX 1578.5 // NOT-AUS Relais auf USBSPS eingeschaltet
+UN  DB20.DBX 827.0  // NOT AUS Taster USB Bedienpult
+UN  E 6.3           // Überwachung NOT AUS-Relais K1 auf Sicherheitsmodul
+U   E 3.1           // Nicht NOT AUS von USBSPS X 3.3 = NOT AUS Relais
+U   DB1.DBX 1578.5  // NOT-AUS Relais auf USBSPS eingeschaltet
+=   M 2.0           // SUMME aller NOT-AUS Möglichkeiten
+NETWORK
+TITLE = Warten auf USBSPS
+//   DB1.DBB 1558 = 255   USB SPS nicht aktiv
+//   DB1.DBB 1558 = 0     Hexschalter auf USBSPS auf 0 = Ueberwachungsschaltung aktiv
+//   DB1.DBB 1558 = 14    Hexschalter auf USBSPS auf E = Ueberwachungsschaltung inaktiv
+//   DB1.DBX 1578.5       NOT-AUS Relais auf USBSPS eingeschaltet
+//   Ausgaenge nur lesen:
+//   DB1.DBW 1578 Abbild von X2 auf USBSPS Ausgaenge
+//   DB1.DBW 1580 Abbild von X3 auf USBSPS Ausgaenge
+//   Ausgaenge setzen:
+//   DB1.DBW 1586 = X2 USBSPS Ausgaenge (X2.7-9 werden nicht von der USBSPS kontolliert)
+//   DB1.DBW 1592 = X3 USBSPS Ausgaenge (X3.9 wird nicht von der USBSPS kontolliert)
+// Überprüfen auf gueltige USBSPS-Hexschaltereinstellung
+U   M 11.7          // USBSPS auf Ueberwachungsbetrieb eingestellt
+SPB  M001
+L   DB1.DBB 1558    // Stellung des HEX-Schalters auf USBSPS
+L   255
+==I
+SPB  M001
+L   DB1.DBB 1558    // Stellung des HEX-Schalters auf USBSPS
+L   0
+==I;                // VERGLEICH AUF UNGLEICH
+S   M 11.7          // USBSPS auf Ueberwachungsbetrieb eingestellt
+SPB  M001
+L   DB1.DBB 1558    // Stellung des HEX-Schalters auf USBSPS
+L   14
+==I;                // VERGLEICH AUF UNGLEICH
+;       =   M          // USBSPS auf nicht Ueberwachungsbetrieb eingestellt
+M001:NOP 0;
+//  Zeitueberwachung USBSPS:
+//  Warten auf NOT-AUS Relais USBSPS eingeschaltet
+U   DB1.DBX 1370.0; // 1.SPS SCHLEIFENDURCHLAUF
+S   M 11.5          // Warten auf USBSPS nicht NOT-AUS
+U   M 11.5          // Warten auf USBSPS nicht NOT-AUS
+U   DB1.DBX 1578.5  // NOT-AUS Relais auf USBSPS eingeschaltet
+R   M 11.5          // Warten auf USBSPS nicht NOT-AUS
+FP  M 11.6          // FM 1.SPS SCHLEIFENDURCHLAUF und NOT-AUS Relais auf USBSPS eingeschaltet
+// NOT AUS TEST:
+//  X6:3  DB20.DBX 827.0 // NICHT NOT-AUS
+//  X6:9  E 6.3 // Ueberwachung NOT AUS-Relais K1 auf Sicherheitsmodul
+U   M 11.6          // FM 1.SPS SCHLEIFENDURCHLAUF und NOT-AUS Relais auf USBSPS eingeschaltet
+S   M 11.0          // HM NOT AUS Test Ersteinschaltung
+S   M 11.4          // HM Tuer auf/zu-Test Ersteinschaltung
+U   M 11.1          // FM Test NOT-AUS Schalter und Relais
+R   M 11.2
+R   M 11.3
+R   M 11.5          // Warten auf USBSPS nicht NOT-AUS
+NETWORK
+TITLE = Test NOT-AUS Schalter und Relais
+U   M 11.6          // FM 1.SPS SCHLEIFENDURCHLAUF und NOT-AUS Relais auf USBSPS eingeschaltet
+UN  DB20.DBX 827.0           // NICHT NOT-AUS
+UN  E 6.3           // Ueberwachung NOT AUS-Relais K1 auf Sicherheitsmodul
+S   M 11.2
+U   M 11.6          // FM 1.SPS SCHLEIFENDURCHLAUF und NOT-AUS Relais auf USBSPS eingeschaltet
+UN  DB20.DBX 827.0           // NICHT NOT-AUS
+U   E 6.3           // Ueberwachung NOT AUS-Relais K1 auf Sicherheitsmodul
+S   M 11.3
+UN  DB20.DBX 827.0           // NICHT NOT-AUS
+U   E 6.3           // Ueberwachung NOT AUS-Relais K1 auf Sicherheitsmodul
+U   M 11.2
+O(
+UN  DB20.DBX 827.0           // NICHT NOT-AUS
+UN  E 6.3           // Ueberwachung NOT AUS-Relais K1 auf Sicherheitsmodul
+U   M 11.3
+)
+FP  M 11.1          // FM Test NOT-AUS Schalter und Relais
+NETWORK
+TITLE = 6000 ALARM NOT-AUS
+UN  M 2.0           // SUMME aller NOT-AUS Möglichkeiten
+O   M 11.0          // HM NOT AUS Test Ersteinschaltung
+UN  M 11.5          // Warten auf USBSPS nicht NOT-AUS
+UN  DB2.DBX 9.2;     // Alarm 6074 Keine Rückmeldung von USB-SPS
+S   DB2.DBX 0.0;    // 6000  NOT-AUS
+O   T 47            // Blinkfrequenz
+ON(
+O   M 11.2
+O   M 11.3
+)
+U   DB2.DBX 0.0;    // 6000  NOT-AUS
+=   DB20.DBX 847.0  // LED NOT AUS Taster
+O   DB1.DBX 1370.2; // QUITTIERT. GEDRUECKT (MSTT/PC)
+O   DB1.DBX 1370.3; // RESET-TASTE GEDRUECKT
+O   M 24.7;         // Positiv FM NOT AUS von USBSPS X3.3
+UN  M 11.2
+UN  M 11.3
+UN  M 11.5          // Warten auf USBSPS nicht NOT-AUS
+U   M 114.3;        // HA ISTDREHZAHL KLEINER 20U/MIN
+R   DB2.DBX 0.0;    // 6000 ALARM NOT-AUS
+R   M 11.0          // HM NOT AUS Test Ersteinschaltung
+NETWORK
+TITLE = Alarm 6006 Ueberwachung NOT AUS-Relais K1 auf Sicherheitsmodul oder AS Signal nicht abgefallen
+U   M 2.0           // HM NICHT NOT-AUS
+U   E 6.3           // Ueberwachung NOT AUS-Relais K1 auf Sicherheitsmodul
+O(
+UN  M 2.0           // HM NICHT NOT-AUS
+UN  E 6.3           // Ueberwachung NOT AUS-Relais K1 auf Sicherheitsmodul
+U   M 114.3;        // HA ISTDREHZAHL KLEINER 20U/MIN
+)
+UN  M 11.5          // Warten auf USBSPS nicht NOT-AUS
+L   S5T#4000MS;      // 2000MS
+SE  T 80;           // STARTEN  ALS EINSCHALTVERZ.
+U   T 80;           // STARTEN  ALS EINSCHALTVERZ.
+S   DB2.DBX 0.6;    // A 6006 NOT AUS-Relais K1 auf Sicherheitsmodul nicht Abgefallen
+O   DB1.DBX 1370.2; // QUITTIERT. GEDRUECKT (MSTT/PC)
+O   DB1.DBX 1370.3; // RESET-TASTE GEDRUECKT
+R   DB2.DBX 0.6;    // A 6006 NOT AUS-Relais K1 auf Sicherheitsmodul oder AS Signal nicht Abgefallen
+// Tuer auf/zu TEST:
+//  Tuersicherheitsschalter:
+//  X6:1     E 2.0 // Tuer geschlossen von Tuersicherheitsverriegelung UEK
+//  X6:2     E 2.1 // Tuer verriegelt von Verriegelungsmagnet SK
+//  X421:6   A 9.2 // Verriegelunsmagnet MaschinenTuer entriegeln
+//  Sicherheitsmodul:
+//  X420:4   A 10.0 // Antriebsfreigaberelais K5 ein auf Sicherheitsmodul Y4B135000
+//  X420:11  A 10.7 // Tuerfreigaberelais K3 ein auf Sicherheitsmodul Y4B135000
+//  X6:10    E 6.4  // Ueberwachung von K2 und K3 auf Sicherheitsmodul Y4A135000
+//  X6:11    E 6.5  // Ueberwachung von K4, K5 und AS-Signale auf Sicherheitsmodul Y4A135000
+//  M 12.0    // Tuer zu und Verriegelt
+//  M 12.1    // Tuer offen
+//  M 50.3   // FREIGABEKREIS AUF AUSGABEMODUL DURCHGESCHALTET
+U   E 2.0;          // Tuer geschlossen von Tuersicherheitsverriegelung UEK
+;       U(
+;       O   DB20.DBX 827.6;          // Schluesselschalter auf Handbetrieb
+;       O   E 2.1;          // Tuer verriegelt von Verriegelungsmagnet SK
+;       )
+=   M 12.0          // Tuer zu und Verriegelt
+UN  M 12.0          // Tuer zu und Verriegelt
+=   M 12.1          // Tuer offen
+U   DB1.DBX 1370.0; // 1.SPS-SCHLEIFENDURCHLAUF
+U   M 12.1          // Tuer offen
+S   M 12.4          // HM Tuer offen
+U   DB1.DBX 1370.0; // 1.SPS-SCHLEIFENDURCHLAUF
+U   M 12.0          // Tuer zu und Verriegelt
+S   M 12.5          // HM Tuer zu und Verriegelt
+U   M 12.4          // HM Tuer offen
+U   M 12.0          // Tuer zu und Verriegelt
+O(
+U   M 12.5          // HM Tuer zu und Verriegelt
+U   M 12.1          // Tuer offen
+)
+UN  M 11.0          // HM NOT AUS Test Ersteinschaltung
+FP  M 12.3          // FM Tuer auf/zu
+NETWORK
+TITLE = FUTTERSCHUTZ
+UN  E 2.3;          // FUTTERSCHUTZ OFFEN
+=   M 56.7          // HM MELDUNG 7064 FUTTERSCHUTZ OFFEN
+U(
+O   DB20.DBX 224.3; // HAUPTSPINDEL EIN M3 STATISCH
+O   DB20.DBX 224.4; // HAUPTSPINDEL EIN M4 STATISCH
+)
+UN  E 2.3;          // FUTTERSCHUTZ OFFEN
+FP  M 52.2;         // HM FUTTERSCHUTZ OFFEN
+U   M 52.2;         // FM FUTTERSCHUTZ OFFEN
+S   M 52.3;         // HM FUTTERSCHUTZ OFFEN
+U   M 52.3;         // HM FUTTERSCHUTZ OFFEN
+=   DB2.DBX 9.1;    // 6073 FUTTERSCHUTZ OFFEN
+O   DB1.DBX 1370.2; // QUITTIERTASTE GEDRUECKT
+O   DB1.DBX 1370.3; // RESETTASTE GEDRUECKT
+R   M 52.3;         // HM FUTTERSCHUTZ OFFEN
+NETWORK
+TITLE = FREIGABE ZUM TuerENTRIEGELN
+U(
+O   M 114.3;        // ISTDREHZAHL KLEINER 20U/MIN
+ON  M 145.7         // HM REGLERFREIGABE FUER HAUPTANTRIEB
+)
+U(
+ON  DB20.DBX 324.0; // PROGRAMM LÄUFT: RUECKSETZEN MIT PROGRAMM ENDE BZW. RESET.
+O   DB20.DBX 324.1; // STOP-ZUSTAND
+)
+UN  M 131.7;        // ACHSEN IN BEWEGUNG
+U   DB20.DBX 827.6;          // Schluesselschalter auf Handbetrieb
+=   M 25.7;         // FREIGABE ZUM TuerENTRIEGELN
+NETWORK
+TITLE = Verriegelungsmagnet MaschinenTuer entriegeln
+O   M 12.1          // Tuer offen
+O   M 25.7;         // FREIGABE ZUM TuerENTRIEGELN
+O   M 113.0;        // HANDBETRIEB AKTIV
+=   A 9.2;          // Verriegelunsmagnet MaschinenTuer entriegeln
+NETWORK
+TITLE = Verriegelungsmagnet nicht verriegelt
+UN  A 9.2;          // Verriegelunsmagnet MaschinenTuer entriegeln
+UN  E 2.1;          // Tuer verriegelt von Verriegelungsmagnet SK
+L   S5T#1S;         // 1S
+SE  T 60;           // STARTEN T 60 ALS VERZOEGERTEN IMPULS
+U   T 60;
+S   DB2.DBX 3.0;    // 6024  ALARM MASCHINENTuer OFFEN
+O   DB1.DBX 1370.2; // QUITTIERT. GEDRUECKT (MSTT/PC)
+O   DB1.DBX 1370.3; // RESET-TASTE GEDRUECKT
+R   DB2.DBX 3.0;    // 6024  ALARM MASCHINENTuer OFFEN
+NETWORK
+TITLE = MELDUNG 7042  MASCHINENTuer INIT.
+O   M 11.4          // HM Tuer auf/zu-Test Ersteinschaltung
+UN  M 11.0          // HM NOT AUS Test Ersteinschaltung
+S   M 21.2;         // HM MELDUNG 7042  MASCHINENTuer INIT.
+U   M 12.3          // FM Tuer auf/zu
+R   M 21.2;         // HM 7042  MASCHINENTuer INIT.
+R   M 11.4          // HM Tuer auf/zu-Test Ersteinschaltung
+R   M 12.4          // HM Tuer offen
+R   M 12.5          // HM Tuer zu und Verriegelt
+NETWORK
+TITLE = MELDUNG 7040  MASCHINENTuer OFFEN
+O   M 12.1          // Tuer offen
+=   M 110.1;        // MASCHINENTuer OFFEN
+U   M 12.1          // Tuer offen
+UN  A 9.1;          // LEISTUNG SCHMIERMITTEL
+=   M 21.0;         // HM MELDUNG 7040  MASCHINENTuer OFFEN
+NETWORK
+TITLE = ALARM 6005  K2 oder K3 auf Sicherheitsmodul nicht Abgefallen
+U   M 12.1          // Tuer offen
+UN  E 6.4;          // Ueberwachung von K2 und K3 auf Sicherheitsmodul Y4A135000
+UN  A 10.7          // Tuerfreigaberelais K3 ein auf Sicherheitsmodul Y4A135000
+L   S5T#500MS;      // 200MS
+SE  T 81;           // STARTEN  ALS EINSCHALTVERZ.
+U   T 81;           // STARTEN  ALS EINSCHALTVERZ.
+S   DB2.DBX 0.5;    // 6005  K2 oder K3 auf Sicherheitsmodul nicht Abgefallen
+O   DB1.DBX 1370.2; // QUITTIERT. GEDRUECKT (MSTT/PC)
+O   DB1.DBX 1370.3; // RESET-TASTE GEDRUECKT
+R   DB2.DBX 0.5;    // 6005  K2 oder K3 auf Sicherheitsmodul nicht Abgefallen
+NETWORK
+TITLE = K3 auf Sicherheitsmodul einschalten
+U   M 12.0;         // Tuer zu und Verriegelt
+UN  E 6.4;          // Ueberwachung von K2 und K3 auf Sicherheitsmodul Y4A135000
+;       UN  DB20.DBX 827.0; // NICHT NOT-AUS
+U   M 2.0           // SUMME aller NOT-AUS Möglichkeiten
+U   A 9.5           // NOT AUS für NE Modul Klemme 64
+S   A 10.7          // Tuerfreigaberelais K3 ein auf Sicherheitsmodul Y4A135000
+U   M 12.0          // Tuer zu und Verriegelt
+U   A 10.7          // Tuerfreigaberelais K3 ein auf Sicherheitsmodul Y4A135000
+S   M 50.0;         // Tuer ZU VON SICHERHEITSMODUL Y4B135000
+S   M 50.3;         // FREIGABEKREIS AUF AUSGABEMODUL DURCHGESCHALTET
+;       O   DB20.DBX 827.0;          // NICHT NOT-AUS
+ON  M 2.0           // SUMME aller NOT-AUS Möglichkeiten
+ON  E 2.0;          // Tuer geschlossen von Tuersicherheitsverriegelung UEK
+U   M 114.3;        // HA ISTDREHZAHL KLEINER 20U/MIN
+R   A 10.7          // Tuerfreigaberelais K3 ein auf Sicherheitsmodul Y4A135000
+;       O  DB20.DBX 827.0;          // NICHT NOT-AUS
+ON  M 2.0           // SUMME aller NOT-AUS Möglichkeiten
+ON  E 2.0;          // Tuer geschlossen von Tuersicherheitsverriegelung UEK
+R   M 50.0          // Tuer ZU VON TuerMODUL Y4A043000 X5:4 FG1
+R   M 50.3;         // FREIGABEKREIS AUF AUSGABEMODUL DURCHGESCHALTET
+; Freigaben Antriebe ein:
+//  X6:11   E 6.5        // Ueberwachung von K4, K5 und auf Sicherheitsmodul Y4A135000
+//  X420:4  A 10.0       // Antriebsfreigaberelais K5 ein auf Sicherheitsmodul Y4A135000
+NETWORK
+TITLE = ALARM 6018 K4 und K5 auf Sicherheitsmodul Y4A135000 abgefallen
+U   M 12.1          // Tuer offen
+UN  A 10.0          // Antriebsfreigaberelais K5 ein auf Sicherheitsmodul Y4A135000
+UN  A 10.7          // Tuerfreigaberelais K3 ein auf Sicherheitsmodul Y4A135000
+UN  M 113.0;        // HANDBETRIEB AKTIV
+L   S5T#2000MS;     // 2000MS
+SE  T 82;           // STARTEN  ALS EINSCHALTVERZ.
+UN  E 6.5           // Ueberwachung von K4, K5 auf Sicherheitsmodul Y4A135000
+L   S5T#500MS;      // 500MS
+SE  T 84;           // STARTEN  ALS EINSCHALTVERZ.
+U   T 82;                 // STARTEN  ALS EINSCHALTVERZ.
+U   T 84;                 // STARTEN  ALS EINSCHALTVERZ.
+S   DB2.DBX 2.2;    // 6018 K4 oder K5 auf Sicherheitsmodul nicht Abgefallen
+O   DB1.DBX 1370.2; // QUITTIERT. GEDRUECKT (MSTT/PC)
+O   DB1.DBX 1370.3; // RESET-TASTE GEDRUECKT
+R   DB2.DBX 2.2;    // 6018 K4 oder K5 auf Sicherheitsmodul nicht Abgefallen
+NETWORK
+TITLE = Antriebsfreigaberelais K5 einschalten auf Sicherheitsmodul Y4A135000
+UN  M 11.0          // HM NOT AUS Test Ersteinschaltung
+UN  M 11.4          // HM Tuer auf/zu-Test Ersteinschaltung
+UN  DB2.DBX 2.2;    // 6018 K4 oder K5 auf Sicherheitsmodul nicht Abgefallen
+U   M 12.0          // Tuer zu und Verriegelt
+U   A 10.7          // Tuerfreigaberelais K3 ein auf Sicherheitsmodul Y4A135000
+O   M 113.0;        // HANDBETRIEB AKTIV
+UN  E 6.5           // Ueberwachung von K4, K5 auf Sicherheitsmodul Y4A135000
+U   M 131.0;        // ER Modul BETRIEBSBEREIT
+S   A 10.0          // Antriebsfreigaberelais K5 ein auf Sicherheitsmodul Y4A135000
+U   A 10.0          // Antriebsfreigaberelais K5 ein auf Sicherheitsmodul Y4A135000
+L   S5T#200MS;      // 200MS
+SE  T 83;           // 200mS EINSCHALTVERZ.Antriebsfreigaberelais K5 ein auf Sicherheitsmodul Y4A135000
+U   M 110.1;        // MASCHINENTuer OFFEN
+U   DB20.DBX 827.6; // Schluesselschalter auf Handbetrieb
+ON  M 131.0;        // ER Modul BETRIEBSBEREIT
+UN  M 131.7;        // ACHSEN IN BEWEGUNG
+R   A 10.0;         // Antriebsfreigaberelais K5 ein auf Sicherheitsmodul Y4A135000
+U   A 10.0          // Antriebsfreigaberelais K5 ein auf Sicherheitsmodul Y4A135000
+=   DB1.DBX 1598.6  // Sonderbetrieb an USB-SPS weiterleiten
+END_FUNCTION
+FUNCTION FC  1 : VOID
+NAME: SCHMIERMITTEL
+BEGIN
+NETWORK
+TITLE = FM WEGIMPULS X-ACHSE
+U   DB1.DBX 1422.0; // WEGIMPULS X-ACHSE
+ZV  Z 2;            // ZÄHLE VORWÄRTS Z2
+ZV  Z 12;            // ZÄHLE VORWÄRTS Z12
+NETWORK
+TITLE = FM WEGIMPULS Z-ACHSE (2M)
+U   DB1.DBX 1422.2; // WEGIMPULS Z-ACHSE
+ZV  Z 6;            // ZÄHLE VORWÄRTS Z6
+ZV  Z 16;            // ZÄHLE VORWÄRTS Z16
+NETWORK
+TITLE = Rücksetzen Z12
+U    DB20.DBX 826.3;          //  TASTE BEDIENPULT SPINDEL STOP
+U    DB20.DBX 827.1;          // TASTE NC STOPP VON BEDIENPULT (1=nicht gedrueckt)
+UN   DB20.DBX 826.5;          // INC 1
+R    Z 12;           // ZÄHLE VORWÄRTS Z12
+NETWORK
+TITLE = Rücksetzen Z16
+U    DB20.DBX 826.3;          //  TASTE BEDIENPULT SPINDEL STOP
+U    DB20.DBX 827.1;          // TASTE NC STOPP VON BEDIENPULT (1=nicht gedrueckt)
+U    DB20.DBX 826.5;          // INC 100
+R    Z 16;           // ZÄHLE VORWÄRTS Z16
+NETWORK
+TITLE = FM1 WEGIMPULS X-ACHSE
+U   DB1.DBX 1422.0; // WEGIMPULS X-ACHSE
+FP  M 130.0;        // FM WEGIMPULS X-ACHSE
+NETWORK
+TITLE = FM1 WEGIMPULS Z-ACHSE
+U   DB1.DBX 1422.2; // WEGIMPULS Z-ACHSE
+FP  M 130.1;        // FM WEGIMPULS Z-ACHSE
+NETWORK
+TITLE = Wegzähler X
+U   M 130.0;        // FM WEGIMPULS X-ACHSE
+SPBN M5;                 // SPRUNG BEI 0
+L   DB15.DBD 16;    // Verfahrweg X
+L   DW#16#0000_0001;
++D;                 // Verfahrweg X +1
+T   DB15.DBD 16;    // Verfahrweg X
+M5:   NOP  0;
+NETWORK
+TITLE = Wegzähler Z
+U   M 130.1;        // FM WEGIMPULS Z-ACHSE
+SPBN M6;                 // SPRUNG BEI 0
+L   DB15.DBD 20;    // Verfahrweg Z
+L   DW#16#0000_0001;
++D;                 // Verfahrweg Z +1
+T   DB15.DBD 20;    // Verfahrweg Z
+M6:   NOP  0;
+NETWORK
+TITLE = Wegzähler2 X
+U   M 130.0;        // FM WEGIMPULS X-ACHSE
+SPBN M7;                 // SPRUNG BEI 0
+L   DB15.DBD 24;    // Verfahrweg X
+L   DW#16#0000_0001;
++D;                 // Verfahrweg X +1
+T   DB15.DBD 24;    // Verfahrweg X
+M7:   NOP  0;
+NETWORK
+TITLE = Wegzähler2 Z
+U   M 130.1;        // FM WEGIMPULS Z-ACHSE
+SPBN M8;                 // SPRUNG BEI 0
+L   DB15.DBD 28;    // Verfahrweg Z
+L   DW#16#0000_0001;
++D;                 // Verfahrweg Z +1
+T   DB15.DBD 28;    // Verfahrweg Z
+M8:   NOP  0;
+NETWORK
+TITLE = WEGINITIALISIERUNG/SCHMIERIMPULS
+L   DB10.DBW 10;    // SPS-MSD X-ACHSE ALLE 8 METER EINEN SCHMIERIMPULS
+L   Z 2;            // LADE Z2
+<=I ;               // VERGLEICH AUF KLEINER GLEICH
+O
+L   DB10.DBW 14;    // SPS-MSD Z-ACHSE ALLE 8 METER EINEN SCHMIERIMPULS
+L   Z 6;            // LADE Z6
+<=I ;               // VERGLEICH AUF KLEINER GLEICH
+O(
+U   DB20.DBX 826.0; // TASTE AUX-ON (BEDIENPULT)
+UN  M 200.0;        // IB BIT SCHMIERUNG ENTLÜFTEN
+)
+O   M 200.3;        // IB SCHMIERVORGANG STARTEN
+UN  A 9.1;          // LEISTUNG SCHMIERMITTEL
+UN  T 24;           // PAUSENZEIT SCHMIERMITTEL
+U(
+O   M 110.0;        // AUX-ON
+O   M 200.0;        // IB BIT SCHMIERUNG ENTLÜFTEN
+)
+SPBN M3;                 // SPRUNG BEI 0
+SET;
+R   Z 2;            // RUECKSETZEN Z2
+R   Z 6;            // RUECKSETZEN Z6
+S   A 9.1;          // LEISTUNG SCHMIERMITTEL
+U   E 9.4;          // DRUCKSCHALTER SCHMIERMITTEL
+S   M 20.6;         // HM 7038  DRUCKSCHALTER SCHM. DEFEKT
+M3:   NOP  0;
+NETWORK
+TITLE = DRUCKSCHALTER SCHMIERMITTEL
+U   A 9.1;          // LEISTUNG SCHMIERMITTEL
+U   E 9.4;          // DRUCKSCHALTER SCHMIERMITTEL
+L   S5T#2S;         // 2S
+SE  T 22;           // STARTEN T 22 ALS EINSCHALTVERZ.
+NETWORK
+TITLE = UEBERWACHUNGSZEIT SCHMIERMITTEL
+U   A 9.1;          // LEISTUNG SCHMIERMITTEL
+UN  E 9.4;          // DRUCKSCHALTER SCHMIERMITTEL
+L   S5T#20S;        // 20S
+SE  T 23;           // STARTEN T 23 ALS EINSCHALTVERZ.
+NETWORK
+TITLE = RUECKSETZEN SCHMIERMITTEL
+O   T 22;           // DRUCKSCHALTER SCHMIERMITTEL
+O   T 23;           // UEBERWACHUNGSZEIT ABGELAUFEN
+;       O   DB20.DBX 827.0 ;         // NICHT NOT-AUS
+ON  M 2.0           // SUMME aller NOT-AUS Möglichkeiten
+R   A 9.1;          // LEISTUNG SCHMIERMITTEL
+NETWORK
+TITLE = /FM LEISTUNG SCHMIERMITTEL
+U   A 9.1;          // LEISTUNG SCHMIERMITTEL
+FP  M 129.1;        // FM LEISTUNG SCHMIERMITTEL
+NETWORK
+TITLE = PAUSENZEIT SCHMIERMITTEL
+U   M 129.1;        // FM LEISTUNG SCHMIERMITTEL
+L   S5T#120S;       // 120S
+SV  T 24;           // STARTEN T 24 ALS VERL. IMPULS
+NETWORK //Wimmer
+TITLE = ENTLÜFTUNGSFUNKTION PUMPE STARTEN
+U   A 9.1;          // LEISTUNG SCHMIERMITTEL
+FN  M 200.1;        // FM LEISTUNG SCHMIERMITTEL AUSGESCHALTEN
+U   M 200.1;        // FM LEISTUNG SCHMIERMITTEL AUSGESCHALTEN
+U   M 200.0;        // IB BIT SCHMIERUNG ENTLÜFTEN
+UN  DB2.DBX 0.0;    // 6000  NOT-AUS
+L   S5T#3000MS;     // 3 Sekunden
+SV  T 26;           // STARTEN T 26 ALS VERL. IMPULS
+U   T 26;           // STARTEN T 26 ALS VERL. IMPULS
+FN  M 200.2;        // FM PAUSE ZWISCHEN SCHMIERVORGANG
+U   M 200.2;        // FM PAUSE ZWISCHEN SCHMIERVORGANG
+O(
+U   DB20.DBX 827.1  // TASTE NC STOPP VON BEDIENPULT
+U   M 200.0;        // IB BIT SCHMIERUNG ENTLÜFTEN
+)
+UN  M 110.0;        // AUX-ON
+=   M 200.3;        // IB SCHMIERVORGANG STARTEN
+NETWORK //Wimmer
+TITLE = PAUSENZEIT MIT M200.0 ZURÜCKSETZEN
+U   M 200.0;        // IB BIT SCHMIERUNG ENTLÜFTEN
+R   T 24;           // STARTEN T 24 ALS VERL. IMPULS
+NETWORK
+TITLE = 7039  SCHMIERMITTEL DEFEKT
+U   T 23;           // UEBERWACHUNGSZEIT ABGELAUFEN
+S   M 20.7;         // HM 7039  SCHMIERMITTEL DEFEKT
+R   A 9.1;          // LEISTUNG SCHMIERMITTEL
+R   T 24;           // STARTEN T 24 ALS VERL. IMPULS
+U   T 22;           // DRUCKSCHALTER SCHMIERMITTEL
+R   M 20.7;         // HM 7039  SCHMIERMITTEL DEFEKT
+R   M 20.6;         // HM 7038  DRUCKSCHALTER SCHM. DEFEKT
+NETWORK
+TITLE = SPS/OB-->SCHMIERIMPULS AKTIV
+U   A 9.1;          // LEISTUNG SCHMIERMITTEL
+=   DB20.DBX 311.4; // SPS/RM-->SCHMIERIMPULS AKTIV
+NETWORK
+TITLE = MELDUNG 7063 OELSTAND ZENTRALSCHMIERUNG
+UN   E 9.5;          // OELSTAND ZENTRALSCHMIERUNG
+S   M 56.6;         // HM 7063 OELSTAND ZENTRALSCHMIERUNG
+U  E 9.5;          // OELSTAND ZENTRALSCHMIERUNG
+R   M 56.6;         // HM MELDUNG 7019  FUELLSTAND SCHMIERMITTEL UNTERSCHRITTEN
+NETWORK
+TITLE = SCHMIERIMPULSZÄHLER
+U   M 129.1;        // FM LEISTUNG SCHMIERMITTEL
+SPBN M4;                 // SPRUNG BEI 0
+L   DB15.DBD 12;    // SCHMIERIMPULSZÄHLER
+L   DW#16#0000_0001;
++D;                 // SCHMIERIMPULSZÄHLER +1
+T   DB15.DBD 12;    // SCHMIERIMPULSZÄHLER
+M4:   NOP  0;
+;  NETWORK
+;  TITLE = LAMPE SCHWIERMITTELTASTER
+;
+;       U   A 9.1;          // LEISTUNG SCHMIERMITTEL
+;       =   A 10.2          // LAMPE SCHWIERMITTELTASTER
+END_FUNCTION
+FUNCTION FC 22: VOID
+NAME: ENDSCHALTER ACHSEN UND PINOLE
+BEGIN
+NETWORK
+TITLE = A 6070 AUF ENDSCHALTER PINOLE GEFAHREN
+U   E 2.4;          // ENDSCHALTER PINOLE
+FP  M 52.5;         // FM ENDSCHALTER PINOLE
+U   M 52.5;         // FM ENDSCHALTER PINOLE
+S   M 52.6;         // HM AUF PINOLE GEFAHREN
+U   M 52.6;         // HM AUF PINOLE GEFAHREN
+S   DB2.DBX 8.6;    //  6070 ENDSCHALTER PINOLE ANGEFAHREN
+O   DB1.DBX 1370.2; // QUITTIERTASTE GEDRUECKT
+O   DB1.DBX 1370.3; // RESETTASTE GEDRUECKT
+R   M 52.6;         // HM AUF PINOLE GEFAHREN
+R   DB2.DBX 8.6;    //  6070 ENDSCHALTER PINOLE ANGEFAHREN
+NETWORK
+TITLE = A 6071 ENDSCHALTER X-ACHSE ANGEFAHREN
+UN  DB1.DBX 1370.0; // 1.SPS-SCHLEIFENDURCHLAUF
+UN  E 2.5;          // ENDSCHALTER X-ACHSE
+FP  M 53.3;         // FM  ENDSCHALTER X-ACHSE
+U   M 131.7;        // ACHSEN IN BEWEGUNG
+U   M 53.3;         // FM  ENDSCHALTER X-ACHSE
+UN  DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+S   DB2.DBX 8.7;    // ALARM 6071 ENDSCHALTER X-ACHSE ANGEFAHREN
+O   DB1.DBX 1370.2; // QUITTIERTASTE GEDRUECKT
+O   DB1.DBX 1370.3; // RESETTASTE GEDRUECKT
+R   DB2.DBX 8.7;    // ALARM ENDSCHALTER X-ACHSE ANGEFAHREN
+NETWORK
+TITLE = ENDSCHALTER PLUS X-ACHSE
+UN  DB1.DBX 1370.0; // 1.SPS-SCHLEIFENDURCHLAUF
+UN  E 2.5;          // ENDSCHALTER X-ACHSE
+U   E 16.0;         // REFSCHALTER X-ACHSE
+UN  DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+FP  M 54.0;         // FM ENDSCHALTER PLUS X-ACHSE ANGESPROCHEN
+U   M 54.0;         // FM ENDSCHALTER PLUS X-ACHSE ANGESPROCHEN
+S   M 54.1;         // ENDSCHALTER PLUS X-ACHSE ANGESPROCHEN
+S   M 54.5;         // HM MELDUNG 7061 ENDSCHALTER X-ACHSE FREIFAHREN
+U   E 2.5;          // ENDSCHALTER X-ACHSE
+R   M 54.1;         // ENDSCHALTER PLUS X-ACHSE ANGESPROCHEN
+R   M 54.4;         // ENDSCHALTER MINUS X-ACHSE ANGESPROCHEN
+R   M 54.5;         // HM MELDUNG 7061 ENDSCHALTER X-ACHSE FREIFAHREN
+NETWORK
+TITLE = ENDSCHALTER MINUS X-ACHSE
+UN  DB1.DBX 1370.0; // 1.SPS-SCHLEIFENDURCHLAUF
+UN  E 16.0;         // REFSCHALTER X-ACHSE
+UN  E 2.5;          // ENDSCHALTER X-ACHSE
+UN  DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+FP  M 54.3;         // FM ENDSCHALTER MINUS X-ACHSE ANGESPROCHEN
+U   M 54.3;         // FM ENDSCHALTER MINUS X-ACHSE ANGESPROCHEN
+S   M 54.4;         // ENDSCHALTER MINUS X-ACHSE ANGESPROCHEN
+S   M 54.5;         // HM MELDUNG 7061 ENDSCHALTER X-ACHSE FREIFAHREN
+NETWORK
+TITLE = A 6072 ENDSCHALTER Z-ACHSE ANGEFAHREN
+UN  DB1.DBX 1370.0; // 1.SPS-SCHLEIFENDURCHLAUF
+UN  E 2.6;          // ENDSCHALTER Z-ACHSE
+FP  M 53.4;         // FM  ENDSCHALTER Z-ACHSE
+U   M 131.7;        // ACHSEN IN BEWEGUNG
+U   M 53.4;         // FM  ENDSCHALTER Z-ACHSE
+UN  DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+S   DB2.DBX 9.0;    // ALARM 6072 ENDSCHALTER Z-ACHSE ANGEFAHREN
+O   DB1.DBX 1370.2; // QUITTIERTASTE GEDRUECKT
+O   DB1.DBX 1370.3; // RESETTASTE GEDRUECKT
+R   DB2.DBX 9.0;    //  6072 ENDSCHALTER Z-ACHSE ANGEFAHREN
+NETWORK
+TITLE = ENDSCHALTER PLUS Z-ACHSE
+UN  DB1.DBX 1370.0; // 1.SPS-SCHLEIFENDURCHLAUF
+UN  E 2.6;          // ENDSCHALTER Z-ACHSE
+U   E 16.2;         // REFSCHALTER Z-ACHSE
+UN  DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+FP  M 56.0;         // FM ENDSCHALTER PLUS Z-ACHSE ANGESPROCHEN
+U   M 56.0;         // FM ENDSCHALTER PLUS Z-ACHSE ANGESPROCHEN
+S   M 56.1;         // ENDSCHALTER PLUS Z-ACHSE ANGESPROCHEN
+S   M 56.5;         // HM MELDUNG 7062 ENDSCHALTER Z-ACHSE FREIFAHREN
+U   M 56.2;         // FM ENDSCHALTER Z-ACHSE
+R   M 56.1;         // ENDSCHALTER PLUS Z-ACHSE ANGESPROCHEN
+R   M 56.4;         // ENDSCHALTER MINUS Z-ACHSE ANGESPROCHEN
+R   M 56.5;         // HM MELDUNG 7062 ENDSCHALTER Z-ACHSE FREIFAHREN
+NETWORK
+TITLE = ENDSCHALTER MINUS Z-ACHSE
+UN  DB1.DBX 1370.0; // 1.SPS-SCHLEIFENDURCHLAUF
+UN  E 16.2;         // REFSCHALTER Z-ACHSE
+UN  E 2.6;          // ENDSCHALTER Z-ACHSE
+UN  DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+FP  M 56.3;         // FM ENDSCHALTER MINUS Z-ACHSE ANGESPROCHEN
+U   M 56.3;         // FM ENDSCHALTER MINUS Z-ACHSE ANGESPROCHEN
+S   M 56.4;         // ENDSCHALTER MINUS Z-ACHSE ANGESPROCHEN
+S   M 56.5;         // HM MELDUNG 7062 ENDSCHALTER Z-ACHSE FREIFAHREN
+END_FUNCTION
+FUNCTION FC  3 : VOID
+NAME: HAUPTANTRIEB_STEUERUNG
+BEGIN
+//  X3:1  Stromistwert HAUPTSPINDEL
+//  X3:2  GND
+//  X3:5  Led H2   E 0.3  =  // Hauptantrieb SERVO-READY
+//  X3:11 Led H1   A 0.3  =  // Hauptantrieb Reglerfreigabe
+//  X3:13 Led H4   A 11.6 = Ausgang  res.
+//  M 131.0;        // ER Modul BETRIEBSBEREIT
+//       U   M 50.0;         // Tuer zu und Verriegelt und Tuerfreigaberelais K3 ein
+//       U   M 110.0;        // AUX-ON
+//  X421:4   A 9.0 // Impulsfreigabe Hauptantrieb
+// Signale für USBSPS:
+// DB1.DBX 1598.0  // X3.6 Impulsfreigabe ER-ModulHauptantrieb für USBSPS
+// DB1.DBX 1598.2 = 0 Achs-Stillstandsueberwachung aktivieren
+//                = 1 Achs-Stillstandsueberwachung deaktivieren
+// DB1.DBX 1598.(3alt).(1neu)  = 0 Spindel-Stillstandsueberwachung aktivieren
+//                = 1 Spindel-Stillstandsueberwachung deaktivieren
+// DB1.DBX 1598.1  // X3.7 Impulsfreigabe Hauptantrieb für USBSPS
+NETWORK
+TITLE = Impulsfreigabe FUER SIEMENS HAUPTANTRIEB
+;       UN  DB20.DBX 827.0           // NICHT NOT-AUS
+;       U   E 2.3;          // FUTTERSCHUTZ
+;       U   M 110.0;        // AUX-ON
+;       U   M 104.2;        // SUM  SFG
+;       S   A 9.0;          // Impulsfreigabe Hauptantrieb
+;
+;       UN  E 2.3;          // FUTTERSCHUTZ
+;       U   DB20.DBX 827.0           // NICHT NOT-AUS
+;       R   A 9.0;          // Impulsfreigabe Hauptantrieb
+NETWORK
+TITLE = Y5A016000
+ON    A 1.6;
+O     A 1.6;
+=     A 1.6;              // Umschaltung IDP
+U     DB1.DBX 1370.0;     // 1. PLC-Durchlauf
+=     A 1.7;              // Reset IDP
+NETWORK
+TITLE = REGLERFREIGABE SIEMENS HAUPTANTRIEB
+O   DB20.DBX 340.0; // SPINDEL EIN IM UHRZEIGER
+O   DB20.DBX 340.1; // SPINDEL EIN GEGEN UHRZEIGER
+;       U   A 9.0;          // Impulsfreigabe Hauptantrieb
+S   M 145.2;        // HM REGLERFREIGABE SIEMENS HAUPTANTRIEB
+U   M 145.2;        // HM REGLERFREIGABE SIEMENS HAUPTANTRIEB
+U   M 104.2;        // SUM  SFG
+O(
+UN  M 114.3;        // ISTDREHZAHL KLEINER 20U/MIN
+U   M 145.7;        // HM REGLERFREIGABE FUER HAUPTANTRIEB
+)
+=   A 9.0;          // Impulsfreigabe Hauptantrieb
+=   A 0.3;          // Hauptantrieb Reglerfreigabe
+=   DB1.DBX 1598.1  // X3.7 Impulsfreigabe Hauptantrieb für USBSPS
+=   M 145.3;        // SPINDELFREIGABE an ACC FUER HAUPTANTRIEB SPINDEL 0
+S   M 145.7;        // HM REGLERFREIGABE FUER HAUPTANTRIEB
+R   M 145.4;
+NETWORK
+TITLE = UEBERWACHUNG HA SCHARF
+U   A 9.0;          // Impulsfreigabe Hauptantrieb
+U   A 0.3;          // Hauptantrieb Reglerfreigabe
+L   S5T#2S;         // 25X0,1S
+SE  T 85;           // STARTEN T8 ALS EINSCHALTVERZ.
+NETWORK
+TITLE = 6013  HAUPTANTRIEB NICHT BEREIT
+UN  E 0.3;          // Hauptantrieb SERVO-READY
+L   S5T#600MS;      // 2X0,1S
+SE  T 86;           // STARTEN T9 ALS EINSCHALTVERZ.
+U   T 85;           // HA UEBERWACHUNG SCHARF
+U   T 86;           // HA/SERVO-READY (0,2S)
+S   DB2.DBX 1.5;    // 6013  HAUPTANTRIEB NICHT BEREIT
+O   DB1.DBX 1370.2; // QUITTIERT. GEDRUECKT (MSTT/PC)
+O   DB1.DBX 1370.3; // RESET-TASTE GEDRUECKT
+R   DB2.DBX 1.5;    // 6013  HAUPTANTRIEB NICHT BEREIT
+U   T 85;           // HA UEBERWACHUNG SCHARF
+=   M 61.0
+U   T 86;           // HA/SERVO-READY (0,2S)
+=   M 61.1
+NETWORK
+TITLE = ANWAHL HAUPTANTRIEB M3 BEDIENPULT
+U   E 4.0;          // UEBERWACHUNGSKONTAKT
+U   DB20.DBX 826.4; // TASTE BEDIENPULT SPINDEL START M3
+FP  M 52.0          // FM TASTE BEDIENPULT SPINDEL START M3
+U   M 52.0          // FM TASTE BEDIENPULT SPINDEL START M3
+UN  DB20.DBX 826.2; // TASTE BEDIENPULT SPINDEL START M4
+UN  DB20.DBX 826.3; // TASTE BEDIENPULT SPINDEL STOP
+UN  M 3.5           // UMDREHUNGSVORSCHUB
+U   E 2.3;          // FUTTERSCHUTZ
+U   E 3.7;          // MOTORSCHUTZ LUEFTER HAUPTANTRIEB
+U   M 51.7          // FREIGABE VON SICHERHEITSEINRICHTUNGEN
+FP  M 60.1;         // FLANKENMERKER TASTE BEDIENPULT SPINDEL START M3
+NETWORK
+TITLE = ANWAHL HAUPTANTRIEB M4 BEDIENPULT
+U   E 4.0;          // UEBERWACHUNGSKONTAKT
+U   DB20.DBX 826.2; // TASTE BEDIENPULT SPINDEL START M4
+FP  M 52.1          // FM TASTE BEDIENPULT SPINDEL START M4
+U   M 52.1          // FM TASTE BEDIENPULT SPINDEL START M4
+UN  DB20.DBX 826.4; // TASTE BEDIENPULT SPINDEL START M3
+UN  DB20.DBX 826.3; // TASTE BEDIENPULT SPINDEL STOP
+UN  M 3.5           // UMDREHUNGSVORSCHUB
+U   E 2.3;          // FUTTERSCHUTZ
+U   E 3.7;          // MOTORSCHUTZ LUEFTER HAUPTANTRIEB
+U   M 51.7          // FREIGABE VON SICHERHEITSEINRICHTUNGEN
+FP  M 60.2;         // FLANKENMERKER TASTE BEDIENPULT SPINDEL START M4
+NETWORK
+TITLE = ANWAHL HAUPTANTRIEB M5 BEDIENPULT
+ON  E 2.3;          // FUTTERSCHUTZ
+O   DB20.DBX 826.3;          // TASTE BEDIENPULT SPINDEL STOP
+FP  M 60.3;         // FLANKENMERKER TASTE BEDIENPULT SPINDEL STOP M5
+NETWORK
+TITLE = ANWAHL HAUPTANTRIEB M3
+UN  DB20.DBX 224.3; // M3 STAT.
+U   M 104.2;        // SUM  SFG
+U(  ;
+O   DB20.DBX 192.3; // M3 DYN.
+O(  ;
+U   M 148.2;        // HM M3 GESPEICHERT M0/M1
+U   DB20.DBX 0.2;   // FC NC-START
+UN  M 104.3;        // SUM  NC-STARTVERR.
+)   ;
+O(  ;
+U   M 60.1;         // FLANKENMERKER TASTE BEDIENPULT SPINDEL START M3
+U   M 104.5;        // HM BETRIEBSART JOG UND INC
+UN  DB20.DBX 324.0; // PROGRAMM LÄUFT
+)   ;
+)   ;
+S   M 145.0;         // HM ANWAHL HAUPTANTRIEB M3
+O   M 145.0         // HM ANWAHL HAUPTANTRIEB M3
+=   DB20.DBX 256.3; // M3 RUECKMELDEN
+S   DB20.DBX 340.0; // SPINDEL EIN IM UHRZEIGER
+R   DB20.DBX 340.1; // SPINDEL EIN GEGEN UHRZEIGER
+R   M 148.2;        // HM M3 GESPEICHERT M0/M1
+R   M 145.1         // HM ANWAHL HAUPTANTRIEB M4
+NETWORK
+TITLE = ANWAHL HAUPTANTRIEB   M4
+UN  DB20.DBX 224.4; // M4 STAT.
+U   M 104.2;        // SUM  SFG
+U(  ;
+O   DB20.DBX 192.4; // M4 DYN.
+O(  ;
+U   M 148.3;        // HM M4 GESPEICHERT M0/M1
+U   DB20.DBX 0.2;   // FC NC-START
+UN  M 104.3;        // SUM  NC-STARTVERR.
+)   ;
+O(  ;
+U   M 60.2;         // FLANKENMERKER TASTE BEDIENPULT SPINDEL START M4
+U   M 104.5;        // HM BETRIEBSART JOG UND INC
+UN  DB20.DBX 324.0; // PROGRAMM LÄUFT
+)   ;
+)   ;
+S   M 145.1         // HM ANWAHL HAUPTANTRIEB M4
+O   M 145.1         // HM ANWAHL HAUPTANTRIEB M4
+=   DB20.DBX 256.4; // M4 RUECKMELDEN
+S   DB20.DBX 340.1; // SPINDEL EIN GEGEN UHRZEIGER
+R   DB20.DBX 340.0; // SPINDEL EIN IM UHRZEIGER
+R   M 148.3;        // HM M4 GESPEICHERT M0/M1
+R   M 145.0;        // HM ANWAHL HAUPTANTRIEB M3
+NETWORK
+TITLE = M3,M4 GESPEICHERT VON M0,M1
+U   M 34.1;         // HM M0/M1 DYNAMISCH
+U(
+O   DB20.DBX 192.3; // M3 DYN.
+O   DB20.DBX 224.3; // M3 STAT.
+)
+UN  M 148.4;        // HM M3/M4 GESPEICHERT M0/M1
+S   M 148.2;        // HM M3 GESPEICHERT M0/M1
+U   M 34.1;         // HM M0/M1 DYNAMISCH
+U(
+O   DB20.DBX 192.4; // M4 DYN.
+O   DB20.DBX 224.4; // M4 STAT.
+)
+UN  M 148.4;        // HM M3/M4 GESPEICHERT M0/M1
+S   M 148.3;         // HM M4 GESPEICHERT M0/M1
+O   DB1.DBX 1440.0  // RESET AUSGELÖST
+O   DB1.DBX 1370.3; // RESETTASTE GEDRUECKT
+R   M 148.2;        // HM M3 GESPEICHERT M0/M1
+R   M 148.3;        // HM M4 GESPEICHERT M0/M1
+NETWORK
+TITLE = ANWAHL HAUPTANTRIEB    M5
+U   M 34.1;         // HM M0/M1 DYNAMISCH
+UN  M 148.4;        // HM M3/M4 GESPEICHERT M0/M1
+O(;
+U   M 60.3;         // FLANKENMERKER TASTE BEDIENPULT SPINDEL STOP M5
+U   M 104.5;        // HM BETRIEBSART JOG UND INC
+UN  DB20.DBX 324.0; // PROGRAMM LÄUFT
+)
+O(;
+U   M 132.7;        // FM SPINDEL HALT
+U   M 104.5;        // HM BETRIEBSART JOG UND INC
+UN  DB20.DBX 324.0; // PROGRAMM LÄUFT
+)
+O   DB20.DBX 192.5; // M5 dynamisch
+O   DB1.DBX 1370.0; // 1.SPS SCHLEIFENDURCHLAUF
+O   DB1.DBX 1440.0  // RESET AUSGELÖST
+O   DB1.DBX 1370.3; // RESETTASTE GEDRUECKT
+O   DB20.DBX 324.2; // DRYRUN AKTIV
+O   DB20.DBX 192.2; // M2 dyn
+O   DB20.DBX 195.6; // M30 dyn
+O   M 109.5;        // /FM AUX-ON
+=   DB20.DBX 256.5; // M5 RUECKMELDEN
+R   DB20.DBX 340.0; // SPINDEL EIN IM UHRZEIGER
+R   DB20.DBX 340.1; // SPINDEL EIN GEGEN UHRZEIGER
+R   M 145.0         // HM ANWAHL HAUPTANTRIEB M3
+R   M 145.1         // HM ANWAHL HAUPTANTRIEB M4
+R   M 145.2;        // HM REGLERFREIGABE SIEMENS HAUPTANTRIEB
+R   M 145.4
+NETWORK
+TITLE = HM M3/M4 GESPEICHERT M0/M1
+O   M 148.2;        // HM M3 GESPEICHERT M0/M1
+O   M 148.3;        // HM M4 GESPEICHERT M0/M1
+S   M 148.4;        // HM M3/M4 GESPEICHERT M0/M1
+UN  M 34.1;         // HM M0/M1 DYNAMISCH
+R   M 148.4;        // HM M3/M4 GESPEICHERT M0/M1
+NETWORK
+TITLE = Tasterlampenansteuerung
+U   M 145.0         // HM ANWAHL HAUPTANTRIEB M3
+U(
+U   T 47;           // STARTEN ALS VERLÄNGERTER IMPULS
+ON  M 132.1;        // SPINDEL HALT AKTIV
+)
+=   DB20.DBX 846.4           // Tasterlampe M3
+U   M 145.1         // HM ANWAHL HAUPTANTRIEB M4
+U(
+U   T 47;           // STARTEN ALS VERLÄNGERTER IMPULS
+ON  M 132.1;        // SPINDEL HALT AKTIV
+)
+=   DB20.DBX 846.2           // Tasterlampe M4
+NETWORK
+TITLE = ISTDREHZAHL KLEINER 20U/MIN
+O   DB1.DBX 1370.0; // 1.SPS SCHLEIFENDURCHLAUF
+O   DB1.DBX 1356.3; // HAUPTANTRIEB STILLSTAND
+U(
+O   E 6.0;          // HA Drehzahl=0 von Relais
+ON  DB1.DBX 1598.1  // X3.7 Impulsfreigabe Hauptantrieb für USBSPS
+)
+L   S5T#300MS;      //
+SE  T 0
+U   T 0
+=   M 114.3;        // HA ISTDREHZAHL KLEINER 20U/MIN
+R   M 145.7         // HM REGLERFREIGABE FUER HAUPTANTRIEB
+NETWORK
+TITLE = HA LAUFT AUS  AFG/EFG
+U   DB20.DBX 224.5; // M5 STAT.
+UN  M 114.3;        // ISTDREHZAHL KLEINER 20U/MIN
+=   M 90.6;         // HA LAUFT AUS  AFG/EFG
+NETWORK
+TITLE = 6014  KEINE HAUPTSPINDELDREHZAHL
+O   DB20.DBX 340.0; // SPINDEL EIN IM UHRZEIGER
+O   DB20.DBX 340.1; // SPINDEL EIN GEGEN UHRZEIGER
+UN  M 145.0         // HM ANWAHL HAUPTANTRIEB M3
+UN  M 145.1         // HM ANWAHL HAUPTANTRIEB M4
+UN  M 132.1;        // SPINDEL HALT AKTIV
+UN  DB20.DBX 328.0; // HS-SPINDEL STOPPEN
+L   S5T#5S;         // 5 S
+SE  T 27;           // STARTEN T 27 ALS EINSCHALTVERZ.
+U   T 27;           // M3/M4-VERZÖGERUNGSZ. ABGELAUFEN
+U   M 114.3;        // ISTDREHZAHL KLEINER 20U/MIN
+L   S5T#1S;         // 5 S
+SE  T 10;           // STARTEN T 10 ALS EINSCHALTVERZ.
+U   T 10;           // M3/M4-VERZÖGERUNGSZ. ABGELAUFEN
+S   DB2.DBX 1.6;    // 6014  KEINE HAUPTSPINDELDREHZAHL
+O   DB1.DBX 1370.2; // QUITTIERT. GEDRUECKT (MSTT/PC)
+O   DB1.DBX 1370.3; // RESET-TASTE GEDRUECKT
+R   DB2.DBX 1.6;    // 6014  KEINE HAUPTSPINDELDREHZAHL
+NETWORK
+TITLE = LUEFTER HAUPTANTRIEB
+U   A 0.3;          // Hauptantrieb Reglerfreigabe
+S   M 41.0;         // HM LUEFTER EIN M3/M4
+UN  A 0.3;          // Hauptantrieb Reglerfreigabe
+R   M 41.0;         // HM LUEFTER EIN M3/M4
+U   A 0.3;          // Hauptantrieb Reglerfreigabe
+FN  M 41.1;         // FM M3/M4 AUS
+U   M 41.1;
+L   S5T#30S;        // 30 S
+SA  T 63;           // NACHLAUFZEIT LUEFTER ABFALLVERZOEGERT
+O   M 41.0;         // HM LUEFTER EIN M3/M
+O   T 63;           // NACHLAUFZEIT LUEFTER ABFALLVERZOEGERT
+=   A 9.3;          // LEISTUNG LUEFTER EIN
+ON  E 3.7;          // MOTORSCHUTZ LUEFTER HAUPTANTRIEB
+ON  M 2.0           // SUMME aller NOT-AUS Möglichkeiten
+;       O   DB20.DBX 827.0;          // NOT-AUS
+R   T 63;           // NACHLAUFZEIT LUEFTER ABFALLVERZOEGERT
+NETWORK
+TITLE = MELDUNG 7026 MOTORSCHUTZ LUFTER HAUPTANTRIEB
+UN  E 3.7;          // MOTORSCHUTZ LUEFTER HAUPTANTRIEB
+S   M 40.2;         // HM MELDUNG 7026 MOTORSCHUTZ LUFTER HAUPTANTRIEB
+O   DB1.DBX 1370.2; // QUITTIERT. GEDRUECKT (MSTT/PC)
+O   DB1.DBX 1370.3; // RESET-TASTE GEDRUECKT
+U   E 3.7;          // MOTORSCHUTZ LUEFTER HAUPTANTRIEB
+R   M 40.2;         // HM MELDUNG 7026 MOTORSCHUTZ LUFTER HAUPTANTRIEB
+END_FUNCTION
+FUNCTION FC  4 : VOID
+NAME: X,Z-ACHSE, Imp.und Reglerfreigabe
+BEGIN
+//  -A111 X-ACHSE
+//  X3:5  Led H2   E 0.0  // X-ACHSE SERVO-READY
+//  X3:11 Led H1   A 0.0  // X-ACHSE Reglerfreigabe
+//  X3:12 Led H3   A 11.0 // Kopplung aktiv
+//  X3:13 Led H4   A 11.1 // Parkende X-Achse
+//  -A113 Z-ACHSE
+//  X3:5  Led H2   E 0.2  // Z-ACHSE SERVO-READY
+//  X3:11 Led H1   A 0.2  // Z-ACHSE Reglerfreigabe
+//  X3:12 Led H3   A 11.3 // Kopplung aktiv Z-ACHSE
+//  X3:13 Led H4   A 11.4 // Parkende Z-Achse
+NETWORK
+TITLE = Achsreglerfreigaben bei Tuer ZU oder Sonderbetrieb
+O   M 113.0;        // HANDBETRIEB AKTIV
+O   M 50.0          // Tuer ZU VON TuerMODUL Y4A043000 X5:4 FG1
+U   M 110.0;        // AUX-ON
+U   T 83;           // 200mS EINSCHALTVERZ.Antriebsfreigaberelais K5 ein auf Sicherheitsmodul Y4A135000
+UN  M 110.2         // HM AUX OFF schalten
+S   A 0.0           // X-ACHSE Reglerfreigabe
+S   A 0.2           // Z-ACHSE Reglerfreigabe
+NETWORK
+TITLE = Kopplung Linearachsen einschalten
+U   M 111.0;        // ACHSEN BETRIEBSBEREIT
+S   A 11.0          // Kopplung aktiv X-ACHSE
+S   A 11.3          // Kopplung aktiv Z-ACHSE
+NETWORK
+TITLE = Achsreglerfreigaben ausschalten
+O   M 110.2;        // AUX OFF SCHALTEN
+ON  A 10.0;         // Antriebsfreigaberelais K5 ein auf Sicherheitsmodul Y4A135000
+UN  M 131.7;        // ACHSEN IN BEWEGUNG
+R   A 0.0           // X-ACHSE Reglerfreigabe
+R   A 0.2           // Z-ACHSE Reglerfreigabe
+NETWORK
+TITLE = Parkende Linearachsen
+;       U(
+;       ON  E 3.1;          // NICHT NOT-AUS VON USB
+;       O   DB20.DBX 827.0; // NICHT NOT-AUS
+;       )
+UN  M 2.0           // SUMME aller NOT-AUS Möglichkeiten
+=   A 11.1          // Parkende X-Achse
+=   A 11.4          // Parkende Z-Achse
+NETWORK
+TITLE = Kopplunge ausschalten
+ON  M 2.0           // SUMME aller NOT-AUS Möglichkeiten
+O   DB2.DBX 1.2;    // 6010  ANTRIEB X-ACHSE N. BEREIT
+O   DB2.DBX 1.4;    // 6012  ANTRIEB Z-ACHSE N. BEREIT
+O   DB2.DBX 2.3;    // 6019 ER Modul nicht betriebsbereit
+R   A 11.0          // Kopplung aktiv X-ACHSE
+R   A 11.3          // Kopplung aktiv Z-ACHSE
+NETWORK
+TITLE = ACHSEN BETRIEBSBEREIT
+U   E 0.0;          // X-ACHSE SERVO-READY
+U   E 0.2;          // Z-ACHSE SERVO-READY
+=   M 111.0;        // ACHSEN BETRIEBSBEREIT
+NETWORK
+TITLE = ACHSEN BETRIEBSBEREIT  AFG/EFG
+UN  M 111.0;        // ACHSEN BETRIEBSBEREIT
+=   M 90.1;         // ACHSEN BETRIEBSBEREIT  AFG/EFG
+NETWORK
+TITLE = UEBERWACHUNG ACHSANTRIEBE SCHARF
+;       U   E 3.1;          // NICHT NOT-AUS VON PIC
+U   M 2.0           // SUMME aller NOT-AUS Möglichkeiten
+U   A 0.0           // X-ACHSE Reglerfreigabe
+U   A 0.2           // Z-ACHSE Reglerfreigabe
+L   S5T#3S;         // 3 SEKUNDEN
+SE  T 4;            // STARTEN T 4 ALS EINSCHALTVERZ.
+NETWORK
+TITLE = 6010  ANTRIEB X-ACHSE N. BEREIT
+U   T 4;            // ACHSUEBERWACHUNG SCHARF
+UN  E 0.0;          // X-ACHSE SERVO-READY
+L   S5T#0S200MS;    // 2X0,1S
+SE  T 62;           // STARTEN T 62 ALS EINSCHALTVERZ.
+U   T 62;
+S   DB2.DBX 1.2;    // 6010  ANTRIEB X-ACHSE N. BEREIT
+O   DB1.DBX 1370.2; // QUITTIERT. GEDRUECKT (MSTT/PC)
+O   DB1.DBX 1370.3; // RESET-TASTE GEDRUECKT
+R   DB2.DBX 1.2;    // 6010  ANTRIEB X-ACHSE N. BEREIT
+NETWORK
+TITLE = 6012  ANTRIEB Z-ACHSE N. BEREIT
+U   T 4;            // ACHSUEBERWACHUNG SCHARF
+UN  E 0.2;          // Z-ACHSE SERVO-READY
+L   S5T#0S200MS;    // 2X0,1S
+SE  T 64;           // STARTEN T 64 ALS EINSCHALTVERZ.
+U   T 64;
+S   DB2.DBX 1.4;    // 6012  ANTRIEB Z-ACHSE N. BEREIT
+O   DB1.DBX 1370.2; // QUITTIERT. GEDRUECKT (MSTT/PC)
+O   DB1.DBX 1370.3; // RESET-TASTE GEDRUECKT
+R   DB2.DBX 1.4;    // 6012  ANTRIEB Z-ACHSE N. BEREIT
+NETWORK
+TITLE = HM ANTRIEB ACHSEN NICHT BEREIT
+O   DB2.DBX 1.2;    // 6010  ANTRIEB X-ACHSE N. BEREIT
+O   DB2.DBX 1.4;    // 6012  ANTRIEB Z-ACHSE N. BEREIT
+S   M 111.1;        // HM ANTRIEB XYZ-ACHSEN NICHT BEREIT
+END_FUNCTION
+FUNCTION FC  5 : VOID
+NAME: JOG_ACHSEN
+BEGIN
+NETWORK
+TITLE = JOG-ACHSEN FREIGABE
+O   M 50.0          // Tuer ZU VON TuerMODUL Y4A043000 X5:4 FG1
+O   M 51.7          // FREIGABE VON SICHERHEITSEINRICHTUNGEN
+U   M 102.0;        // SUM ACHSFREIGABE
+U(
+ON  DB20.DBX 324.0; // PROGRAMM LÄUFT: RUECKSETZEN MIT PROGRAMM ENDE BZW. RESET.
+O   DB20.DBX 324.1; // STOP-ZUSTAND
+)
+=   M 112.0;        // JOG-ACHSEN FREIGABE
+NETWORK
+TITLE = Schluesselschalter auf Auto und Tuer zu
+U   M 12.0          // Tuer zu und Verriegelt
+U   DB20.DBX 827.6           // Schluesselschalter auf Handbetrieb
+=   M 0.0           // Schluesselschalter auf Auto und Tuer zu
+NETWORK
+TITLE = Schluesselschalter auf Auto und Tuer offen
+U   DB20.DBX 827.6;          // Schluesselschalter auf Handbetrieb
+U   M 12.1;         // TUER OFFEN
+=   M 0.1           // Schluesselschalter auf Auto und Tuer offen
+NETWORK
+TITLE = Schluesselschalter auf Handbetrieb
+UN  DB20.DBX 827.6;          // Schluesselschalter auf Handbetrieb
+=   M 0.2           // Schluesselschalter auf Handbetrieb
+NETWORK
+TITLE = Hauptantrieb laeuft
+//  mit Joystick immer Umdrehungsvorschub
+//  mit Joystick und Eilgangstaste immer Eilgang
+UN  M 114.3;        // HA ISTDREHZAHL KLEINER 20U/MIN
+=   M 0.3           // Hauptantrieb laeuft
+NETWORK
+TITLE = Hauptantrieb steht,Tuer offen max.6m/min
+//  nur mit Joystick,Eilgangstaste und Tuer offen immer Eilgang max.6m/min
+U   M 114.3;        // HA ISTDREHZAHL KLEINER 20U/MIN
+U   M 12.1;         // TUER OFFEN
+=   M 0.4           // Hauptantrieb steht,Tuer offen max.6m/min
+NETWORK
+TITLE = Hauptantrieb steht,Tuer zu max.10m/min
+//  nur mit Joystick,Eilgangstaste und Tuer zu immer Eilgang max.10m/min
+U   M 114.3;        // HA ISTDREHZAHL KLEINER 20U/MIN
+U   M 12.1;         // TUER OFFEN
+=   M 0.5           // Hauptantrieb steht,Tuer zu max.10m/min
+NETWORK
+TITLE = Alle Joystick in Stellung 0
+UN  DB20.DBX 826.6;          // JOYSTICK -X
+UN  DB20.DBX 827.3;          // JOYSTICK -Z
+UN  DB20.DBX 828.3;          // JOYSTICK +X
+UN  DB20.DBX 827.5;          // JOYSTICK +Z
+=   M 51.0          // Alle Joystick in Stellung 0
+NETWORK
+TITLE = JOG ausloesen von HA laeuft und alle Joystick in Stellung 0
+U   M 0.3           // Hauptantrieb laeuft
+U   M 51.0          // Alle Joystick in Stellung 0
+FP  M 1.0           // FM JOG ausloesen von HA laeuft
+U   M 1.0           // FM JOG ausloesen von HA laeuft
+S   M 1.1           // HM JOG ausloesen von HA laeuft
+UN  M 0.3           // Hauptantrieb laeuft
+R   M 1.1           // HM JOG ausloesen von HA laeuft
+R   M 3.5           // FREIGABE UMDREHUNGSVORSCHUB
+U   M 1.1           // HM JOG ausloesen von HA laeuft
+U(
+UN  DB20.DBX 324.0  // Programm läuft
+O   DB20.DBX 324.1  // STOP-Zustand
+)
+=   M 0.6           // JOG ausloesen von HA laeuft
+NETWORK
+TITLE = VORSCHUB X-ACHSE UNTER 15MM/MIN
+L  2.5E-04;
+L  DB1.DBD 1228;
+>R;
+= M 133.1;
+L  -2.5E-04;
+L  DB1.DBD 1228;
+<R;
+= M 133.4;
+NETWORK
+TITLE = VORSCHUB Z-ACHSE UNTER 15MM/MIN
+L  2.5E-04;
+L  DB1.DBD 1236;
+>R;
+= M 133.2;
+L  -2.5E-04;
+L  DB1.DBD 1236;
+<R;
+= M 133.5;
+U  M 133.1;
+U  M 133.4;
+U  M 133.2;
+U  M 133.5
+=  M 133.6
+U  M 133.6
+UN DB20.DBX 827.6; // Schluesselschalter auf Handbetrieb
+U  M 3.5           // UMDREHUNGSVORSCHUB
+S  M 133.3;
+NETWORK
+TITLE = FREIGABE UMDREHUNGSVORSCHUB
+U  DB20.DBX 826.1; // TASTE NC START VON BEDIENPULT
+FP M 3.6           // FM TASTE NC START
+U  M 3.6           // FM TASTE NC START
+U  M 0.6           // JOG ausloesen von HA laeuft
+U  E 4.1;          // UEBERWACHUNGSKONNTAKT ACHSE
+UN M 133.6
+S  M 3.5           // UMDREHUNGSVORSCHUB
+O  M 105.7;        // FM RESET TASTE VON BEDIENPULT
+O  M 105.6;        // FM TASTE NC STOPP VON BEDIENPULT
+O  M 133.3;
+R  M 3.5           // UMDREHUNGSVORSCHUB
+NETWORK
+TITLE = JOG-ACHSE +-X BEDIENPULT
+U   DB20.DBX 828.3;          // JOYSTICK +X
+UN  DB20.DBX 826.6;          // JOYSTICK -X
+U   E 4.1;
+FN  M 3.2           // Jog aus +X
+U   DB20.DBX 826.6;          // JOYSTICK -X
+UN  DB20.DBX 828.3;          // JOYSTICK +X
+U   E 4.1;
+FN  M 3.3           // Jog aus -X
+U   E 4.1;                   // UEBERWACHUNGSKONNTAKT ACHSE
+U   DB20.DBX 828.3;          // JOYSTICK +X
+UN  DB20.DBX 826.6;          // JOYSTICK -X
+UN  DB20.DBX 827.3;          // JOYSTICK -Z
+UN  DB20.DBX 827.5;          // JOYSTICK +Z
+UN  M 135.0;                 // JOG PLUS AKTIV
+UN  M 135.2;                 // JOG MINUS AKTIV
+UN  M 135.0;                 // JOG PLUS AKTIV
+UN  M 135.2;                 // JOG MINUS AKTIV
+UN  M 3.3           // Jog aus -X
+UN  M 133.0;        // X/Z ACHSEN IN BEWEGUNG AUSSCHALTVWERZÖGERND
+FP  M 3.0
+U   E 4.1;                   // UEBERWACHUNGSKONNTAKT ACHSE
+U   DB20.DBX 826.6;          // JOYSTICK -X
+UN  DB20.DBX 828.3;          // JOYSTICK +X
+UN  DB20.DBX 827.3;          // JOYSTICK -Z
+UN  DB20.DBX 827.5;          // JOYSTICK +Z
+UN  M 135.0;                 // JOG PLUS AKTIV
+UN  M 135.2;                 // JOG MINUS AKTIV
+UN  M 3.2           // Jog aus +X
+UN  M 133.0;        // X/Z ACHSEN IN BEWEGUNG AUSSCHALTVWERZÖGERND
+FP  M 3.1
+O   M 3.0
+O   M 3.1
+SPBN M06
+=   DB20.DBX 1.2;   // JOG-ANFORDERUNG
+U   DB20.DBX 828.3;          // JOYSTICK +X
+UN  DB20.DBX 826.6;          // JOYSTICK -X
+=   DB20.DBX 10.0;  // JOG +X
+S   DB1.DBX 1598.4;
+R   DB20.DBX 12.0;  // JOG -X
+SPB  M06
+U   DB20.DBX 826.6;          // JOYSTICK -X
+UN  DB20.DBX 828.3;          // JOYSTICK +X
+=   DB20.DBX 12.0;  // JOG -X
+S   DB1.DBX 1598.4;
+R   DB20.DBX 10.0;  // JOG +X
+M06: NOP 0;
+NETWORK
+TITLE = JOG-ACHSE +-Z BEDIENPULT
+U   DB20.DBX 827.5;          // JOYSTICK +Z
+UN  DB20.DBX 827.3;          // JOYSTICK -Z
+U   E 4.1;
+FN  M 4.2           // Jog aus +Z
+U   DB20.DBX 827.3;          // JOYSTICK -Z
+UN  DB20.DBX 827.5;          // JOYSTICK +Z
+U   E 4.1;
+FN  M 4.3           // Jog aus -Z
+U   E 4.1;                   // ÜBERWACHUNGSKONNTAKT ACHSE
+U   DB20.DBX 827.5;          // JOYSTICK +Z
+UN  DB20.DBX 827.3;          // JOYSTICK -Z
+UN  DB20.DBX 826.6;          // JOYSTICK -X
+UN  DB20.DBX 828.3;          // JOYSTICK +X
+UN  M 135.0;                 // JOG PLUS AKTIV
+UN  M 135.2;                 // JOG MINUS AKTIV
+UN  M 4.3           // Jog aus -Z
+UN  M 133.0;        // X/Z ACHSEN IN BEWEGUNG AUSSCHALTVWERZÖGERND
+FP  M 4.0
+U   E 4.1;                   // ÜBERWACHUNGSKONNTAKT ACHSE
+U   DB20.DBX 827.3;          // JOYSTICK -Z
+UN  DB20.DBX 827.5;          // JOYSTICK +Z
+UN  DB20.DBX 826.6;          // JOYSTICK -X
+UN  DB20.DBX 828.3;          // JOYSTICK +X
+UN  M 135.0;                 // JOG PLUS AKTIV
+UN  M 135.2;                 // JOG MINUS AKTIV
+UN  M 133.0;                 // X/Z ACHSEN IN BEWEGUNG AUSSCHALTVWERZÖGERND
+UN  M 4.2;                   // Jog aus +Z
+FP  M 4.1
+O   M 4.0
+O   M 4.1
+SPBN M04
+=   DB20.DBX 1.2;   // JOG-ANFORDERUNG
+U   DB20.DBX 827.5;          // JOYSTICK +Z
+UN  DB20.DBX 827.3;          // JOYSTICK -Z
+=   DB20.DBX 10.2;  // JOG +Z
+S   DB1.DBX 1598.5;
+R   DB20.DBX 12.2;  // JOG -Z
+SPB  M04
+U   DB20.DBX 827.3;          // JOYSTICK -Z
+UN  DB20.DBX 827.5;          // JOYSTICK +Z
+=   DB20.DBX 12.2;  // JOG -Z
+S   DB1.DBX 1598.5;
+R   DB20.DBX 10.2;  // JOG +Z
+M04: NOP 0;
+NETWORK
+TITLE = JOG IN ALLEN ACHSEN AUS
+UN  DB20.DBX 827.4;          // TASTE EILGANG
+UN  M 0.3           // Hauptantrieb laeuft
+FP  M 49.1          // FM TASTE EILGANG losgelassen
+U   DB20.DBX 826.3           // TASTE SPINDEL HALT (BEDIENPULT) NICHT
+FP  M 49.2          // FM TASTE SPINDEL HALT (BEDIENPULT) NICHT
+U   DB20.DBX 1.2;   // FC JOG-ACHSEN
+UN  M 112.0;        // JOG-ACHSEN FREIGABE
+;       O   M 49.1          // FM TASTE EILGANG losgelassen
+O   M 49.2          // FM TASTE SPINDEL HALT (BEDIENPULT) NICHT
+O   M 51.6          // NEGATIV FLANKENMERKER AUS FREIGABE VON SICHERHEITSEINRICHTUNGEN
+O   DB1.DBX 1370.3; // RESET-TASTE GEDRUECKT
+O(
+U   M 3.2           // Jog aus +X
+UN  M 3.5           // FREIGABE UMDREHUNGSVORSCHUB
+)
+O(
+U   M 3.3           // Jog aus -X
+UN  M 3.5           // FREIGABE UMDREHUNGSVORSCHUB
+)
+O(
+U   M 4.2           // Jog aus +Z
+UN  M 3.5           // FREIGABE UMDREHUNGSVORSCHUB
+)
+O(
+U   M 4.3           // Jog aus -Z
+UN  M 3.5           // FREIGABE UMDREHUNGSVORSCHUB
+)
+O   M 105.6;        // FM TASTE NC STOPP VON BEDIENPULT
+O   M 133.3;
+SPBN   M1051
+=   DB20.DBX 1.2;   // JOG-ANFORDERUNG
+L   DW#16#0000_0000;// LADE 0
+T   DB20.DBD 10;    // JOG IN ALLEN ACHSEN AUS
+R   DB1.DBX 1598.4; //
+R   DB1.DBX 1598.5; //
+R   M 133.3;
+M1051: NOP 0
+NETWORK
+TITLE = LED Achstasten
+O   DB20.DBX 10.0;  // JOG +X
+O(
+U   DB20.DBX 327.2; // BETRIEBSART REFERENZ
+U   DB1.DBX 66.0    // Positive Achsrichtung X
+)
+=   DB20.DBX 848.2; // LED +X Taster
+O   DB20.DBX 12.0;  // JOG -X
+O(
+U   DB20.DBX 327.2; // BETRIEBSART REFERENZ
+U   DB1.DBX 68.0    // Negative Achsrichtung X
+)
+=   DB20.DBX 846.6  // LED -X Taster
+O   DB20.DBX 10.2;  // JOG +Z
+O(
+U   DB20.DBX 327.2; // BETRIEBSART REFERENZ
+U   DB1.DBX 66.2    // Positive Achsrichtung Z
+)
+=   DB20.DBX 847.5  // LED +Z Taster
+O   DB20.DBX 12.2;  // JOG -Z
+O(
+U   DB20.DBX 327.2; // BETRIEBSART REFERENZ
+U   DB1.DBX 68.2    // Negative Achsrichtung Z
+)
+=   DB20.DBX 847.3  // LED -Z Taster
+// Von Wegendschalter herunterfahren:
+// DB20.DBX 4.5        // Achsrichtung anfordern
+// DB20.DBB 886        // Achse 0 bis 7 nur in PLUS
+// DB20.DBB 887        // Achse 0 bis 7 nur in MINUS
+NETWORK
+TITLE =  Handrad und Joystick X-Achse nur in PLUS Richtung
+U   M 54.3;         // FM ENDSCHALTER MINUS X-ACHSE ANGESPROCHEN
+UN  DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+SPBN M1006
+=   DB20.DBX 4.5;   // Achsrichtung anfordern
+=   DB20.DBX 886.0  // Achse 0 bis 7 nur in PLUS
+M1006: NOP 0;
+NETWORK
+TITLE =  Handrad und Joystick X-Achse nur in MINUS Richtung
+U   M 54.0;         // FM ENDSCHALTER PLUS X-ACHSE ANGESPROCHEN
+UN  DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+SPBN M1007
+=   DB20.DBX 4.5;   // Achsrichtung anfordern
+=   DB20.DBX 887.0; // Achse 0 bis 7 nur in MINUS
+M1007: NOP 0;
+NETWORK
+TITLE =  Handrad und Joystick Z-Achse nur in PLUS Richtung
+U   M 56.3;         // FM ENDSCHALTER MINUS Z-ACHSE ANGESPROCHEN
+UN  DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+SPBN M1004
+=   DB20.DBX 4.5;   // Achsrichtung anfordern
+=   DB20.DBX 886.2  // Achse 0 bis 7 nur in PLUS
+M1004: NOP 0;
+NETWORK
+TITLE =  Handrad und Joystick Z-Achse nur in MINUS Richtung
+U   M 56.0;         // FM ENDSCHALTER PLUS Z-ACHSE ANGESPROCHEN
+UN  DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+O   M 52.5;         // FM ENDSCHALTER PINOLE
+SPBN M1005
+=   DB20.DBX 4.5;   // Achsrichtung anfordern
+=   DB20.DBX 887.2; // Achse 0 bis 7 nur in MINUS
+M1005: NOP 0;
+// Achsrichtung zuruecksetzen:
+UN  E 2.4;          // ENDSCHALTER PINOLE
+FP  M 53.5;         // FM ENDSCHALTER PINOLE NICHT BETÄTIGT
+U   E 2.6;          // ENDSCHALTER Z-ACHSE
+FP  M 56.2;         // FM ENDSCHALTER Z-ACHSE
+U   E 2.5;          // ENDSCHALTER X-ACHSE
+FP  M 54.2;         // FM ENDSCHALTER X-ACHSE
+O   M 53.5;         // FM ENDSCHALTER PINOLE NICHT BETÄTIGT
+O   M 56.2;         // FM ENDSCHALTER Z-ACHSE
+O   M 54.2;         // FM ENDSCHALTER X-ACHSE
+SPBN M1010;
+=   DB20.DBX 4.5;   // Achsrichtung anfordern
+L 0
+T   DB20.DBB 886    // Achse 0 bis 7 nur in PLUS
+T   DB20.DBB 887    // Achse 0 bis 7 nur in MINUS
+M1010: NOP 0;
+END_FUNCTION
+FUNCTION FC  6 : VOID
+NAME: ACHSEN_REFERENZIEREN
+BEGIN
+NETWORK
+TITLE = FREIGABE REFERENZIEREN
+U   M 50.0          // Tuer ZU VON TuerMODUL Y4A043000 X5:4 FG1
+U   M 102.0;        // SUM ACHSFREIGABE
+UN  M 100.2;        // VORSCHUBSCHALTER AUF 0%
+UN  M 131.7;        // ACHSEN IN BEWEGUNG
+UN  M 91.1;         // SUM ALARME  AFG/EFG
+U   DB20.DBX 827.6;          // Schluesselschalter auf Handbetrieb
+UN  E 2.4;          // ENDSCHALTER PINOLE
+U   M 114.3;        // ISTDREHZAHL KLEINER 20U/MIN
+=   M 120.1;        // REF ACHSEN FREIGABE
+NETWORK
+TITLE = REFERENZPUNKT ANFAHREN ABBRECHEN(RESET AUSLÖSEN)
+U   DB20.DBX 327.2; // BETRIEBSART REFERENZ
+U   M 110.1;        // MASCHINENTuer OFFEN
+FP  M 122.4         // FLANKENMERKER RESET AUSLÖSEN
+;
+O   M 52.5;         // FM ENDSCHALTER PINOLE
+O   M 122.4         // FLANKENMERKER RESET AUSLÖSEN
+O   DB1.DBX 1440.0  // NC-RESET AUSLÖSEN
+=   DB1.DBX 1440.0  // NC-RESET AUSLÖSEN
+NETWORK
+TITLE = REFPKT.X,Z, VON MST ZUGLEICH ANFAHREN
+UN  M 121.3;        // REFPKT.X,Z,ZUGLEICH ANFAHREN
+U   DB20.DBX 830.4; // VON MST ALLE ACHSEN REFERENZIEREN
+U   DB20.DBX 327.2; // BETRIEBSART REFERENZ
+FP  M 121.0         // FM REFPKT.X,Z, VON MST ZUGLEICH ANFAHREN
+U   M 121.0         // FM REFPKT.X,Z, VON MST ZUGLEICH ANFAHREN
+U   M 120.1;        // REF ACHSEN FREIGABE
+SPBN M1701;
+SET;
+=   DB20.DBX 1.1;   // REFERENZPKT.ANFAHREN (UMLENKUNG)
+=   DB20.DBX 8.0;   // REFERENZIEREN X-ACHSE
+=   DB20.DBX 8.2;   // REFERENZIEREN Z-ACHSE
+M1701: NOP 0;
+NETWORK
+TITLE = REFPKT.X,Z,ZUGLEICH ANFAHREN
+UN  M 100.2;        // VORSCHUBSCHALTER AUF 0%
+UN  M 121.3;        // REFPKT.X,Z,ZUGLEICH ANFAHREN
+U   M 120.1;        // REF ACHSEN FREIGABE
+U   DB20.DBX 8.0;   // REFERENZIEREN X-ACHSE
+U   DB20.DBX 8.2;   // REFERENZIEREN Z-ACHSE
+S   M 121.3;        // REFPKT.X,Z,ZUGLEICH ANFAHREN
+FP  M 121.5;        // FM REFPKT.X,Z,ZUGLEICH ANFAHREN
+O   DB1.DBX 1440.0  // RESET AUSGELÖST
+O   DB1.DBX 1370.3; // RESET TASTE GEDRUECKT
+R   M 121.3;        // REFPKT.X,Z,ZUGLEICH ANFAHREN
+NETWORK
+TITLE = REFERENZPUNKT VERLOREN
+O   M 121.5;        // FM REFPKT.X,Z,ZUGLEICH ANFAHREN
+O   DB2.DBX 1.2;    // ALARM X-ACHSE DEFEKT
+O   DB2.DBX 1.4;    // ALARM Z-ACHSE DEFEKT
+O   DB2.DBX 2.3;    // A 6019 ER Modul nicht betriebsbereit
+;       O   DB20.DBX 827.0 ;         // NICHT NOT-AUS
+ON  M 2.0           // SUMME aller NOT-AUS Möglichkeiten
+U   DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+=   DB20.DBX 348.0; // REFERENZPUNKT VERLOREN
+NETWORK
+TITLE = REFPKT.ANFAHREN SPERREN
+U   DB20.DBX 1.1;   // REFERENZPKT.ANFAHREN
+UN  M 120.1;        // REF ACHSEN FREIGABE
+R   DB20.DBX 1.1;   // REFERENZPKT.ANFAHREN
+S   DB20.DBX 318.7; // NEG.QUITTUNG DNC REFPKT.ANFAHREN
+NETWORK
+TITLE = X-ACHSE REFERENZIEREN (FC-CODE)
+U   M 121.5;        // FM REFPKT.X,Z,ZUGLEICH ANFAHREN
+U   DB20.DBX 8.0;   // REFERENZIEREN X-ACHSE
+O(;
+UN  M 121.3;        // REFPKT.X,Z,ZUGLEICH ANFAHREN
+U   M 120.1;        // REF ACHSEN FREIGABE
+U   DB20.DBX 8.0;   // REFERENZIEREN X-ACHSE
+);
+=   DB20.DBX 8.0;   // REFERENZIEREN X-ACHSE
+NETWORK
+TITLE = FM REFERENZPUNKT X-ACHSE AKTIV
+U   DB1.DBX 134.0;  // REFERENZPUNKT X-ACHSE AKTIV
+FP  M 120.0;        // FM REFERENZPUNKT X-ACHSE AKTIV
+NETWORK
+TITLE = Z-ACHSE REFERENZIEREN (FC-CODE)
+U   M 121.3;        // REFPKT.X,Z,ZUGLEICH ANFAHREN
+U   M 120.0;        // FM REFERENZPUNKT X-ACHSE AKTIV
+O(;
+UN  M 121.3;        // REFPKT.X,Z,ZUGLEICH ANFAHREN
+U   M 120.1;        // REF ACHSEN FREIGABE
+U   DB20.DBX 8.2;   // REFERENZIEREN Z-ACHSE
+);
+=   DB20.DBX 8.2;   // REFERENZIEREN Z-ACHSE
+R   DB20.DBX 8.0;   // REFERENZIEREN X-ACHSE
+SPBN   M701;
+SET;
+=   DB20.DBX 1.1;   // REFERENZPKT.ANFAHREN (UMLENKUNG)
+M701:  NOP 0;
+NETWORK
+TITLE = FM REFERENZPUNKT AKTIV
+U   DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+FP  M 122.5;        // FM REFERENZPUNKT AKTIV
+U   M 122.5;        // FM REFERENZPUNKT AKTIV
+R   M 121.3;        // REFPKT.X,Z,ZUGLEICH ANFAHREN
+NETWORK
+TITLE = 7017  REFERENZPUNKT ANFAHREN
+U   M 110.0;        // AUX-ON
+UN  DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+;       UN  A 9.1;          // LEISTUNG SCHMIERMITTEL
+=   M 18.1;         // HM 7017  REFERENZPUNKT ANFAHREN
+NETWORK
+TITLE = LAMPE NC START AKTIV
+U   DB20.DBX 324.0; // Programm läuft
+U   DB20.DBX 324.1; // STOP-ZUSTAND
+UN  M 20.1          // LAMPE WERKZEUGBESTAETIGUNG TASTE
+U   T 47;           // STARTEN ALS VERLÄNGERTER IMPULS
+O(
+U   DB20.DBX 324.0; // Programm läuft
+UN  DB20.DBX 324.1; // STOP-ZUSTAND
+)
+O   M 3.5           // UMDREHUNGSVORSCHUB
+=   DB20.DBX 846.1          // LAMPE NC START TASTE
+NETWORK
+TITLE = LED NC-STOP
+U   DB20.DBX 324.1; // STOP-ZUSTAND
+=   DB20.DBX 847.1  // LED Programm Halt Taster
+END_FUNCTION
+FUNCTION FC  7 : VOID
+NAME: AUX_ON
+BEGIN
+NETWORK
+TITLE = SUM ALARME 1
+L   DB2.DBW 0;      // WORT/ALARME 1
+L   W#16#0;         // LADE KONSTANTE HEX 0
+<>I;                // VERGLEICH AUF UNGLEICH
+=   M 105.0;        // SUM ALARME 1
+NETWORK
+TITLE = SUM ALARME 2
+L   DB2.DBW 2;      // WORT/ALARME 2
+L   W#16#0;         // LADE KONSTANTE HEX 0
+<>I;                // VERGLEICH AUF UNGLEICH
+=   M 105.1;        // SUM ALARME 2
+NETWORK
+TITLE = SUM ALARME 3/THERM. ALARME
+L   DB2.DBW 4;      // BYTE/ALARME 3
+L   W#16#0;         // LADE KONSTANTE HEX 0
+<>I;                // VERGLEICH AUF UNGLEICH
+=   M 105.2;        // SUM ALARME 3/THERM. ALARME
+NETWORK
+TITLE = SUM ALARME 5
+L   DB2.DBW 6;      // WORT/ALARME 5
+L   W#16#0;         // LADE KONSTANTE HEX 0
+<>I;                // VERGLEICH AUF UNGLEICH
+=   M 105.3;        // SUM ALARME 5
+NETWORK
+TITLE = SUM ALARME 6
+L   DB2.DBW 8;      // WORT/ALARME 6
+L   W#16#0;         // LADE KONSTANTE HEX 0
+<>I ;               // VERGLEICH AUF UNGLEICH
+=   M 105.4;        // SUM ALARME 6
+;  NETWORK
+;  TITLE = FM TASTE AUX-ON (TASTE MASCHINE START)
+;
+;       U   DB20.DBX 826.0;          // TASTE AUX-ON (BEDIENPULT)
+;       UN  T 38;           // AUX OFF NACH 3 SEKUNDEN
+;       FP  M 110.5;        // FM TASTE AUX-ON
+;
+; NETWORK
+;  TITLE = FM TASTE AUX-OFF (TASTE MASCHINE START)
+;
+;       U   DB20.DBX 826.0;          // TASTE AUX-ON (BEDIENPULT)
+;       L   S5T#2000MS;     // 20X0,1S
+;       SE  T 38;           // AUX OFF NACH 2 SEKUNDEN
+;
+;       U T 38;             // AUX OFF NACH 2 SEKUNDEN
+;       FP  M 110.7;        // FM TASTE AUX-OFF
+;
+;  NETWORK
+;  TITLE = ANWAHL AUX-ON
+;
+;       U   DB20.DBX 826.0;          // TASTE AUX-ON (BEDIENPULT)
+;       UN  T 38;           // AUX OFF NACH 2 SEKUNDEN
+;       UN  M 91.1;         // SUM ALARME  AFG/EFG
+;       UN  M 11.0          // HM NOT AUS Test Ersteinschaltung
+;       UN  M 11.4          // HM Tuer auf/zu-Test Ersteinschaltung
+;       UN   M 110.2        // HM AUX OFF schalten
+;       S   M 110.0;        // AUX-ON
+NETWORK
+TITLE = FM TASTE AUX-ON (TASTE MASCHINE START)
+U   DB20.DBX 826.0  // AUX ON Taste
+UN  M 109.0
+UN  M 109.2
+UN  M 110.0;        // AUX-ON
+UN  M 110.2         // HM AUX OFF schalten
+UN  M 91.1          // SUM ALARME  AFG/EFG
+UN  M 11.0          // HM NOT AUS Test Ersteinschaltung
+UN  M 11.4          // HM TÜR auf/zu-Test Ersteinschaltung
+UN  DB2.DBX 0.0;    // 6000  NOT-AUS
+S   M 109.0
+S   M 109.1
+U   M 109.0
+FP  M 110.5;        // FM TASTE AUX-ON
+NETWORK
+TITLE = FM TASTE AUX-OFF (TASTE MASCHINE START)
+U   DB20.DBX 826.0  // AUX ON Taste
+UN  M 109.1
+U   M 109.0
+UN  DB2.DBX 0.0;    // 6000  NOT-AUS
+UN  DB20.DBX 324.0; // PROGRAMM LÄUFT
+U   M 114.3;        // ISTDREHZAHL KLEINER 20U/MIN
+UN  M 131.7;        // ACHSEN IN BEWEGUNG
+R   M 109.0
+S   M 109.2
+UN  DB20.DBX 826.0  // AUX ON Taste
+R   M 109.1
+R   M 109.2
+U   M 109.0
+FN  M 110.7         // FM TASTE AUX-OFF
+NETWORK
+TITLE = ANWAHL AUX-ON
+U   M 110.5;        // FM TASTE AUX-ON
+S   M 110.0;        // AUX-ON
+NETWORK
+TITLE = FM AUX-ON
+U   M 110.0;        // AUX-ON
+FP  M 110.3;        // FM AUX-ON
+NETWORK
+TITLE = ABWAHL AUX-ON
+O   M 110.7;        // FM TASTE AUX-OFF
+ON  M 2.0           // SUMME aller NOT-AUS Möglichkeiten
+O   DB2.DBX 0.5;    // 6005 K2 oder K3 auf Sicherheitsmodul nicht Abgefallen
+O   DB2.DBX 0.6;    // 6006 NOT AUS-Relais K1 auf Sicherheitsmodul nicht Abgefallen
+O   DB2.DBX 3.0;    // 6024 ALARM MASCHINENTuer OFFEN
+O   DB2.DBX 0.7;    // 6007 VERSORGUNGSSCHUETZE NICHT ABGEFALLEN
+O   DB2.DBX 1.2;    // 6010 ANTRIEB X-ACHSE N. BEREIT
+O   DB2.DBX 1.4;    // 6012 ANTRIEB Z-ACHSE N. BEREIT
+O   DB2.DBX 1.5;    // 6013 HAUPTANTRIEB NICHT BEREIT
+O   DB2.DBX 2.2;    // 6018 K4 oder K5 auf Sicherheitsmodul nicht Abgefallen
+O   DB2.DBX 2.3;    // 6019 ER Modul nicht betriebsbereit
+O   DB2.DBX 9.2;    // 6074 Keine Rückmeldung von USB-SPS
+S   M 110.2         // HM AUX OFF schalten
+UN  E 0.0;          // X-ACHSE SERVO-READY
+UN  E 0.2;          // Z-ACHSE SERVO-READY
+UN  A 0.0;          // X-ACHSE Reglerfreigabe
+UN  A 0.2;          // Z-ACHSE Reglerfreigabe
+U   M 110.2         // HM AUX OFF schalten
+U   M 114.3;        // ISTDREHZAHL KLEINER 20U/MIN
+R   M 110.0;        // AUX-ON
+R   M 110.2         // HM AUX OFF schalten
+R   M 109.0
+;       O   DB1.DBX 1370.1; // FATALER FEHLER AUFGETRETEN
+;       O   DB2.DBX 1.1;    // 6009  AUSGABEMODUL NICHT DURCHGESCHALTET
+;       O   DB2.DBX 1.3;    // 6011  ANTRIEB y-ACHSE N. BEREIT
+;       O   DB2.DBX 5.4;    // 6044  BREMSWIDERSTAND UEBERLASTET
+;       O   DB2.DBX 6.7;    // 6055  KEIN TEIL GESPANNT
+;       O   DB2.DBX 7.0;    // 6056  PINOLE NICHT BEREIT
+;       O   DB2.DBX 7.4;    // 6060  C-ACHSE VERRIEGELUNGSUEBERWACHUNG
+;       O   DB2.DBX 8.1;    // 6065  STÖRUNG LADEMAGAZIN
+;       O   DB2.DBX 8.3;    // 6067  KEINE DRUCKLUFT
+NETWORK
+TITLE = AUX-ON  SFG
+UN  M 110.0;        // AUX-ON
+=   M 94.0;         // AUX-ON  SFG
+NETWORK
+TITLE = AUX-ON   AFG/EFG
+ON  M 110.0;        // AUX-ON
+ON  M 50.3;         // FREIGABEKREIS AUF AUSGABEMODUL DURCHGESCHALTET
+=   M 90.0;         // AUX-ON   AFG/EFG
+NETWORK
+TITLE = MELDUNG 7016  HILFSANTRIEBE EINSCHALTEN
+UN  M 110.0;        // AUX-ON
+=   M 18.0          // HM MELDUNG 7016  HILFSANTRIEBE EINSCHALTEN
+NETWORK
+TITLE = SPS/OB-->NOT-AUS AKTIV
+;       U   DB2.DBX 0.0;    // 6000  NOT-AUS
+UN  M 2.0           // SUMME aller NOT-AUS Möglichkeiten
+=   DB1.DBX 1390.5; // SPS/RM-->NOT-AUS AKTIV
+NETWORK
+TITLE = SPS/OB-->MASCHINENTuer GESCHL.
+U   M 50.0          // Tuer ZU VON TuerMODUL Y4A043000 X5:4 FG1
+=   DB1.DBX 1390.1; // SPS/RM-->MASCHINENTuer GESCHL.
+NETWORK
+TITLE = SPS/OB-->AUX-ON
+U   M 110.0;        // AUX-ON
+=   DB1.DBX 1390.2; // SPS/RM-->AUX-ON
+NETWORK
+TITLE = LAMPE AUX ON
+U   T 47;           // IMPULSDAUER
+UN  M 110.0         // AUX ON
+UN  M 21.2          // MASCHINENTUER INIT.
+UN  M 11.0          // NOT AUS TEST ERSTEINSCHALTUNG
+UN  M 11.5          // Warten auf USBSPS nicht NOT-AUS
+O   M 110.0         // AUX ON
+=   DB20.DBX 846.0          // LAMPE HILFSANTRIEBE EIN TASTE
+END_FUNCTION
+FUNCTION FC  8 : VOID
+NAME: NC_STARTVERR.UND BEDIENTASTEN
+BEGIN
+NETWORK
+TITLE = AFG/EFG/SFG/ALARM AKTIV
+U   M 104.2;        // SUM  SFG
+U   DB20.DBX 340.4; // ACHSFREIGABE
+U   DB20.DBX 340.3; // EINLESEFREIGABE
+=   M 103.1;        // NC-START FREIGABE VON AFG,EFG,SFG
+ON  M 103.1;        // NC-START FREIGABE VON AFG,EFG,SFG
+O   DB1.DBX 1366.3; // MASCHINENALARM AKTIV
+=   M 96.0;         // NC-STARTVERRIEGELUNG
+NETWORK
+TITLE = SCHLUESSELSCHALTER BETRIEBSART AUTOMATIK/HAND
+UN  DB20.DBX 827.6;          // Schluesselschalter auf Handbetrieb
+=   M 96.1;         // NC-STARTVERRIEGELUNG
+NETWORK
+TITLE = ENDSCHALTER PINOLE
+U   E 2.4;          // ENDSCHALTER PINOLE
+=   M 96.2;         // NC-STARTVERRIEGELUNG
+NETWORK
+TITLE = SOLLSTUECKZAHL ERREICHT
+U   M 21.3;         // HM 7043  SOLLSTUECKZAHL ERREICHT
+=   M 96.3;         // NC-STARTVERRIEGELUNG
+NETWORK
+TITLE = ENDSCHALTER X-ACHSE
+U   M 54.5;         // HM MELDUNG 7061 ENDSCHALTER X-ACHSE FREIFAHREN
+=   M 96.4;         // NC-STARTVERRIEGELUNG
+NETWORK
+TITLE = SCHMIERMITTEL UND MOTORSCHUTZ
+O   M 56.6;         // HM 7063 OELSTAND ZENTRALSCHMIERUNG
+O   M 20.6;         // HM 7038  DRUCKSCHALTER SCHM. DEFEKT
+O   M 20.7;         // HM 7039  SCHMIERMITTEL DEFEKT
+O   M 40.0;         // HM MELDUNG 7065 MOTORSCHUTZ KUEHLMITTELPUMPE
+O   M 40.2;         // HM MELDUNG 7066 MOTORSCHUTZ LUEFTER HAUPTANTRIEB
+=   M 96.5;         // NC-STARTVERRIEGELUNG
+NETWORK
+TITLE = REFERENZPUNKT NICHT AKTIV UND FREIGABE WERKZEUG NACH REF.
+ON  M 59.3;         // FREIGABE WERKZEUG NACH REFERNZIEREN
+ON  DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+=   M 96.6;         // NC-STARTVERRIEGELUNG
+NETWORK
+TITLE = NC-STARTVERRIEGELUNG WERKZEUGBESTAETIGUNG AKTIV
+O   M 42.3;        // HM MELDUNG 7066 WERKZEUG BESTAETIGEN
+O   M 58.1;        // HM ANFORDERUNG NEUES T-WORT
+=   M 96.7;        // NC-STARTVERRIEGELUNG
+NETWORK
+TITLE = ENDSCHALTER Z-ACHSE
+U   M 56.5;         // HM MELDUNG 7062 ENDSCHALTER Z-ACHSE FREIFAHREN
+=   M 97.0;         // NC-STARTVERRIEGELUNG
+NETWORK
+TITLE = ACHSTASTE GEDRÜCKT
+U   E 4.1;          // UEBERWACHUNGSKONTAKT ACHSE
+=   M 97.1;         // NC-STARTVERRIEGELUNG
+NETWORK
+TITLE = Spindel oder Achsen in Bewegung
+ON  M 114.3;        // HA ISTDREHZAHL KLEINER 20U/MIN
+O   M 131.7;        // ACHSEN IN BEWEGUNG
+UN  DB20.DBX 324.0; // PROGRAMM LÄUFT: RUECKSETZEN MIT PROGRAMM ENDE BZW. RESET.
+=   M 97.2;         // NC-STARTVERRIEGELUNG
+NETWORK
+TITLE = SUM NC-START VERR.
+L   MW 96;          // WORT/NC-STARTVERR.
+L   W#16#0;         // LADE KONSTANTE HEX 0
+<>I ;               // VERGEICH AUF UNGEICH
+=   M 104.3;        // SUM NC-STARTVERR.
+NETWORK
+TITLE = NC-START IST FREIGEGEBEN
+UN  M 104.3;        // SUM  NC-STARTVERR.
+=   DB20.DBX 311.5  // Melden NC-START IST FREIGEGEBEN
+NETWORK
+TITLE = 7018  SCHLUESSEL UMSCHALTEN
+U   DB20.DBX 826.1; // TASTE NC START VON BEDIENPULT
+UN  DB20.DBX 827.6; // Schluesselschalter auf Handbetrieb
+U   M 12.0          // Tuer zu und Verriegelt
+O(
+U   DB20.DBX 827.6; // Schluesselschalter auf Handbetrieb
+U   M 12.1          // Tuer offen
+UN  DB20.DBX 324.0; // PROGRAMM LÄUFT: RUECKSETZEN MIT PROGRAMM ENDE BZW. RESET.
+U   DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+)
+=   M 18.2;         // HM 7018  SCHLUESSEL UMSCHALTEN
+NETWORK
+TITLE = FM TASTE NC STOPP VON BEDIENPULT oder HM M0/M1 DYNAMISCH
+U   DB20.DBX 827.1;          // TASTE NC STOPP VON BEDIENPULT (1=nicht gedrueckt)
+UN  DB20.DBX 327.2; // BETRIEBSART REFERENZ
+FP  M 105.6;        // FM TASTE NC STOPP VON BEDIENPULT
+O(
+U   M 105.6;        // FM TASTE NC STOPP VON BEDIENPULT
+U   DB20.DBX 324.0; // Programm läuft
+)
+O   M 34.1;         // HM M0/M1 DYNAMISCH
+O   DB20.DBX 0.1;   // NC-STOPP ANFORDERUNG
+=   DB20.DBX 0.1;   // NC-STOPP ANFORDERUNG
+NETWORK
+TITLE = FM RESET TASTE VON BEDIENPULT
+U   DB20.DBX 828.6  // RESET TASTE VON BEDIENPULT
+FP  M 105.7;        // FM RESET TASTE VON BEDIENPULT
+O   M 105.7;        // FM RESET TASTE VON BEDIENPULT
+O   DB20.DBX 4.0;   // RESET ANFORDERUNG
+=   DB20.DBX 4.0;   // RESET ANFORDERUNG
+NETWORK
+TITLE = NC-START/STARTVERR.
+U   DB20.DBX 0.2;   // FC NC-START
+UN  M 104.3;        // SUM  NC-STARTVERR.
+=   DB20.DBX 0.2;   // FC NC-START
+NETWORK
+TITLE = NC-START/NEG.DNC-QUITTUNG
+U   DB1.DBX 1366.0; // DNC-BETRIEB AKTIV
+U   DB20.DBX 0.2;   // FC NC-START
+U   M 104.3;        // SUM  NC-STARTVERR.
+S   DB20.DBX 319.0; // NC-START/NEG.DNC-QUITTUNG
+END_FUNCTION
+FUNCTION FC  9: VOID
+NAME: RESET
+BEGIN
+NETWORK
+TITLE = /FM AUX-ON
+U   M 110.0;        // AUX-ON
+FN  M 109.5;        // /FM AUX-ON
+NETWORK
+TITLE = /FM AUX-ON/WORT RESET
+U   M 109.5;        // /FM AUX-ON
+=   M 98.1;         // /FM AUX-ON/WORT RESET
+NETWORK
+TITLE = /FM HANDBETRIEB AKTIV
+;       U   M 113.0;        // HANDBETRIEB AKTIV
+;       FN  M 113.7;        // /FM HANDBETRIEB AKTIV
+NETWORK
+TITLE = /FM SONDERBETRIEB/WORT RESET
+;       U   M 113.7;        // /FM HANDBETRIEB AKTIV
+;       =   M 98.3;         // /FM SONDERBETRIEB/WORT RESET
+NETWORK
+TITLE = SUM RESET
+L   MW 98;          // LADE WORT RESET
+L   W#16#0;         // LADE KONSTANTE HEX 0
+<>I ;               // VERGLEICH AUF UNGLEICH
+=   M 104.4;        // SUM RESET
+NETWORK
+TITLE = FC RESET/SPS
+O   M 104.4;        // SUM RESET
+S   DB1.DBX 1440.0; // FC RESET/SPS
+END_FUNCTION
+FUNCTION FC 10 : VOID
+NAME: BEI_PROGRAMM_ENDE_RESET_ODER_NEUSTART
+BEGIN
+NETWORK 1
+TITLE = DAUERLAUF BIT FREISCHALTEN
+U   DB10.DBX 1.0;   // SPS-MSD DAUERLAUF-BIT
+UN  DB10.DBX 77.2;  // LADEMAGAZIN AKTIVIEREN
+=   M 10.2          // NEUSTART NACH PROGRAMMENDE
+NETWORK 2
+TITLE = LED 1x TASTE AKTIVIEREN
+U   DB10.DBX 77.2;  // LADEMAGAZIN UND 1x TASTE AKTIVIEREN
+SPB   M001
+=   M 8.2           // 1X AKTIV
+M001:  NOP 0;
+NETWORK 3
+TITLE = NEUSTART VON 1X TASTE UND VON M30,M32
+// M30 UND M32 SIND NICHT IM SELBEN PLC-CYCLUS AKTIV !!!!!!!!
+U   DB20.DBX 195.6; // M30 DYN.
+U   DB10.DBX 77.2;  // LADEMAGAZIN AKTIVIEREN
+UN  M 8.2           // 1X AKTIV
+S   M 10.6          // HM M30 DYN.
+U   DB20.DBX 196.0; // M32 DYN.
+U   DB10.DBX 77.2;  // LADEMAGAZIN AKTIVIEREN
+UN  M 8.2           // 1X AKTIV
+S   M 10.7          // HM M32 DYN.
+U   M 10.6          // HM M30 DYN.
+U   M 10.7          // HM M32 DYN.
+S   M 10.2          // NEUSTART NACH PROGRAMMENDE
+NETWORK 4
+TITLE = PROGRAMM ENDE AN NC
+U   M 10.1;         // HM
+UN  M 10.2          // NEUSTART NACH PROGRAMMENDE
+R   M 10.1;         // HM
+=   DB20.DBX 348.1; // PROGRAMM LÄUFT WIRD ZURUECKGESETZT
+R   M 10.6          // HM M30 DYN.
+R   M 10.7          // HM M32 DYN.
+NETWORK 5
+TITLE = PROGRAMM ENDE UND NEUSTART (DAUERLAUF) AN NC
+U   M 10.1;         // HM
+U   M 10.2          // NEUSTART NACH PROGRAMMENDE
+UN  M 104.3;        // SUM  NC-STARTVERR.
+U   DB20.DBX 340.3; // EINLESEFREIGABE
+R   M 10.1;         // HM
+=   DB20.DBX 348.2; // PROGRAMM LÄUFT WIRD ZURUECKGESETZT UND GESTARTET
+R   M 10.2          // NEUSTART NACH PROGRAMMENDE
+R   M 10.6          // HM M30 DYN.
+R   M 10.7          // HM M32 DYN.
+NETWORK 6
+TITLE = ISTDREHZAHL KLEINER 20U/MIN
+O   DB20.DBX 192.2; // M2 DYN.
+O   DB20.DBX 195.6; // M30 DYN.
+S   M 10.0;         // HM
+U   M 10.0;         // HM ENDE ODER NEUSTART
+U   M 114.3;        // ISTDREHZAHL KLEINER 20U/MIN
+S   M 10.1;         // HM
+R   M 10.0;         // HM ENDE ODER NEUSTART
+NETWORK 7
+TITLE = M2 M30 und M32 RUECKMELDEN VON M2,M30,M32 UND RESET
+O   DB20.DBX 348.1; // PROGRAMM LÄUFT WIRD ZURUECKGESETZT
+O   DB20.DBX 348.2; // PROGRAMM LÄUFT WIRD ZURUECKGESETZT UND GESTARTET
+O   DB1.DBX 1370.3; // RESETTASTE GEDRUECKT
+O   DB1.DBX 1440.0; // RESET AUSGELÖST
+R   M 10.0;         // HM ENDE ODER NEUSTART
+R   M 10.1;         // HM
+R   M 10.2          // NEUSTART NACH PROGRAMMENDE
+R   M 10.6          // HM M30 DYN.
+R   M 10.7          // HM M32 DYN.
+=   DB20.DBX 259.6; // M30 RUECKMELDEN
+=   DB20.DBX 260.0; // M32 RUECKMELDEN
+=   DB20.DBX 256.2; // M2 RUECKMELDEN
+END_FUNCTION
+FUNCTION FC 14: VOID
+NAME: PLC NC-UEBERGABE UND AFG/EFG/SFG
+BEGIN
+NETWORK
+TITLE = SUM MELDUNGEN  AFG/EFG
+;//  BELEGUNG VON MELDUNGSWORT DB3.DBW 0:
+L   DB3.DBW 0;      // WORT/MELDUNGEN  AFG/EFG
+L   W#16#0;         // LADE KONSTANTE HEX 0
+<>I;                // VERGLEICH AUF UNGLEICH 0
+=   M 91.0;         // SUM MELDUNGEN  AFG/EFG
+NETWORK
+TITLE = SUM MELDUNGEN  AFG/EFG
+O   M 105.0;        // SUM ALARME 1
+O   M 105.1;        // SUM ALARME 2
+O   M 105.2;        // SUM ALARME 3/THERM. ALARME
+O   M 105.3;        // SUM ALARME 5
+O   M 105.4;        // SUM ALARME 6
+=   M 91.1;         // SUM ALARME  AFG/EFG
+U   M 91.1;         // SUM ALARME  AFG/EFG
+FP  M 53.2        // FM SUM ALARME  AFG/EFG
+NETWORK
+TITLE = AFG/EFG VON SICHERHEITSEINRICHTUNGEN
+UN  M 51.7;         // FREIGABE VON SICHERHEITSEINRICHTUNGEN
+=   M 91.4;         // AFG/EFG VON SICHERHEITSEINRICHTUNGEN
+NETWORK
+TITLE = ACHSFREIGABE
+;       UN  M 90.0;         // AUX-ON   AFG/EFG
+;       UN  M 91.2;         // ROBOTIK VORSCHUB-STOP AFG/EFG
+;       UN  M 91.3;         // TuerBEWEGUNG AKTIV  AFG/EFG
+;       UN  M 91.5;         // SPANNMITTELBEWEGUNG AKTIV  AFG/EFG
+;       UN  M 91.5;         // ZANGENBEWEGUNG AKTIV  AFG/EFG
+;       UN  M 90.2;         // C-ACHSE EINGESCHWENKT
+;       UN  M 90.3;         // WZW  AFG/EFG
+;       UN  M 90.4;         // AWZ EINKUPPELANFORDERUNG
+;       UN  M 90.5;         // AWZ LAUFT AUS  AFG/EFG
+;       UN  M 90.7;         // AUFFANGSCHALE IN BEWEGUNG
+UN  M 90.1;         // ACHSEN BETRIEBSBEREIT  AFG/EFG
+UN  M 90.6;         // HA LAUFT AUS  AFG/EFG
+UN  M 91.0;         // SUM MELDUNGEN  AFG/EFG
+UN  M 91.1;         // SUM ALARME  AFG/EFG
+UN  M 91.6;         // VORSCHUB HALT AKTIV  AFG/EFG
+UN  M 91.7;         // SPINDEL HALT AKTIV  AFG/EFG
+UN  M 91.4;         // AFG/EFG VON SICHERHEITSEINRICHTUNGEN
+=   M 102.0;        // SUM ACHSFREIGABE
+U   M 102.0;        // SUM ACHSFREIGABE
+=   DB20.DBX 340.4; // ACHSFREIGABE
+NETWORK
+TITLE = EINLESEFREIGABE
+UN  M 90.0;         // AUX-ON   AFG/EFG
+UN  M 90.1;         // ACHSEN BETRIEBSBEREIT  AFG/EFG
+UN  M 90.2;         // C-ACHSE EINGESCHWENKT
+UN  M 90.3;         // WZW  AFG/EFG
+UN  M 90.4;         // AWZ EINKUPPELANFORDERUNG
+UN  M 90.5;         // AWZ LAUFT AUS  AFG/EFG
+UN  M 90.6;         // HA LAUFT AUS  AFG/EFG
+UN  M 90.7;         // AUFFANGSCHALE IN BEWEGUNG
+UN  M 91.0;         // SUM MELDUNGEN  AFG/EFG
+UN  M 91.1;         // SUM ALARME  AFG/EFG
+;       UN  M 91.2;         // ROBOTIK VORSCHUB-STOP AFG/EFG
+UN  M 91.3;         // TuerBEWEGUNG AKTIV  AFG/EFG
+UN  M 91.5;         // SPANNMITTELBEWEGUNG AKTIV  AFG/EFG
+UN  M 91.5;         // ZANGENBEWEGUNG AKTIV  AFG/EFG
+;       UN  M 91.6;         // VORSCHUB HALT AKTIV  AFG/EFG
+UN  M 91.7;         // SPINDEL HALT AKTIV  AFG/EFG
+UN  M 91.4;         // AFG/EFG VON SICHERHEITSEINRICHTUNGEN
+=   M 104.0;        // SUM EINLESEFREIGABE
+U   M 104.0;        // SUM EINLESEFREIGABE
+;       UN  M 145.0         // HM ANWAHL HAUPTANTRIEB M3
+;       UN  M 145.1         // HM ANWAHL HAUPTANTRIEB M4
+;       UN  M 40.0          // HM ANWAHL AWZ-MOTOR M3
+;       UN  M 40.1          // HM ANWAHL AWZ-MOTOR M4
+;       UN  M 80.0          // UMSCHALTUNG SPINDEL/RUNDACHSE AKTIV
+;       UN  M 81.7          // ZUSATZMERKER UMSCHALTUNG SP/RUND ELFREIG // !!!!! YVONNE
+;       UN  M 39.0;         // EFG 7021  WERKZEUGWENDER FREIFAHREN
+=   DB20.DBX 340.3; // EINLESEFREIGABE
+NETWORK
+TITLE = Freigaben für Betriebsart Repos
+U   DB20.DBX 324.0; // PROGRAMM LÄUFT
+U   DB20.DBX 324.1; // PROGRAMM ANGEHALTEN
+U   DB20.DBX 326.3; // BETRIEBSART REPOS
+SPBN  M1801;
+=   DB25.DBX 340.3; // EINLESEFREIGABE K1
+=   DB25.DBX 340.4; // ACHSFREIGABE    K1
+M1801: NOP   0;
+;//    BELEGUNG VON MW 94 (SFG) :     8*************
+;//    M 94.0;      AUX-ON
+;//    M 94.1;      ER Modul BETRIEBSBEREIT
+;//    M 94.3;      SPANNMITTEL KEIN TEIL GESPANNT
+;//    M 94.5;      FUTTERSCHUTZ OFFEN
+;//    M 95.7;      SPINDEL HALT AKTIV
+NETWORK
+TITLE = SPINDELFREIGABE BEI ALARM FUTTERSCHUTZ OFFEN
+U   M 52.3;         // HM FUTTERSCHUTZ OFFEN
+=   M 94.5;         // ALARM FUTTERSCHUTZ OFFEN
+NETWORK
+TITLE = SUM  SFG
+L   MW 94;          // WORT  SFG
+L   W#16#0;         // LADE KONSTANTE HEX 0
+==I;                // VERGLEICH AUF GLEICH
+=   M 104.2;        // SUM  SFG
+NETWORK
+TITLE = SPINDELFREIGABE SPINDEL 0
+U   M 104.2;        // SUM  SFG
+U   M 145.3;         // REGLERFREIGABE FUER HAUPTANTRIEB
+L   S5T#200MS;      //
+SE  T 55
+U   T 55
+UN  DB20.DBX 324.2; // DRYRUN AKTIV
+=   DB20.DBX 340.5; // SPINDELFREIGABE SPINDEL 0
+NETWORK
+TITLE = SPS/OB-->WERKZEUGW. AKTIV
+U   DB10.DBX 75.5;  // SPS-MSD /WERKZEUGWENDER
+=   DB20.DBX 382.0; // SPS/RM-->WERKZEUGW. AKTIV
+NETWORK
+TITLE = SPS/OB-->TuerAUTOMATIK AKTIV
+U   DB10.DBX 75.0;  // SPS-MSD /TuerAUTOMATIK
+=   DB1.DBX 1418.0; // SPS/RM-->TuerAUTOMATIK AKTIV
+NETWORK
+TITLE = SPS/OB-->PNEUM. SPM AKTIV
+U   DB10.DBX 75.2;  // SPS-MSD /PNEUM. SPM
+=   DB20.DBX 382.1; // SPS/RM-->PNEUM. SPM AKTIV
+NETWORK
+TITLE = SPS/OB-->PNEUM. PINOLE AKTIV
+U   DB10.DBX 75.1;  // SPS-MSD /PINOLE
+=   DB20.DBX 382.2; // SPS/RM-->PNEUM. PINOLE AKTIV
+NETWORK
+TITLE = SPS/OB-->AUSBLASEINR. AKTIV
+U   DB10.DBX 75.3;  // SPS-MSD /AUSBLASEN
+=   DB20.DBX 382.4; // SPS/RM-->AUSBLASEINR. AKTIV
+NETWORK
+TITLE = SPS/OB-->KUEHLMITTEL AKTIV
+SET;
+=   DB20.DBX 382.3; // SPS/RM-->KUEHLMITTEL AKTIV
+NETWORK
+TITLE = SUM SPINDEL EIN/AUS
+UN  DB20.DBX 326.1; // BETRIEBSART EDIT
+UN  DB20.DBX 326.2; // BETRIEBSART MDI
+UN  DB20.DBX 326.3; // BETRIEBSART REPOS
+UN  DB20.DBX 326.4; // BETRIEBSART AUTOMATIK
+UN  DB20.DBX 327.2; // BETRIEBSART REFERENZ
+UN  DB20.DBX 327.4; // BETRIEBSART PRESET
+=   M 104.5;        // HM BETRIEBSART JOG UND INC
+END_FUNCTION
+FUNCTION FC 12: VOID
+NAME: Handbetrieb
+BEGIN
+//    X 6:8    DB20.DBX 827.6;          // Schluesselschalter auf Handbetrieb
+NETWORK
+TITLE = FG SONDERBETRIEB/SICHERHEITSSCH.
+UN  DB20.DBX 827.6;          // Schluesselschalter auf Handbetrieb
+=   M 113.0;        // HANDBETRIEB AKTIV
+NETWORK
+TITLE = MELDUNG 7067  HANDBETRIEB AKTIV
+U   M 113.0;        // HANDBETRIEB AKTIV
+UN  DB20.DBX 826.1; // TASTE NC START VON BEDIENPULT
+=   M 18.4;         // HM MELDUNG 7067  HANDBETRIEB AKTIV
+NETWORK
+TITLE = HANDBETRIEB AKTIV
+U   M 113.0;        // HANDBETRIEB AKTIV
+L   S5T#800MS;      // 8X0,1S
+SA  T 25;           // HANDBETRIEB AKTIV 800MS AUSSCHALTVERZ.
+NETWORK
+TITLE = SB AKTIV/VORSCHUBBEGR. 2M/MIN
+U   M 113.0;        // HANDBETRIEB AKTIV
+=   DB20.DBX 340.2; // SB AKTIV/VORSCHUBBEGR.FUER AC 2M/MIN
+NETWORK
+TITLE = SPS/OB-->HANDBETRIEB EIN
+UN  DB20.DBX 827.6;          // Schluesselschalter auf Handbetrieb
+=   DB1.DBX 1390.6; // SPS/RM-SCHLUESSELSCHALTER AUF SONDERBETRIEB
+NETWORK
+TITLE = RESET WENN SCHLUESSELSCHALTER UMGESCHALTEN WIRD
+UN  DB20.DBX 827.6;          // Schluesselschalter auf Handbetrieb
+FP  M 43.6;         // FM SCHLUESSELSCHALTER AUF SONDERBETRIEB
+U   M 43.6;         // FM SCHLUESSELSCHALTER AUF SONDERBETRIEB
+;       U   DB20.DBX 324.0; // NC START AKTIV
+SPBN M001;
+=   DB20.DBX 4.0;   // Anforderung für Reset-Taste (Verhalten wie bei Taste!)
+M001:  NOP 0;
+NETWORK
+TITLE = RESET WENN SCHLUESSELSCHALTER auf Automatik bei offener Tuer UMGESCHALTEN WIRD
+U  DB20.DBX 827.6;          // Schluesselschalter auf Handbetrieb
+FP  M 43.7;         // FM SCHLUESSELSCHALTER NICHT AUF SONDERBETRIEB
+U   M 43.7;         // FM SCHLUESSELSCHALTER NICHTAUF SONDERBETRIEB
+UN  M 12.0          // Tuer zu und Verriegelt
+SPBN M002;
+=   DB20.DBX 4.0;   // Anforderung für Reset-Taste (Verhalten wie bei Taste!)
+M002:  NOP 0
+END_FUNCTION
+FUNCTION FC 13: VOID
+NAME: INITIALISIERUNGEN UEBERWACHUNGEN UND ALARME
+BEGIN
+NETWORK
+TITLE = Remanente Bereiche aus SE/Daten laden
+U     DB1.DBX 1370.0;     // 1. PLC-Durchlauf
+SPBN     M1301;
+L     DB15.DBW 20;        // Maschinenkonfig. in SE-Daten
+T     MW 5;               // akt. Maschinenkonfiguration
+M1301: NOP   0;
+NETWORK
+TITLE = SCHLUESSELSCHALTER VORHANDEN
+U   DB1.DBX 1370.0; // 1.SPS-SCHLEIFENDURCHLAUF
+S   DB1.DBX 1418.2; // SCHLUESSELSCHALTER VORHANDEN
+NETWORK
+TITLE = M0,M1 AUSLÖSUNG
+O   M 58.0;         // FM ANFORDERUNG NEUES T-WORT
+O   DB20.DBX 192.0; // M0 DYNAMISCH
+=   DB20.DBX 256.0; // M0 RUECKMELDEN
+U   DB20.DBX 192.1; // M1 DYNAMISCH
+U   DB20.DBX 324.5; // BEDINGTER HALT AKTIV
+=   DB20.DBX 256.1; // M1 RUECKMELDEN
+U   DB20.DBX 192.1; // M1 DYNAMISCH
+U   DB20.DBX 324.5; // BEDINGTER HALT AKTIV
+O   M 58.0;         // FM ANFORDERUNG NEUES T-WORT
+O   DB20.DBX 192.0; // M0 DYNAMISCH
+=   M 34.1;         // HM M0/M1 DYNAMISCH
+NETWORK
+TITLE = SPS/OB-->EINZELSTUECK AKTIV
+UN  DB10.DBX 1.0;   // SPS-MSD DAUERLAUF AKTIV
+=   DB1.DBX 1390.3; // SPS/RM-->EINZELSTUECK AKTIV
+NETWORK
+TITLE = VORSCHUBSCHALTER AUF 0%
+L   DB20.DBW 358;   // FEED-OVERRIDE-ISTWERT
+L   W#16#0000;      // LADE 0
+==I;                // VERGLEICH AUF GLEICH
+=   M 100.2;        // VORSCHUBSCHALTER AUF 0%
+NETWORK
+TITLE = EILGANG UEBERLAGERUNG
+U   DB20.DBX 827.4  // Eilgang Taster
+U   DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+UN  M 3.5           // FREIGABE UMDREHUNGSVORSCHUB
+=   DB20.DBX 824.0; // EILGANG UEBERLAGERUNG KANAL 0
+NETWORK
+TITLE = LED EILGANG UEBERLAGERUNG
+U   DB20.DBX 824.0; // EILGANG UEBERLAGERUNG KANAL 0
+U   M 131.7;        // ACHSEN IN BEWEGUNG
+=   DB20.DBX 847.4  // LED Eilgang Taster
+NETWORK
+TITLE = HAUPTANTRIEB LÄUFT
+UN  M 114.3;        // ISTDREHZAHL KLEINER 20U/MIN
+=   M 20.0;         // HAUPTANTRIEB LÄUFT (AUSGANG BEDIENMODUL X1:9)
+NETWORK
+TITLE = FREIGABE VON SICHERHEITSEINRICHTUNGEN
+U   M 50.3;         // FREIGABEKREIS AUF AUSGABEMODUL DURCHGESCHALTET
+U   M 50.0          // Tuer ZU VON TuerMODUL Y4A043000 X5:4 FG1
+U   DB20.DBX 827.6;          // Schluesselschalter auf Handbetrieb
+ON  DB20.DBX 827.6;          // Schluesselschalter auf Handbetrieb
+=   M 51.7          // FREIGABE VON SICHERHEITSEINRICHTUNGEN
+FN  M 51.6          // NEGATIV FLANKENMERKER AUS FREIGABE VON SICHERHEITSEINRICHTUNGEN
+NETWORK
+TITLE = ACHSEN IN BEWEGUNG
+L   DB1.DBB 1358;   // ACHSEN IN BEWEGUNG
+L   B#16#0;         // LADE KONSTANTE HEX 0
+<>I;                // VERGLEICH AUF UNGLEICH
+=   M 131.7;        // ACHSEN IN BEWEGUNG
+NETWORK
+TITLE = X/Z ACHSE IN BEWEGUNG
+O   DB1.DBX 1358.0;   // X-ACHSE IN BEWEGUNG
+O   DB1.DBX 1358.2;   // Z-ACHSE IN BEWEGUNG
+=   M 131.6;          // X/Z ACHSEN IN BEWEGUNG
+U   M 131.6;
+L   S5T#10MS;       // 10MS
+SA  T 71;           // STARTEN  ALS AUSSCHALTVERZÖGERND.
+U   T 71;
+=   M 133.0;        // X/Z ACHSEN IN BEWEGUNG ASCHALTVERZÖGERND
+NETWORK
+TITLE = JOG PLUS AKTIV
+L   DB20.DBB 10;    // JOG PLUS AKTIV
+L   B#16#0;         // LADE KONSTANTE HEX 0
+<>I;                // VERGLEICH AUF UNGLEICH
+=   M 135.0;        // JOG PLUS AKTIV
+FP  M 135.1;        // FM JOG PLUS AKTI
+NETWORK
+TITLE = JOG MINUS AKTIV
+L   DB20.DBB 12;    // JOG MINUS AKTIV
+L   B#16#0;         // LADE KONSTANTE HEX 0
+<>I;                // VERGLEICH AUF UNGLEICH
+=   M 135.2;        // JOG MINUS AKTIV
+FP  M 135.3         // FM JOG MINUS AKTI
+NETWORK
+TITLE =  EasyCycle beenden und LED löschen
+U   DB1.DBX 1440.1; // PROGRAMM BEENDEN
+U   M 110.0;        // AUX-ON
+R   DB1.DBX 1440.1; // PROGRAMM BEENDEN
+U   DB1.DBX 1440.1; // PROGRAMM BEENDEN
+UN  M 110.0;        // AUX-ON
+SPBN   M1302
+L   W#16#0;         // LADE KONSTANTE HEX 0
+T   DB20.DBW 846    // LED IM BEDIENPULT LÖSCHEN
+T   DB20.DBW 848    // LED IM BEDIENPULT LÖSCHEN
+M1302:  NOP 0
+END_FUNCTION
+FUNCTION FC 17: VOID
+NAME: ER Modul Netzeinspeisung
+BEGIN
+//  X420:5   A 10.1 // AUX ON Schuetz
+//  X422:5   E 3.5 // Rueckmeldung Netzschuetz ER-Modul abgefallen
+//  X422:4   E 3.4 // ER-Modul betriebsbereit
+// Signale für USBSPS:
+// DB1.DBX 1598.0  // X3.6 Impulsfreigabe ER-ModulHauptantrieb für USBSPS
+// DB1.DBX 1598.1  // X3.7 Impulsfreigabe Hauptantrieb für USBSPS
+// DB1.DBX 1598.2 = 0 Achs-Stillstandsueberwachung aktivieren
+//                = 1 Achs-Stillstandsueberwachung deaktivieren
+// DB1.DBX 1598.3 = 0 Spindel-Stillstandsueberwachung aktivieren
+//                = 1 Spindel-Stillstandsueberwachung deaktivieren
+NETWORK
+TITLE = ALARM 6007 VERSORGUNGSSCHUETZE NICHT ABGEFALLEN
+U   DB1.DBX 1370.0; // 1.SPS SCHLEIFENDURCHLAUF
+UN  E 3.5           // Rueckmeldung Netzschuetz ER-Modul abgefallen
+S   DB2.DBX 0.7;    // ALARM 6007 VERSORGUNGSSCHUETZE NICHT ABGEFALLEN
+NETWORK
+TITLE = ER Modul
+U   M 110.0;        // AUX-ON
+U   E 3.5;          // Rueckmeldung Netzschuetz ER-Modul abgefallen
+S   A 10.1;         // AUX ON Schuetz
+S   DB1.DBX 1598.0  // X3.6 Impulsfreigabe ER-ModulHauptantrieb für USBSPS
+UN  M 110.0;        // AUX-ON
+L     S5T#3S;       // 3S
+SE  T 57;
+O   T 57;
+O   T 1;            // 3S Einschaltverzögerung nach NOT AUS für NE Modul Klemme 64
+O(
+U   E 6.0;          // HA Drehzahl=0 von Relais
+U   DB2.DBX 0.0;    // 6000  NOT-AUS
+UN  M 131.7;        // ACHSE IN BEWEGUNG
+)
+R    A 10.1;        // AUX ON Schuetz
+R   DB1.DBX 1598.0  // X3.6 Impulsfreigabe ER-ModulHauptantrieb für USBSPS
+NETWORK
+TITLE = ER Modul BETRIEBSBEREIT
+U   E 3.4;          // ER-Modul betriebsbereit
+U   A 10.1;         // AUX ON Schuetz
+U   DB1.DBX 1598.0  // X3.6 Impulsfreigabe ER-ModulHauptantrieb für USBSPS
+=   M 131.0;        // ER Modul BETRIEBSBEREIT
+NETWORK
+TITLE = SFG VON ER Modul BETRIEBSBEREIT
+UN  M 131.0;        // ER Modul BETRIEBSBEREIT
+=   M 94.1;         // ER Modul BETRIEBSBEREIT
+NETWORK
+TITLE = ER Modul betriebsbereit
+U   A 10.1;         // AUX ON Schuetz
+U   DB1.DBX 1598.0  // X3.6 Impulsfreigabe ER-ModulHauptantrieb für USBSPS
+L   S5T#5S;         // 25X0,1S
+SE  T 8;            // STARTEN T8 ALS EINSCHALTVERZ.
+NETWORK
+TITLE = ALARM 6019 ER Modul nicht betriebsbereit
+UN  E 3.4;          // ER-Modul betriebsbereit
+L   S5T#0S4000MS;   // 2X0,1S
+SE  T 9;            // STARTEN T9 ALS EINSCHALTVERZ.
+U   T 8;            // ER MODUL UEBERWACHUNG SCHARF
+U   T 9;            // ER MODUL NICHT-READY (0,2S)
+S   DB2.DBX 2.3;    // A 6019 ER Modul nicht betriebsbereit
+O   DB1.DBX 1370.2; // QUITTIERT. GEDRUECKT (MSTT/PC)
+O   DB1.DBX 1370.3; // RESET-TASTE GEDRUECKT
+R   DB2.DBX 2.3;    // A 6019 ER MODUL NICHT BETRIEBSBEREIT
+END_FUNCTION
+FUNCTION FC 18: VOID
+NAME: KUEHLMITTEL Schalter
+BEGIN
+NETWORK
+TITLE = Kühlmittelschalter
+//  X422:8   E 3.6 // MOTORSCHUTZ KUEHLMITTELPUMPE
+//  X421:9   A 9.4 // Leistung Kühlmittelpumpe
+//  DB20.DBX 828.0  // Kühlmittelschalter Handbetrieb
+//  DB20.DBX 828.1  // Kühlmittelschalter Spindelbetrieb
+//  DB20.DBX 848.0  // LED Kühlmittelschalter
+O   DB20.DBX 340.0; // SPINDEL EIN IM UHRZEIGER
+O   DB20.DBX 340.1; // SPINDEL EIN GEGEN UHRZEIGER
+U   DB20.DBX 340.5; // SPINDELFREIGABE SPINDEL 0
+UN  M 114.3;        // HA ISTDREHZAHL KLEINER 20U/MIN
+=   M 107.6         // Spindel läuft
+U   DB20.DBX 828.1  // Kühlmittelschalter Spindelbetrieb
+U   M 107.6         // Spindel läuft
+O   DB20.DBX 828.0  // Kühlmittelschalter Handbetrieb
+=   M 107.1;        // KUEHLMITTEL EIN
+NETWORK
+TITLE = KUEHLMITTEL FREIGABE
+U   M 110.0;        // AUX-ON
+U   E 3.6           // MOTORSCHUTZ KUEHLMITTELPUMPE
+=   M 107.0;        // KUEHLMITTEL FREIGABE
+NETWORK
+TITLE = KUEHLMITTEL LEISTUNG
+U   M 107.1;        // KUEHLMITTEL EIN
+U   M 107.0;        // KUEHLMITTEL FREIGABE
+=   A 9.4;          // Leistung Kühlmittelpumpe
+NETWORK
+TITLE = LED Kühlmittelschalter
+U   T 47;           // STARTEN ALS VERLÄNGERTER IMPULS
+U   DB20.DBX 828.1  // Kühlmittelschalter Spindelbetrieb
+UN  M 107.6         // Spindel läuft
+O   A 9.4;          // Leistung Kühlmittelpumpe
+=   DB20.DBX 848.0  // LED Kühlmittelschalter
+NETWORK
+TITLE = SPS/OB-->KUEHLMITTEL EIN
+U   M 107.1;        // KUEHLMITTEL EIN
+=   DB20.DBX 310.5; // SPS/OB-->KUEHLMITTEL EIN
+NETWORK
+TITLE = SPS/OB-->KUEHLMITTEL SPRITZT
+U   A 9.4;          // Leistung Kühlmittelpumpe
+=   DB20.DBX 310.6; // SPS/RM-->KUEHLMITTEL SPRITZT
+NETWORK
+TITLE = ALARM MOTORSCHUTZ KUEHLMITTEL
+UN  E 3.6;          // MOTORSCHUTZ KUEHLMITTELPUMPE
+S   M 40.0;         // HM MELDUNG 7065 MOTORSCHUTZ KUEHLMITTELPUMPE
+U   E 3.6;          // MOTORSCHUTZ KUEHLMITTELPUMPE
+R   M 40.0;         // HM MELDUNG 7065 MOTORSCHUTZ KUEHLMITTELPUMPE
+END_FUNCTION
+FUNCTION FC 25: VOID
+NAME: KUEHLMITTEL_M8_M9
+BEGIN
+NETWORK
+TITLE = Kühlmittelschalter
+//  X422:8   E 9.4  // MOTORSCHUTZ KUEHLMITTELPUMPE
+//  X421:9   A 9.4  // Leistung Kühlmittelpumpe
+//  DB20.DBX 828.0  // Kühlmittelschalter Handbetrieb
+//  DB20.DBX 828.1  // Kühlmittelschalter Spindelbetrieb
+//  DB20.DBX 848.0  // LED Kühlmittelschalter
+//  DB20.DBX 324.0; // Programm läuft
+NETWORK
+TITLE = Spindel läuft
+O   DB20.DBX 340.0; // SPINDEL EIN IM UHRZEIGER
+O   DB20.DBX 340.1; // SPINDEL EIN GEGEN UHRZEIGER
+U   DB20.DBX 340.5; // SPINDELFREIGABE SPINDEL 0
+UN  M 114.3;        // HA ISTDREHZAHL KLEINER 20U/MIN
+=   M 107.6         // Spindel läuft
+NETWORK
+TITLE = Auswertung Kühlmittelschalter
+U   DB20.DBX 828.1  // Kühlmittelschalter Spindelbetrieb
+U   M 107.6         // Spindel läuft
+UN  DB20.DBX 324.0; // Programm läuft
+O   DB20.DBX 828.0  // Kühlmittelschalter Handbetrieb
+=   M 117.1;        // KUEHLMITTEL EIN Handbetrieb
+O   DB20.DBX 828.0  // Kühlmittelschalter Handbetrieb
+O   DB20.DBX 828.1  // Kühlmittelschalter Spindelbetrieb
+=   M 117.0         // Kühlmittelfreigabe von Kühlmittelschalter
+NETWORK
+TITLE = ANWAHL KUEHLMITTEL (EIN M8)
+U   DB20.DBX 193.0; // M8 DYN.
+U   DB20.DBX 324.0; // Programm läuft
+S   M 107.3;        // KUEHLMITTEL PROGRAMMIERT
+=   DB20.DBX 257.0; // M8 RUECKMELDEN
+NETWORK
+TITLE = ABWAHL KUEHLMITTEL (AUS M9)
+O   DB1.DBX 1370.0; // 1.SPS-SCHLEIFENDURCHLAUF
+O   DB1.DBX 1440.0  // RESET AUSGELÖST
+O   DB1.DBX 1370.3; // RESETTASTE GEDRUECKT
+ON  M 110.0;        // AUX-ON
+O   DB20.DBX 192.2; // M2 DYN.
+O   DB20.DBX 195.6; // M30 DYN.
+O   DB20.DBX 193.1; // M9 DYN.
+=   DB20.DBX 257.1; // M9 RUECKMELDEN
+R   M 107.3;        // KUEHLMITTEL PROGRAMMIERT
+NETWORK
+TITLE = KUEHLMITTEL EIN Automatikbetrieb
+U   M 107.3;        // KUEHLMITTEL PROGRAMMIERT
+UN  DB20.DBX 324.1; // PROGRAMM ANGEHALTEN
+UN  DB20.DBX 324.2; // DRYRUN AKTIV
+=   M 107.1;        // KUEHLMITTEL EIN Automatikbetrieb
+NETWORK
+TITLE = KUEHLMITTEL LEISTUNG
+O   M 107.1;        // KUEHLMITTEL EIN Automatikbetrieb
+O   M 117.1;        // KUEHLMITTEL EIN Handbetrieb
+U   M 110.0;        // AUX-ON
+U   M 117.0         // Kühlmittelfreigabe von Kühlmittelschalter
+U   E 3.6           // MOTORSCHUTZ KUEHLMITTELPUMPE
+=   A 9.4;          // Leistung Kühlmittelpumpe
+NETWORK
+TITLE = LED Kühlmittelschalter
+U   M 107.3;        // KUEHLMITTEL PROGRAMMIERT
+U   DB20.DBX 828.1  // Kühlmittelschalter Spindelbetrieb
+U   T 47            // Blinkfrequenz
+O   A 9.4;          // Leistung Kühlmittelpumpe
+=   DB20.DBX 848.0  // LED Kühlmittelschalter
+NETWORK
+TITLE = SPS/OB-->KUEHLMITTEL eingeschaltet und spritzt
+U   A 9.4;          // Leistung Kühlmittelpumpe
+=   DB20.DBX 310.6; // SPS/RM-->KUEHLMITTEL SPRITZT
+=   DB20.DBX 310.5; // SPS/OB-->KUEHLMITTEL EIN
+NETWORK
+TITLE = ALARM MOTORSCHUTZ KUEHLMITTEL
+UN  E 3.6;          // MOTORSCHUTZ KUEHLMITTELPUMPE
+S   M 40.0;         // HM MELDUNG 7065 MOTORSCHUTZ KUEHLMITTELPUMPE
+U   E 3.6;          // MOTORSCHUTZ KUEHLMITTELPUMPE
+R   M 40.0;         // HM MELDUNG 7065 MOTORSCHUTZ KUEHLMITTELPUMPE
+END_FUNCTION
+FUNCTION FC 19: VOID
+NAME: SPINDEL_HALT_START_M3_M4
+BEGIN
+NETWORK
+TITLE = FM TASTE SPINDEL HALT (BEDINPULT)
+U   DB20.DBX 826.3;          // TASTE SPINDEL HALT (BEDIENPULT)
+UN  DB20.DBX 295.4; // TASTE SPINDEL START (PC)
+U(
+ON  M 114.3;        // ISTDREHZAHL KLEINER 20U/MIN
+)
+FP  M 132.7;        // FM TASTE SPINDEL HALT
+NETWORK
+TITLE = SPINDEL HALT/START FREIGABE
+U   M 104.2; // SUM  SFG
+U   DB20.DBX 324.1; // NC-STOP AKTIV
+=   M 132.0;        // SPINDEL HALT/START FREIGABE
+NETWORK
+TITLE = SPINDEL HALT AKTIV
+U   M 132.0;        // SPINDEL HALT/START FREIGABE
+U   M 132.7;        // FM TASTE SPINDEL HALT
+U(  ;
+ON  M 104.5;        // HM BETRIEBSART JOG UND INC
+O   DB20.DBX 324.0; // PROGRAMM LÄUFT
+)   ;
+U   M 50.0          // Tuer ZU VON TuerMODUL Y4A043000 X5:4 FG1
+R   M 145.4
+S   M 132.1;        // SPINDEL HALT AKTIV
+U(
+O   M 52.1          // FM TASTE BEDIENPULT SPINDEL START M4
+O   M 52.0          // FM TASTE BEDIENPULT SPINDEL START M3
+)
+U   M 132.1;        // SPINDEL HALT AKTIV
+U   DB20.DBX 324.0; // PROGRAMM LÄUFT
+U   M 50.0          // Tuer ZU VON TuerMODUL Y4A043000 X5:4 FG1
+S   M 145.4
+U   M 145.4
+L   S5T#200MS;      // 200MS
+SE  T 5;            // STARTEN T 5 ALS EINSCHALTVERZ.
+U   T 5;            // STARTEN T 5 ALS EINSCHALTVERZ.
+R   M 132.1;        // SPINDEL HALT AKTIV
+O   DB1.DBX 1440.0  // RESET AUSGELÖST
+O   DB1.DBX 1370.3; // RESETTASTE GEDRUECKT
+R   M 132.1;        // SPINDEL HALT AKTIV
+R   M 145.4
+NETWORK
+TITLE = SPINDEL HALT AKTIV  SFG/ AFG/EFG
+U   M 132.1;        // SPINDEL HALT AKTIV
+=   M 95.7;         // SPINDEL HALT AKTIV  SFG
+=   M 91.7;         // SPINDEL HALT AKTIV  AFG/EFG
+;  NETWORK
+;  TITLE = /FM TASTE SPINDEL START (MT/PC)
+;
+;       U   DB20.DBX 295.4; // TASTE SPINDEL START (PC)
+;       UN  DB20.DBX 295.3; // TASTE SPINDEL HALT (PC)
+;       FN  M 132.3;        // FM TASTE SPINDEL START
+END_FUNCTION
+FUNCTION FC 23: VOID
+NAME: LAMPENIMPULS
+BEGIN
+NETWORK
+TITLE = BLINKLICHT IMPULSDAUER
+U   DB1.DBX 1370.0; // 1.SPS SCHLEIFENDURCHLAUF
+SPBN   M001
+L   DB10.DBW 20;    // LADE ZEIT AUS SPS-MSD
+ITB;                // UMWANDELN EINER GANZZAHL IN EINEN BCD-WERT
+T   MW 30;          // TRANSFERIERE IN MW30
+SET;
+R   M 31.4;         // ZEITRASTER 0,01S EINSTELLEN
+R   M 31.5;         // ZEITRASTER 0,01S EINSTELLEN
+M001:  NOP 0
+UN  T 48;           // PAUSENDAUER
+L   MW 30;          // LADE MW30
+SV  T 47;           // STARTEN ALS VERLÄNGERTER IMPULS
+NETWORK
+TITLE = BLINKLICHT PAUSENDAUER
+U   DB1.DBX 1370.0; // 1.SPS SCHLEIFENDURCHLAUF
+SPBN   M002
+L   DB10.DBW 22;    // LADE ZEIT AUS SPS-MSD
+ITB;                // UMWANDELN EINER GANZZAHL IN EINEN BCD-WERT
+T   MW 32;          // TRANSFERIERE IN MW32 (ZEITRASTER IST  0,01S)
+SET;
+R   M 33.4;         // ZEITRASTER 0,01S EINSTELLEN
+R   M 33.5;         // ZEITRASTER 0,01S EINSTELLEN
+M002:  NOP 0
+UN  T 47;           // IMPULSDAUER
+L   MW 32;          // LADE MW30
+SV  T 48;           // STARTEN ALS VERLÄNGERTER IMPULS
+END_FUNCTION
+FUNCTION FC 15: VOID
+NAME: MELDUNGEN
+BEGIN
+;HILFSMERKER ZUORDNUNG:
+;TITLE = 7000  FALSCHES T-WORT                M 16.0
+;TITLE = 7016  HILFSANTRIEBE EINSCHALTEN      M 18.0
+;TITLE = 7017  REFERENZPUNKT ANFAHREN         M 18.1
+;TITLE = 7018  SCHLUESSEL UMSCHALTEN           M 18.2
+;TITLE = 7019  PNEUMATIKÖLER LEER             M 18.3
+;TITLE = 7021  WERKZEUGWENDER FREIFAHREN      M 18.5
+;TITLE = 7022  AUFFANGSCHALEUEBERWACHUNG       M 18.6
+;TITLE = 7023  DRUCKSCHALTER EINSTELLEN       M 18.7
+;TITLE = 7024  SPANNMITTELBERO EINSTELLEN     M 19.0
+;TITLE = 7025  WARTEZEIT HAUPTANTRIEB         M 19.1
+;TITLE = 7026  MOTORSCHUTZ LUEFTER HAUPTANTRIEB AUS     M 56.7  NEU E 160
+;TITLE = 7038  DRUCKSCH.SCHMIERMITTEL DEFEKT  M 20.6
+;TITLE = 7039  SCHMIERMITTEL DEFEKT           M 20.7
+;TITLE = 7040  MASCHINENTuer OFFEN             M 21.0
+;TITLE = 7042  MASCHINENTuer INIT.             M 21.2
+;TITLE = 7043  SOLLSTUECKZAHL ERREICHT         M 21.3
+;TITLE = 7055  SPANNMITTEL OFFEN              M 22.0
+;TITLE = 7054  SPANNMITTEL KEIN TEIL GESPANNT M 22.1
+;TITLE = 7050  ZANGE SCHLIESSEN               M 22.2
+;TITLE = 7051  ZANGE/KEIN TEIL GESPANNT       M 22.3
+;TITLE = 7052  PINOLE IN ZWISCHENSTELLUNG     M 22.4
+;TITLE = 7053  PINOLE/KEIN TEIL GESPANNT      M 22.5
+;TITLE = 7060 ENDSCHALTER PINOL FREIFAHREN                      NEU E 160
+;TITLE = 7061 ENDSCHALTER X-ACHSE FREIFAHREN  M 54.5            NEU E 160
+;TITLE = 7062 ENDSCHALTER Z-ACHSE FREIFAHREN  M 56.5            NEU E 160
+;TITLE = 7063 OELSTAND ZENTRALSCHMIERUNG      M 56.6            NEU E 160
+;TITLE = 7064 FUTTERSCHUTZ OFFEN              M 56.7            NEU E 160
+;TITLE = 7065 MOTORSCHUTZ KUEHLMITTEL AUS     M 56.7            NEU E 160
+;TITLE = 7066 WERKZEUG BESTAETIGEN            M 42.3            NEU E 160
+;TITLE = 7067 HANDBETRIEB                     M 18.4            NEU E 160
+NETWORK
+TITLE = ALLE MELDUNGEN LOESCHEN
+L   0
+T   DB3.DBD 0       // 7000 BIS 7031
+T   DB3.DBD 4       // 7032 BIS 7063
+T   DB3.DBD 8       // 7064 BIS 7095
+NETWORK
+TITLE = Warten auf USBSPS nicht NOT-AUS
+O   M 58.1;         // HM ANFORDERUNG NEUES T-WORT
+O   M 11.5          // Warten auf USBSPS nicht NOT-AUS
+BEB
+NETWORK
+TITLE = 7039  SCHMIERMITTEL DEFEKT
+U   M 20.7;         // HM 7039  SCHMIERMITTEL DEFEKT
+=   DB3.DBX 4.7;    // 7039  SCHMIERMITTEL DEFEKT
+BEB
+NETWORK
+TITLE = 7042  MASCHINENTuer INIT.
+U   M 21.2          // HM 7042  MASCHINENTuer INIT.
+=   DB3.DBX 5.2;    // 7042  MASCHINENTuer INIT.
+BEB
+NETWORK
+TITLE = 7016  HILFSANTRIEBE EINSCHALTEN
+U   M 18.0          // HM 7016  HILFSANTRIEBE EINSCHALTEN
+=   DB3.DBX 2.0;    // 7016  HILFSANTRIEBE EINSCHALTEN
+BEB
+TITLE = 7060  ENDSCHALTER PINOL FREIFAHREN
+U   E 2.4;          // ENDSCHALTER PINOLE
+=   DB3.DBX 7.4;    // 7060 ENDSCHALTER PINOL FREIFAHREN
+BEB
+;  NETWORK
+;  TITLE = MELDUNG 7022  AUFFANGSCHALEUEBERWACHUNG
+;
+;       U   M 18.6;         // HM 7022  AUFFANGSCHALEUEBERWACHUNG
+;       =   DB3.DBX 2.6;    // MELDUNG 7022  AUFFANGSCHALEUEBERWACHUNG
+;       BEB
+;  NETWORK
+;  TITLE = MELDUNG 7023  DRUCKSCHALTER EINSTELLEN
+;
+;       U   M 18.7;         // HM 7023  DRUCKSCHALTER EINSTELLEN
+;       =   DB3.DBX 2.7;    // MELDUNG 7023  DRUCKSCHALTER EINSTELLEN
+;       BEB
+;  NETWORK
+;  TITLE = MELDUNG 7024  SPANNMITTELENDSCHALTER EINSTELLEN
+;
+;       U   M 19.0;         // HM 7024  SPANNMITTELENDSCHALTER EINSTELLEN
+;       =   DB3.DBX 3.0;    // MELDUNG 7024  SPANNMITTELENDSCHALTER EINSTELLEN
+;       BEB
+NETWORK
+TITLE = 7061 ENDSCHALTER X-ACHSE FREIFAHREN
+U   M 54.5;                 // HM MELDUNG 7061 ENDSCHALTER X-ACHSE FREIFAHREN
+=   DB3.DBX 7.5;          // 7061 ENDSCHALTER X-ACHSE FREIFAHREN
+BEB
+NETWORK
+TITLE = 7062 ENDSCHALTER Z-ACHSE FREIFAHREN
+U   M 56.5;                 // HM MELDUNG 7062 ENDSCHALTER Z-ACHSE FREIFAHREN
+=   DB3.DBX 7.6;          // 7062 ENDSCHALTER Z-ACHSE FREIFAHREN
+BEB
+NETWORK
+TITLE = 7066 WERKZEUG BESTAETIGEN
+U   M 42.3;                 // HM MELDUNG 7066 WERKZEUG BESTAETIGEN
+=   DB3.DBX 8.2;          // 7066 WERKZEUG BESTAETIGEN
+BEB
+NETWORK
+TITLE = 7064 FUTTERSCHUTZ OFFEN
+U   M 56.7;                 // HM MELDUNG 7064 FUTTERSCHUTZ OFFEN
+=   DB3.DBX 8.0;          // 7064 FUTTERSCHUTZ OFFEN
+BEB
+NETWORK
+TITLE = 7065  MOTORSCHUTZ KUEHLMITTELPUMPE
+U   M 40.0;               // HM MELDUNG 7065 MOTORSCHUTZ KUEHLMITTELPUMPE
+=   DB3.DBX 8.1;          // 7065 MOTORSCHUTZ KUEHLMITTELPUMPE
+BEB
+NETWORK
+TITLE = 7026  MOTORSCHUTZ LUFTER HAUPTANTRIEB
+U   M 40.2;               // HM MELDUNG 7026 MOTORSCHUTZ LUFTER HAUPTANTRIEB
+=   DB3.DBX 3.2;          // 7026 MOTORSCHUTZ LUEFTER HAUPTANTRIEB
+BEB
+;  NETWORK
+;  TITLE = 7017  REFERENZPUNKT ANFAHREN
+;
+;       U   M 18.1          // HM 7017  REFERENZPUNKT ANFAHREN
+;       =   DB3.DBX 2.1;    // 7017  REFERENZPUNKT ANFAHREN
+;       BEB
+NETWORK
+TITLE = 7018  SCHLUESSEL UMSCHALTEN
+U   M 18.2;         // HM 7018  SCHLUESSEL UMSCHALTEN
+=   DB3.DBX 2.2;    // 7018  SCHLUESSEL UMSCHALTEN
+BEB
+NETWORK
+TITLE = 7077 HANDBETRIEB
+U   M 18.4;         // HM 7067  HANDBETRIEB
+=   DB3.DBX 8.3;    // 7067  HANDBETRIEB
+BEB
+NETWORK
+TITLE = 7055  SPANNMITTEL OFFEN !
+U   M 110.0;        // AUX-ON
+U   DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+U   M 22.0;         // HM 7055  SPANNMITTEL OFFEN !
+=   DB3.DBX 6.7;    // 7055  SPANNMITTEL OFFEN !
+BEB
+NETWORK
+TITLE = 7054 SPANNMITTEL KEIN TEIL GESPANNT
+U   M 110.0;        // AUX-ON
+U   DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+U   M 22.1;         // HM 7054 SPANNMITTEL KEIN TEIL GESPANNT
+=   DB3.DBX 6.6;    // 7054 SPANNMITTEL KEIN TEIL GESPANNT
+BEB
+NETWORK
+TITLE = 7050  ZANGE SCHLIESSEN
+U   M 110.0;        // AUX-ON
+U   DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+U   M 22.2;         // HM 7050  ZANGE SCHLIESSEN
+=   DB3.DBX 6.2;    // 7050  ZANGE SCHLIESSEN
+BEB
+NETWORK
+TITLE = 7051  ZANGE/KEIN TEIL GESPANNT
+U   M 110.0;        // AUX-ON
+U   DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+U   M 22.3;         // HM 7051  ZANGE/KEIN TEIL GESPANNT
+=   DB3.DBX 6.3;    // 7051  ZANGE/KEIN TEIL GESPANNT
+BEB
+NETWORK 24
+TITLE = 7052  PINOLE IN ZWISCHENSTELLUNG
+UN  E  6.5;          // PINOLE GESPANNT
+U   M 22.4;         // HM 7052  PINOLE IN ZWISCHENSTELLUNG
+=   DB3.DBX 6.4;    // 7052  PINOLE IN ZWISCHENSTELLUNG
+BEB
+NETWORK 25
+TITLE = 7053  PINOLE/KEIN TEIL GESPANNT
+U   M 22.5;         // HM 7053  PINOLE/KEIN TEIL GESPANNT
+=   DB3.DBX 6.5;    // 7053  PINOLE/KEIN TEIL GESPANNT
+BEB
+NETWORK
+TITLE = 7016  HILFSANTRIEBE EINSCHALTEN
+U   DB20.DBX 324.4; // REFERENZPUNKT AKTIV
+U   M 18.0          // HM 7016  HILFSANTRIEBE EINSCHALTEN
+=   DB3.DBX 2.0;    // 7016  HILFSANTRIEBE EINSCHALTEN
+BEB
+NETWORK
+TITLE = 7016  HILFSANTRIEBE EINSCHALTEN
+U   M 18.0          // HM 7016  HILFSANTRIEBE EINSCHALTEN
+=   DB3.DBX 2.0;    // 7016  HILFSANTRIEBE EINSCHALTEN
+BEB
+NETWORK
+TITLE = 7038  DRUCKSCHALTER SCHMIERMITTEL DEFEKT
+U   M 20.6;         // HM 7038  DRUCKSCHALTER SCHM. DEFEKT
+=   DB3.DBX 4.6;    // 7038  DRUCKSCHALTER SCHM. DEFEKT
+BEB
+NETWORK
+TITLE = 7063 OELSTAND ZENTRALSCHMIERUNG
+U   M 56.6;         // HM 7063 OELSTAND ZENTRALSCHMIERUNG
+=   DB3.DBX 7.7;    // 7063 OELSTAND ZENTRALSCHMIERUNG
+BEB
+NETWORK
+TITLE = 7040  MASCHINENTuer OFFEN
+U   M 21.0          // HM 7040  MASCHINENTuer OFFEN
+=   DB3.DBX 5.0;    // 7040  MASCHINENTuer OFFEN
+BEB
+NETWORK 24
+TITLE = 7052  PINOLE IN ZWISCHENSTELLUNG
+U   M 22.4;         // HM 7052  PINOLE IN ZWISCHENSTELLUNG
+=   DB3.DBX 6.4;    // 7052  PINOLE IN ZWISCHENSTELLUNG
+BEB
+NETWORK
+TITLE = 7017  REFERENZPUNKT ANFAHREN
+U   M 18.1          // HM 7017  REFERENZPUNKT ANFAHREN
+=   DB3.DBX 2.1;    // 7017  REFERENZPUNKT ANFAHREN
+BEB
+NETWORK
+TITLE = 7021  WERKZEUGWENDER FREIFAHREN
+U   M 18.5;         // HM 7021  WZW NICHT VERRIEGELT
+=   DB3.DBX 2.5;    // MELDUNG 7021  WERKZEUGWENDER FREIFAHREN
+BEB
+NETWORK
+TITLE = 7043  SOLLSTUECKZAHL ERREICHT
+U   M 21.3;         // HM 7043  SOLLSTUECKZAHL ERREICHT
+=   DB3.DBX 5.3;    // 7043  SOLLSTUECKZAHL ERREICHT
+BEB
+NETWORK
+TITLE = 7018  SCHLUESSEL UMSCHALTEN
+U   M 18.2;         // HM 7018  SCHLUESSEL UMSCHALTEN
+=   DB3.DBX 2.2;    // 7018  SCHLUESSEL UMSCHALTEN
+BEB
+END_FUNCTION
+ORGANIZATION_BLOCK OB 1
+NAME: ORGANISATIONSBAUSTEIN
+BEGIN
+U     M 11.7 // USBSPS auf Ueberwachungsbetrieb eingestellt
+CC     FC  2  // CYCLISCHE ÜBERWACHUNG PIC
+CC     FC 16  // Stillstandsueberwachung
+CALL   FC  8  // NC-STARTVERR. UND BEDIENTASTEN
+CALL   FC 11  // Neues Sicherheitskonzept
+CALL   FC 13  // INITIALISIERUNGEN UEBERWACHUNGEN UND ALARME
+CALL   FC 21  // WERKZEUGBESTAETIGUNG
+CALL   FC  9  // RESET
+CALL   FC 10  // BEI PROGRAMM ENDE RESET ODER NEUSTART
+CALL   FC 17  // ER Modul Netzeinspeisung
+CALL   FC  3  // HA STEUERUNG SPINDEL0 (M3/M4/M5)
+CALL   FC  4  // X,Z-ACHSE, Imp.und Reglerfreigabe
+CALL   FC 22  // ENDSCHALTER ACHSEN UND PINOLE
+CALL   FC  7  // AUX-ON
+CALL   FC 12  // SONDERBETRIEB
+CALL   FC  6  // REF ACHSEN
+CALL   FC  5  // JOG ACHSEN
+CALL   FC 19  // SPINDEL HALT/START
+CALL   FC  1  // SCHMIERMITTEL
+UN    DB10.DBX 75.0   // Kühlmittel ein/aus mit M8 und M9 im Automatikbetrieb erlaubt
+CC     FC 18  // KUEHLMITTEL Schalter
+U     DB10.DBX 75.0   // Kühlmittel ein/aus mit M8 und M9 im Automatikbetrieb erlaubt
+CC     FC 25  // KUEHLMITTEL (M8/M9)
+CALL   FC 23  // LAMPENIMPULS
+CALL   FC 15  // MELDUNGEN 7000
+;    CALL   FC  8  // NC-STARTVERR. UND BEDIENTASTEN
+CALL   FC 20  // BETREIBSARTENUMSCHALTUNG
+CALL   FC 14  // PLC NC-UEBERGABE UND AFG/EFG/SFG
+CALL   FC 24  // STUECKZAEHLER
+END_ORGANIZATION_BLOCK

@@ -1,0 +1,12 @@
+;X-Referenzsch.
+E0.0/B
+;Y-Referenzsch.
+E0.1/B
+;Z-Referenzsch.
+E0.2/B
+;Antrieb Ready X,Y,Z,HA,E/R
+E1.0/B
+E1.1/B
+E1.2/B
+E1.3/B
+E5.5/B

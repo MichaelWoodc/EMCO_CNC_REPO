@@ -1,0 +1,10 @@
+N1 IF $P_DRYRUN GOTOF DRY1 
+N2 IF $P_SEARCH GOTOF DRY1 
+N3 _MSG11: MSG("$85158")   ;MSG("Stangenlader schiebt vor! *Warten auf Quitierung*")
+N4 G4 F0.1
+N5 IF $A_IN[8]==0 GOTOB _MSG11
+N6 
+N7 DRY1:
+N8 MSG("") ;MELDUNG LOESCHEN
+N9 RET
+

@@ -1,0 +1,27 @@
+The Emco PC Mill 30 is actually a branded tool running Emcos own Basic CadCam software. It was introduced sometimes around 1994, and were sold only a few years before discontinued (1998?).
+
+As with the other versions of Emco CadCam it requires MS-DOS operating system, but since it drives the mill through serial connection, which is less timing sensitive as a parallel connection - it may be possible to use it in DosBox emulated environment.
+
+The mill was made by a French company "Multisoft Robotique". 
+
+It was also sold under the brand names "Techsoft Camcut 300",  "Intelys f-1000" and "Jeulin 600" using other software. The CAM software "Galados" is listed as compatible to these other versions, but I dont know if Galados will work with the Emco version.
+
+A USB version of the lathe is still marketed by Jeulin for about 4000 Euros:
+
+http://www.jeulin.fr/fr/a-a1052700-edc1000003/article/18102584-Minifraiseuse-600\
+-CE-USB.html
+
+Hope this will be of value for someone.
+
+The steppers of PCMill 30 has the following specs: 
+I have three steppers with the following specs:
+
+Step-Syn
+Type 103G770-2521
+DC 4.1V
+1.1A
+1.8DEG/STEP
+Sanyo Denki Co., LTD.
+6 Wires
+
+The drivers are: Easy Power GS-D200S modules

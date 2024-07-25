@@ -1,0 +1,14 @@
+%
+    N` G`   X `    Z `  F`  H 
+    00M06    00     00T 02      
+    01M03                       
+    02 88 -1000 -   20  50  00  @  (1x)Facing Cycle
+    03 84 - 100 - 2500 100  50  @  (2x)Longitudinal Cycle
+    04 00 - 200     00          
+    05 01   100 -  100  40      
+    06 00    00    100          
+    07M06    00     00T 02      60deg threading tool
+    08 78 -  50 - 1000K100  04  @  (13x)Threading Cycle
+    09 00   100     00          
+    10M30                       
+   M

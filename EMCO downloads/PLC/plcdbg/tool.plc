@@ -1,0 +1,15 @@
+; WZW Schrittkette
+DB100.DBD40/B
+; Positionsreg. HW/SW
+DB100.DBW29/D
+DB100.DBW31/D
+; Spindel Rundachsbetrieb
+M110.4/B
+; Eingangssignale
+E0.3/B
+E2.4/B
+E6.6/B
+E6.6/B
+E6.7/B
+; Spindelposition
+DB1.DBD12/G

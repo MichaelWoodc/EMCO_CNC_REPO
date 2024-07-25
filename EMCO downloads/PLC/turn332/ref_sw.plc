@@ -1,0 +1,13 @@
+;X-Referenzsch.
+E0.0/B
+;Z-Referenzsch.
+E0.1/B
+;Antrieb Ready X,Z,AWZ,HA,E/R
+E1.0/B
+E1.1/B
+E1.2/B
+E1.3/B
+E5.5/B
+;Spindelbremse
+E0.3/B
+A4.3/B

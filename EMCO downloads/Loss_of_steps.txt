@@ -1,0 +1,62 @@
+I use an EMCO compact 5 CNC with MFI to edit and download.  During production of a 
+series of products (using differ3ent tools in the turret), I noticed the parts becoming 
+smaller each time.  It seemed I was losing 2 steps in X each run. Because it happened every run, 
+it couldn't be a mechanical problem.
+
+So I made some testprograms and measured the crosslide with a dial indicator.
+In the listings below, I wrote down the actual readings.  If you copy the 
+programs to MFI, you can see the positions where we should be. (Or calculate them yourself)
+
+Within the step size of the crosslide stepper (and backlash in the measurement),
+this program does what it is supposed to do. Begin en end position are the same.
+
+%
+    N` G`   X `    Z `  F`  H 
+    00 92   130     00          x=65
+    01 00    00     00          
+    02M00                       x=-1.3
+    03 00 - 300     00          
+    04M00                       x=-148.2
+    05 00   130     00          
+    06M00                       x=64.5
+    07 00   300     00          
+    08M00                       x=-149.5
+    09 00   130     00          
+    10M30                       x=65
+    11 21                       After second run X=65
+   M
+
+Now with some tool changes, something goes wrong.
+The 3rd tool 'sticks out' 1.00 mm further, so the reading after the first
+change is about 100 less.
+%
+    N` G`   X `    Z `  F`  H 
+    00 92   130     00          x=65
+    01 00    00     00          
+    02M00                       x=-1.3
+    03M06   100     00T 03      
+    04M00                       x=-99
+    05 00 - 300     00          
+    06M00                       x=-48.2
+    07M06    00     00T 00      
+    08M00                       x=-147
+    09 00   130     00          
+    10M00                       x=66
+    11 00   300     00          
+    12M00                       x=-152
+    13 00   130     00          
+    14M30                       x=68
+    15 21                       After second run x=70.2
+   M
+
+   Conclusion:
+   After a toolchange, the Emco software makes rounding errors.
+   Without a tool change, the programs behave as they should (within
+   the accuracy of the steppers).  If you introduce a tool change, the 
+   machine rounds off, and seem to forget that it did so. So when canging back to the 
+   first tool, the rounding error is not compensated.
+   
+   I only tested this in Absolute Diameter mode.  I do not know if what 
+   happens in Radius mode.  Maybe I'll find the time to try that out as well.
+   
+   

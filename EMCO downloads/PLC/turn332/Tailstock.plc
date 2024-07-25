@@ -1,0 +1,14 @@
+;Positioncounter
+MW122/D
+;act. position
+DB100.DBW277/D
+;input signals
+E4.3/B
+E5.0/B
+E5.1/B
+E5.2/B
+;output signals
+A4.5/B
+A4.6/B
+A5.0/B
+A5.1/B

@@ -1,0 +1,166 @@
+EMCO Stepper Control Board
+
+Stephen Davies
+September 2018
+
+Introduction
+------------
+In August 2018 an EMCO Compact 5 CNC was donated to my makerspace by one
+of the local high schools. The machine appeared in excellent condition for its
+age. The spindle runs smoothly as does the cross-slide (X-axis). Unfortunately
+the Z-axis failed to jog. Physically the motor was vibrating, indicating that
+some stepping was being attempted, but no linear movement occurred.
+
+After removing the Z-axis stepper motor from the lathe body further testing
+indicated that unloaded the motor would rotate but stall when even the 
+slightest amount of pressure was applied to the pulley.
+
+Swapping the X and Z motor cables resulted in a failure of the cross-slide
+(and Z-axis now worked), suggesting that there was a fault in the stepper
+motor driver board (A6A 113 001). After attempting to test the board in-situ
+I gave up and removed it from the chassis. Bench testing is much simpler.
+
+The board was in excellent condition. The only physical damage was some
+evidence of overheating of the 1N5404 diode between the 10V supply rail and
+the E output.
+
+The board schematics are available in the same folder as this document, it
+is suggested that you print off a copy of each of the four pages and 'stitch'
+them together so you can follow the next bit. The file names include 
+'A6A113000' but all seem to be for the A6A113001 model. I found the
+schematic to be consistent with the PCB.
+
+On the subject of part numbers, I found the PCB had A6A 113020 in the top
+layer copper and A6A113001 in the top layer silkscreen.
+
+Circuit Overview
+----------------
+The Compact 5 CNC uses unipolar stepper motors. Based on other posts and 
+documents they are 72 steps per revolution, i.e. 5 degree/step. There are
+two windings, each with 3 wires. Winding pairs are A, C, E (centre) and
+B, D, F (centre) respectively.
+
+The driver circuit board (Schrittmotorplatine) is designed in two halves
+- a low voltage logic section, powered by the CPU board, and a high voltage
+motor control section powered from the main power supply. The two halves
+are electrically isolated using optocouplers OK1-OK8.
+
+The board mounts below the main CPU board and connects directly via two
+right angle 0.1" SIL pin headers. Each SIL header has 6 pins, a, b, c, d,
+ground and +5 volts. Note terminology, lower case for inputs, upper case
+for outputs.
+
+Inputs a, b, c and d are direct controls for the stepper motor windings. 
+Signals a and c are complementary, i.e. 180 degrees out of phase. Same goes
+for b and d. Signals a and b are 90 degrees out of phase. Each signal will
+be a square wave with a 50% duty cycle when the motors are stepping.
+
+Motor control uses a bi-level voltage pulse. When the motor is first
+activated its centre tap (E or F) is connected to 50 volts. The current
+in the motor winding is monitored and when it reaches 3 amps the 50
+volt level is removed, being replaced by 10 volts.
+
+The descriptions given below use the a & c signals in the Z-axis section
+of the board. For reasons of symmetry it isn't necessary to describe the
+b & d signals or the X-axis.
+
+Low Side Power Control
+----------------------
+For analysis purposes each channel can be divided into two smaller sections,
+one dealing with the low side drivers, i.e. connection between motor coil
+and ground, and the the high side, dealing with the step pulse and
+holding current.
+
+Inputs a & c arrive on X34/1 and X34/3 respectively. They pass into a
+NAND based RS latch implemented using a 74LS38. Presumably the latch
+is present to guarantee that disconnected inputs result in either
+output A or C being activated but not both.
+
+Following the output from IC1/3, the inverted signal (/a) drives one
+channel of OK1 (pins 1/2). When a is high the optocoupler is activated
+and the output transistor is switched on. This in turn enables the BC556
+switch, which in turn drives the Darlington pair formed by the BD139/BD245B
+transistors. When enabled, the BD245B provides a high current path to ground.
+
+So, when input a (X34/1) is high, output A (X31/3) is
+pulled to ground. When input a is low, output A is disconnected.
+
+High Side Power Control
+-----------------------
+The high side implements a bi-level motor driver. When first activated output E
+is connected to 50V. Once the current through the coil reaches 3 amps the
+output is disconnected from 50V and is switched passively (using diodes) to 10V.
+
+The complicated looking circuitry around ICs 2,3 and 4 is used to control the
+high pulse and current feedback loop. A word of warning, the schematic uses an
+unusual symbol for ICs 3, 4, 7 & 8, they are NOR gates.
+
+Following though from the a input on the Z axis - signal /a connects directly 
+to IC3/2 and indirectly to IC2/5, a schmitt trigger inverter, via an RC
+network. Looks complicated until you realise that this forms a negative edge
+detector. Looking for a negative edge on /a is equivalent to looking for a
+positive edge on a. Every time there is a positive edge on the a input there
+is a short length, high going pulse, output by IC3/3.
+
+This is repeated for input c using IC3/5 and IC2/9. The resulting pulse stream
+being output on IC3/4. Two 1N4148 diodes form what is known as a wire-OR,
+mixing the edge pulses for the a and c inputs. The combined pulses are what
+trigger output E being connected to 50V.
+
+NOR gates IC4/3 and IC4/11 form a NOR RS latch. Note that this uses positive
+logic pulses to activate, unlike the NAND RS latch formed by IC1. IC4/13
+is the S (set) input, IC4/1 is the R (reset) input. IC4/3 is the latch
+output Q.
+
+The positive pulse stream, from the a/c positive edges, turns Q on (high).
+This in turn switches on the BC548 which turns on OK4/3. This turns on
+the BC546, leading to activation of the Darlington pair BD140 and TIP2955.
+This connects output E to the 50V supply. 
+
+To prevent overcurrent there is a 0.22 ohm resistor connected to the
+TIP2955 emitter. Voltage across this resistor is proportional to the
+winding current. When the current reaches 3A the resistor voltage will be
+around 0.6V, enough to discharge the RC network (220/1uF) connected to
+a BC556 and turn the transistor on. This is then fed back via OK3/1.
+Strangley, the feedback signal for over current in the E output is used
+to disconnect the F output from 50V.
+
+This crossover I cannot explain. I'd have thought that high current in the
+E output would result in the high side driver for E being turned off.
+
+Testing
+-------
+Bench testing of the driver board was performed using Henk's suggested
+network of resistors and LEDs, a couple of bench supplies and an Arduino
+as a signal generator. The Arduino source code is provided as a separate
+peer file to this document.
+
+Initial testing showed that both high and low side power transistors in
+the Z-axis A channel had blown. These were replaced, along with the heat
+affected diode mentioned previously.
+
+Found a replacement for the TIP2955 easily enough, only difference being a
+change in case. Apparently the original TO-218 case has been replaced by
+the TO-247 case. They look a little different but are mechanically identical.
+
+Replacing the BD245B is hampered by the fact that they appear to be
+obsolete. Element14, RS and Digikey had no stock (or record of the part
+number). Found some from an eBay vendor in France but was not prepared to
+pay the postage or wait 3 weeks. Eventually went with a TIP35C in a TO-247
+case. Guess time will tell if I got the substitution right.
+
+Before refitting the board I checked the stepper motor and found that
+3 of the poles measured in at 4.7 ohms, the fourth at 0.9 ohms.
+
+Further Testing
+---------------
+After writing this up I confess to a nagging doubt about the winding current
+feedback loop. The E/F crossover still isn't making any sense.
+
+Also, due to equipment limitations I was unable to test the over current
+portion of the circuit on the bench.
+
+What if the overcurrent circuit failed first, cooking the winding followed
+by the transistors?
+
+Guess that's a job for another day.

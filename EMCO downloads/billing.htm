@@ -1,0 +1,2586 @@
+
+	
+	<!DOCTYPE html>
+	<html lang="en-US">
+		<head>
+			<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			
+			<meta name="pinterest" content="nopin" />
+			<meta name="pinterest" content="nohover" />
+			
+			<meta name="3778517eb4810dfb5d143ed8f1b359b3b5a82923" content="0f56257c3db4a222e91b11bc6871c4df2e263b28" />
+			<link rel="apple-touch-icon" sizes="57x57" href="/img/org.1/favicons/apple-icon-57x57.png">
+			<link rel="apple-touch-icon" sizes="60x60" href="/img/org.1/favicons/apple-icon-60x60.png">
+			<link rel="apple-touch-icon" sizes="72x72" href="/img/org.1/favicons/apple-icon-72x72.png">
+			<link rel="apple-touch-icon" sizes="76x76" href="/img/org.1/favicons/apple-icon-76x76.png">
+			<link rel="apple-touch-icon" sizes="114x114" href="/img/org.1/favicons/apple-icon-114x114.png">
+			<link rel="apple-touch-icon" sizes="120x120" href="/img/org.1/favicons/apple-icon-120x120.png">
+			<link rel="apple-touch-icon" sizes="144x144" href="/img/org.1/favicons/apple-icon-144x144.png">
+			<link rel="apple-touch-icon" sizes="152x152" href="/img/org.1/favicons/apple-icon-152x152.png">
+			<link rel="apple-touch-icon" sizes="180x180" href="/img/org.1/favicons/apple-icon-180x180.png">
+			<link rel="icon" type="image/png" sizes="192x192"  href="/img/org.1/favicons/android-icon-192x192.png">
+			<link rel="icon" type="image/png" sizes="32x32" href="/img/org.1/favicons/favicon-32x32.png">
+			<link rel="icon" type="image/png" sizes="96x96" href="/img/org.1/favicons/favicon-96x96.png">
+			<link rel="icon" type="image/png" sizes="16x16" href="/img/org.1/favicons/favicon-16x16.png">
+			<link rel="manifest" href="/img/org.1/favicons/manifest.json">
+			<meta name="msapplication-TileColor" content="#ffffff">
+			<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+			
+			
+			
+
+<script>
+/* stubs */
+const hapticsImpactHeavy = async () => {
+};
+const hapticsImpactMedium = async () => {
+};
+const hapticsImpactLight = async () => {
+};
+const hapticsVibrate = async () => {
+};
+const hapticsSelectionStart = async () => {
+};
+const hapticsSelectionChanged = async () => {
+};
+const hapticsSelectionEnd = async () => {
+};
+</script>
+
+			
+<script>
+	
+		function setPullToRefresh() {}
+	
+	function gotoURL(inurl) {
+		window.location.href = inurl;
+		return;
+	}
+	function contentLoaded(isHTMX, f, caller = "") {
+		console.log("contentLoaded: " + isHTMX + " " + caller);
+		if (isHTMX == true) {
+			document.body.addEventListener('htmx:afterSettle', f, {once: true});
+		} else {
+			if (document.readyState !== 'loading') {
+				console.log('document is already ready, just execute code here');
+				f();
+			} else {
+				console.log('document was not ready, place code here');
+				document.addEventListener('DOMContentLoaded', f, {once: true});
+			}
+		}
+	}
+
+	function HideAppSidebarOnKeyboard() {
+		console.log("In HideAppSidebarOnKeyboard");
+		
+	}
+	// stub
+	function logError(data, url, linenumber) {
+		console.log(data)
+		return;
+	}
+	var pushSubToken;
+	var ignoreErrors = false;
+	var lastError = "";
+	
+		window.onerror = function(errorMessage, errorUrl, errorLine, errorColumn, errorObj) {
+			let column;
+			let stack;
+			if (console && console.log) {
+				console.log("msg:", errorMessage);
+				console.log("url:", errorUrl);
+				console.log("line:", errorLine);
+				if (errorColumn !== undefined && errorObj != null) {
+					console.log("column:", errorColumn);
+					column = errorColumn;
+				}
+				if (errorObj !== undefined && errorObj != null) {
+					console.log("stack:", errorObj.stack);
+					stack = errorObj.stack;
+				}
+				console.log("client_id:", "web.web09.4905687.1721868209887596958");
+				console.log("last_error:", lastError);
+				console.log("stack:", stack);
+			}
+			if (errorUrl == "" || errorUrl === null) {
+				errorUrl = window.location.href;
+			}
+			if (errorMessage.includes("SecurityError:") == true) {
+				ignoreErrors = true;
+			}
+			if (ignoreErrors == true) {
+				console.log("cookies, disabled, ignoring");
+				lastError = errorMessage;
+				return;
+			}
+			jQuery.ajax({
+				type: 'POST',
+				url: '/jsclienterror',
+				data: {
+					msg: errorMessage,
+					url: errorUrl,
+					line: errorLine,
+					column: column,
+					stack: stack,
+					last_error: lastError,
+					client_id: "web.web09.4905687.1721868209887596958"
+				},
+				success: function() {
+					if (console && console.log) {
+						console.log('JS error report successful.');
+					}
+					lastError = errorMessage;
+				},
+				error: function() {
+					if (console && console.error) {
+						console.error('JS error report submission failed!');
+					}
+					lastError = errorMessage;
+				}
+			});
+			return true;
+		}
+	
+</script>
+			
+			
+			<script src="/tinymce-5.10.9/tinymce.min.js"></script>
+			<script src="/js/browser-image-compression-2.0.2.min.js"></script>
+			<link href="/css/application-9b26dc9b8f5d198e9a6fff0c2f1ac8a7.css" rel="stylesheet" id="groupsio-css">
+			<script src="/js/application-54cd8f1f1a11b24cf92ea0ab28905602.js" id="groupsio-js"></script>
+			<script src="/js/run_prettify.js"></script>
+			<title>
+				
+	Emco-CNC-Users@groups.io | Billing
+
+			</title>
+			
+
+			
+				
+			
+			
+	<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+
+<script>
+	htmx.config.scrollBehavior = "instant";
+	htmx.config.historyCacheSize = 0;
+	htmx.config.defaultSettleDelay = 0;
+	console.log("FULL PAGE LOAD");
+</script>
+		</head>
+		<body id="body" class="" hx-headers='{"Accept-Version": "5c80ba392c7cdb48c845916f822c349201fd4263"}' hx-ext="preload" hx-boost="false">
+			
+				<script>
+					if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+						document.body.classList.add('dark-mode');
+					}
+				</script>
+			
+
+			
+				<div class="navbar navbar-head navbar-fixed-top" role="navigation" id="headerbar" style="border:0">
+					<div class="container-fluid" style="padding-left:0px;">
+						
+							<a href="https://groups.io" class="navbar-left">
+								<img src="https://groups.io/img/org.1/mainlogo.png" height="50" alt="Groups.io">
+							</a>
+						
+						<ul class="nav navbar-nav hidden-xs">
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Your Groups
+									<span id="your-groups-badge" class="badge"></span>
+									<b class="caret"></b>
+								</a>
+								<ul id="your-groups-list" class="dropdown-menu scrollable-groups-menu">
+									
+										
+											
+											
+												<li>
+													<a href="https://groups.io/g/Emco-CNC-Users/topics">
+														<i class="fa-fw fa fa-users"></i>
+														&nbsp;Group open to all users of Emco CNC Machinery (mills, lathes)
+													</a>
+												</li>
+											
+										
+									
+									<li role="separator" class="divider"></li>
+									<li>
+										<a href="https://groups.io/groups">
+											<i class="fa-fw fa fa-users"></i>
+											Manage My Subscriptions
+										</a>
+									</li>
+								</ul>
+							</li>
+							
+								<li>
+									<a href="https://groups.io/search">
+										Find or Create a Group
+									</a>
+								</li>
+							
+							
+						</ul>
+						<ul class="nav navbar-nav pull-right visible-xs" style="margin-top:5px;margin-bottom:5px;">
+							<li>
+								<a href="#" data-toggle="modal" data-target="#mobileAccount" style="padding-top:10px;padding-bottom:0px;">
+									
+										<i class="fa-fw fa fa-lg fa-user"></i>
+									
+								</a>
+							</li>
+						</ul>
+						<ul class="nav navbar-nav navbar-right hidden-xs">
+							<li>
+								<a class="hidden-xs hidden-sm" href="https://groups.io/helpcenter" target="_blank">
+									Help
+								</a>
+							</li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									
+										<span title="mlw19mlw91@gmail.com">
+											Michael W
+										</span>
+									
+									<b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu">
+									<li class="dropdown-header">
+										
+											<span style="display: flex;align-items: center; margin-bottom:10px;">
+												<i class="fa fa-user" style="font-size:40px; padding-right:2px; padding-left:2px;margin-right:10px;"></i>
+												<div>
+													
+														<strong>
+															Michael W
+														</strong>
+														
+															<br>
+															@MichaelWood
+														
+													
+												</div>
+											</span>
+											mlw19mlw91@gmail.com
+										
+									</li>
+									<li role="separator" class="divider"></li>
+									
+									<li>
+										<a href="https://groups.io/settings">
+											<i class="pull-right fa-fw fa fa-user"></i>
+											Settings
+										</a>
+									</li>
+									<li>
+										<a href="https://groups.io/logout">
+											<i class="pull-right fa-fw fa fa-power-off"></i>
+											Log Out
+										</a>
+									</li>
+									
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="modal fade" id="mobileAccount" role="dialog">
+					<div class="modal-dialog" style="margin-top:50px;">
+						<div class="modal-content">
+							<div class="modal-body">
+
+									<ul class="list-group noborderlist">
+										<li class="dropdown-header">
+											
+												<span style="display: flex;align-items: center; margin-bottom:10px;">
+													<i class="fa fa-user" style="font-size:40px; padding-right:2px; padding-left:2px;margin-right:10px;"></i>
+													<div>
+														
+															<strong>
+																Michael W
+															</strong>
+															
+																<br>
+																@MichaelWood
+															
+														
+													</div>
+												</span>
+												mlw19mlw91@gmail.com
+											
+										</li>
+										<li class="noborderitem list-group-item">
+											<a href="https://groups.io/groups">
+												<i class="pull-right fa-fw fa fa-users"></i>
+												Manage My Subscriptions
+											</a>
+										</li>
+										<li class="noborderitem list-group-item">
+											<a href="https://groups.io/helpcenter" target="_blank">
+												<i class="pull-right fa-fw fa fa-question-circle"></i>
+												Help
+											</a>
+										</li>
+										
+											<li class="noborderitem list-group-item">
+												<a href="https://groups.io/search">
+													<i class="pull-right fa-fw fa fa-search"></i>
+													Find or Create a Group
+												</a>
+											</li>
+										
+										
+										<li class="noborderitem list-group-item">
+											<a href="https://groups.io/settings">
+												<i class="pull-right fa-fw fa fa-user"></i>
+												Settings
+											</a>
+										</li>
+										<li class="noborderitem list-group-item">
+											<a href="https://groups.io/logout">
+												<i class="pull-right fa-fw fa fa-power-off"></i>
+												Log Out
+											</a>
+										</li>
+										
+									</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			
+<script>
+var groupnavigatorData = [
+
+	
+	{
+		name: "Group open to all users of Emco CNC Machinery (mills, lathes)",
+		url: "https://groups.io/g/Emco-CNC-Users/topics"
+	},
+	
+
+];
+</script>
+
+
+<!-- Modal Dialog for Autocomplete -->
+<div class="modal fade" id="groupnavigatorModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <input type="text" class="form-control" id="groupnavigatorInput" placeholder="Go to group..." style="margin-bottom:10px">
+        <div id="groupnavigatorContainer" class="autocompleteResults" style="max-height:250px; overflow-y: auto;"></div>
+		<div class="text-center" style="margin-top:10px; font-size:12px;"><i class="fa-sharp fa-arrow-up-arrow-down"></i> to navigate&nbsp;&nbsp;&nbsp;<i class="fa-sharp fa-arrow-turn-down-left"></i> to use&nbsp;&nbsp;&nbsp;<strong>esc</strong> to dismiss</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// Keep track of the currently selected index
+var selectedIndex = -1;
+
+// Function to highlight the matched substring
+function highlightSubstring(str, substring) {
+  var index = str.toLowerCase().indexOf(substring.toLowerCase());
+  if (index !== -1) {
+    var before = str.substring(0, index);
+    var middle = str.substring(index, index + substring.length);
+    var after = str.substring(index + substring.length);
+    return before + '<span class="autocomplete-highlight">' + middle + '</span>' + after;
+  }
+  return str;
+}
+
+// Function to highlight the selected item and ensure it is visible in the scrollable list
+function highlightSelectedItem(modalName) {
+  var listContainer = document.getElementById(modalName + 'Container');
+  var items = document.getElementsByClassName(modalName + '-list-item');
+  Array.from(items).forEach(function(item, idx) {
+    item.className = idx === selectedIndex ? modalName + '-list-item autocomplete-list-item btn-primary no-hover' : modalName + '-list-item autocomplete-list-item no-hover'; // Apply btn-primary class to the selected item
+  });
+  if (items.length > 0 && selectedIndex >= 0) {
+    var selectedItem = items[selectedIndex];
+    var containerTop = listContainer.scrollTop;
+    var containerBottom = containerTop + listContainer.clientHeight;
+    var itemTop = selectedItem.offsetTop;
+    var itemBottom = itemTop + selectedItem.offsetHeight;
+	const fudge = 59;
+    if (selectedIndex > 0 && itemTop > containerBottom) {
+      // If there are items below the selected item and the selected item is not fully visible, scroll down
+      listContainer.scrollTop = itemTop - listContainer.clientHeight + items[selectedIndex - 1].offsetHeight;
+    } else if (selectedIndex < items.length - 1 && (itemTop - fudge) < containerTop) {
+      // If there are items above the selected item and the selected item is not fully visible, scroll up
+      listContainer.scrollTop = itemTop - fudge - items[selectedIndex + 1].offsetHeight;
+    }
+  }
+}
+
+// function to populate the list based on the input
+function populateList(modalName, data) {
+  var input = document.getElementById(modalName+'Input').value;
+  var listContainer = document.getElementById(modalName+'Container');
+  listContainer.innerHTML = '';
+  data.forEach(function(item) {
+    if (item.name.toLowerCase().includes(input.toLowerCase())) {
+      var div = document.createElement('div');
+      div.innerHTML = highlightSubstring(item.name, input);
+      div.className = modalName+'-list-item autocomplete-list-item no-hover'; // Apply no-hover class
+      div.addEventListener('click', function() {
+        // Navigate to the specified URL when a list item is clicked
+        window.location.href = item.url;
+      });
+      div.addEventListener('mousemove', function() {
+        // Remove no-hover class from all items when the mouse is moved over any item
+		console.log("mouse move");
+        var items = document.getElementsByClassName(modalName+'-list-item');
+        Array.from(items).forEach(function(item) {
+          item.classList.remove('no-hover');
+        });
+      });
+      listContainer.appendChild(div);
+    }
+  });
+  highlightSelectedItem(modalName);
+}
+
+function InitAutocomplete(modalName, data) {
+	// Focus the input field when the modal is shown and populate the list
+	$('#' + modalName + 'Modal').on('shown.bs.modal', function () {
+		$('#' + modalName + 'Input').focus().val('');
+		populateList(modalName, data);
+		selectedIndex = 0;
+		highlightSelectedItem(modalName);
+	});
+
+	// Event listener for input field typing
+	document.getElementById(modalName + 'Input').addEventListener('input', function() {
+		populateList(modalName, data);
+		selectedIndex = 0;
+	});
+
+	// Event listener for arrow keys and enter key
+	document.getElementById(modalName + 'Input').addEventListener('keydown', function(event) {
+		var items = document.getElementsByClassName(modalName + '-list-item');
+		if (event.key === 'ArrowDown') {
+			event.preventDefault();
+			if (selectedIndex < items.length - 1) selectedIndex++;
+			highlightSelectedItem(modalName);
+		} else if (event.key === 'ArrowUp') {
+			event.preventDefault();
+			if (selectedIndex > 0) selectedIndex--;
+			highlightSelectedItem(modalName);
+		} else if (event.key === 'Enter' && selectedIndex >= 0 && selectedIndex < items.length) {
+			event.preventDefault();
+			items[selectedIndex].click();
+		}
+	});
+}
+
+function showAutocompleteModal(modalName) {
+	$('#' + modalName + 'Modal').modal('show');
+	selectedIndex = -1;
+}
+</script>
+
+			<div id="content" class="container-fluid">
+<script>
+	InitAutocomplete("groupnavigator", groupnavigatorData);
+
+	document.body.addEventListener("showReloadPageDialog", function(evt) {
+		console.log("Forced reload");
+		location.reload();
+	});
+
+	// submitEvent acts like .submit(), except it is compatible with the app, by using events instead.
+	function submitEvent(ele) {
+		console.log("in submitEvent");
+		if (ele.startsWith('#')) {
+    		ele = ele.slice(1);
+		}
+		document.getElementById(ele).submit();
+		return;
+		/*
+		const theEvent = new CustomEvent('submit', {
+			bubbles: true,
+			cancelable: true
+		});
+		if (typeof ele === 'string' || ele instanceof String) {
+			if (ele.startsWith("#") == true) {
+				ele = ele.slice(1);
+			}
+			if (document.getElementById(ele).dispatchEvent(theEvent) == true) {
+				// if not cancelled, do normal submit
+				console.log("calling submit");
+				document.getElementById(ele).submit();
+			}
+			return;
+		}
+		// assume ele is the element
+		if (ele.dispatchEvent(theEvent) == true) {
+			// if not cancelled, do normal submit
+			console.log("calling submit");
+			ele.submit();
+		}
+		*/
+	}
+
+	// gioDestroy is a convenience function for destroy callbacks
+	function gioDestroy(eventCB) {
+		let internalGioDestroy = function(evt) {
+			// do not activate on infinite scroll events
+			if (evt.detail.target !== undefined && evt.detail.target.id != "maincontent-refresh") {
+				console.log("Ignoring infinite scroll event");
+				return;
+			}
+			console.log("Calling destroy callback");
+			eventCB(evt);
+		}
+		document.body.addEventListener("htmx:beforeSwap", internalGioDestroy, {once: true});
+		document.body.addEventListener("htmx:historyCacheMiss", internalGioDestroy, {once: true});
+	}
+			
+	var drawerCloseFunc = function(evt) {
+		console.log("in drawerCloseFunc");
+		// Find all elements with the class 'drawer'
+		var drawers = document.querySelectorAll('.drawer');
+
+		// Iterate over each element and call closeDrawer() on each
+		drawers.forEach(function(obj) {
+			drawerObj.closeDrawer(obj);
+		});
+		$('.modal').modal('hide');
+	}
+	document.body.addEventListener('htmx:beforeSwap', drawerCloseFunc);
+	document.body.addEventListener('htmx:historyCacheMiss', drawerCloseFunc);
+
+	var keydownFunc = function(event) {
+		var tagName = event.target.tagName.toLowerCase();
+		if (tagName === 'input' || tagName === 'textarea' || event.target.isContentEditable) {
+			if (event.key === 'Escape') {
+				event.target.blur();
+			}
+			return;
+		}
+		// check if the viewimages viewer is up
+		let element = document.getElementById('overlay');
+		if (element && element.classList.contains('visible')) {
+			return;
+		}
+		console.log("HERE: " + event.key + " " + event.ctrlKey + " " + event.shiftKey + " " + event.metaKey);
+		if (event.ctrlKey && event.shiftKey && (event.key === '?' || event.key === '/')) {
+			event.preventDefault(); // Prevent the default action
+			// Show the modal dialog for keyboard shortcuts
+			$('#shortcutModal').modal('show');
+			return;
+		}
+		$('#shortcutModal').modal('hide');
+
+		if (event.key.toLowerCase() === 'g') {
+			// For Windows and Linux
+			if (event.ctrlKey) {
+				event.preventDefault();
+				showAutocompleteModal("groupnavigator");
+				return;
+			}
+		}
+
+		// Check if the pressed key is '/'
+		if ((event.key === 'f' || event.key === 'F') && event.shiftKey) {
+			if (navigator.platform.toUpperCase().indexOf('MAC') >= 0) {
+				if (event.metaKey) {
+					event.preventDefault(); // Prevent the default action
+					// Focus on the search box
+					let box = document.getElementById('searchbox')
+					if (box != null) {
+						document.getElementById('searchbox').focus();
+					}
+				}
+			} else {
+				// For Windows and Linux
+				if (event.ctrlKey) {
+					event.preventDefault(); // Prevent the default action
+					// Focus on the search box
+					let box = document.getElementById('searchbox')
+					if (box != null) {
+						document.getElementById('searchbox').focus();
+					}
+				}
+			}
+		}
+	}
+	document.addEventListener('keydown', keydownFunc);
+	var removeDrawerCloseFunc = function(evt) {
+		document.body.removeEventListener('htmx:beforeSwap', drawerCloseFunc);
+		document.body.removeEventListener('htmx:historyCacheMiss', drawerCloseFunc);
+		document.removeEventListener('keydown', keydownFunc);
+	}
+	document.body.addEventListener("htmx:historyCacheMiss", removeDrawerCloseFunc, {once: true});
+</script>
+<!-- Modal Dialog for Keyboard Shortcuts -->
+<div class="modal fade" id="shortcutModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Keyboard Shortcuts</h4>
+      </div>
+      <div class="modal-body">
+		<div class="row">
+			<div class="col-xs-3 text-right"><strong>ctrl</strong> + <strong>shift</strong> + <strong>?</strong>&nbsp;&nbsp;:</div>
+			<div class="col-xs-9" style="margin-left: -23px;">Show all keyboard shortcuts</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-3 text-right"><strong>ctrl</strong> + <strong>g</strong>&nbsp;&nbsp;:</div>
+			<div class="col-xs-9" style="margin-left: -23px;">Navigate to a group</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-3 text-right"><strong class="ctrlmeta">ctrl</strong> + <strong>shift</strong> + <strong>f</strong>&nbsp;&nbsp;:</div>
+			<div class="col-xs-9" style="margin-left: -23px;">Find</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-3 text-right"><strong class="ctrlmeta">ctrl</strong> + <strong>/</strong>&nbsp;&nbsp;:</div>
+			<div class="col-xs-9" style="margin-left: -23px;">Quick actions</div>
+		</div>
+		</div>
+		<div class="text-center" style="margin-top:10px; margin-bottom:10px; font-size:12px;"><strong>esc</strong> to dismiss</div>
+    </div>
+  </div>
+</div>
+
+				
+	
+	<div id="mainrow" class="row"  hx-boost="true" hx-target="#maincontent-refresh" hx-push-url="true" hx-on::after-request="document.getElementById('maincontent').scrollTo({top: 0, behavior: 'instant'})" >
+		<div id="groupsidebar" class="scrollbar hidden-print">
+			<div class="scrollbar-content">
+				<div id="accordion" role="tablist" aria-multiselectable="true" style="margin-bottom:20px;">
+					<div class="list-group noborderlist" style="border:0;margin-bottom:0px">
+						
+
+
+	<a id="sidebar-home" title="Group Home" href="https://groups.io/g/Emco-CNC-Users" class="list-group-item sidebar-item">
+		<i class="fa-fw fa fa-home fa-lg"></i>
+		Home
+		
+			
+				
+				
+					<span class="label label-info">Owner</span>
+				
+			
+		
+	</a>
+
+	
+		<a href="#submenu0" class="noborderitem list-group-item sidebar-section navbar-vertical dropdown-indicator" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="submenu0">
+			<i class="fa-fw fa fa-pencil-alt fa-lg"></i>
+			Subscription
+		</a>
+		<div class="collapse" id="submenu0">
+			
+
+	<a title="Edit Subscription Settings" href="https://groups.io/g/Emco-CNC-Users/editsub" id="sidebar-editsub" class="noborderitem list-group-item sidebar-item sidebar-item-editsub">
+		<span class="list-group-submenu">
+			<i class="fa-fw fa fa-pencil-alt fa-lg"></i>
+			Settings
+			<span id="sidebar-editsub-badge" class="badge"></span>
+		</span>
+	</a>
+
+			
+
+	<a title="Group Profile" href="https://groups.io/g/Emco-CNC-Users//profile/@MichaelWood" id="sidebar-profileview" class="noborderitem list-group-item sidebar-item sidebar-item-profileview">
+		<span class="list-group-submenu">
+			<i class="fa-fw fa fa-user fa-lg"></i>
+			Group Profile
+			<span id="sidebar-profileview-badge" class="badge"></span>
+		</span>
+	</a>
+
+			
+
+	<a title="Delivery History" href="https://groups.io/g/Emco-CNC-Users/subdeliveries" id="sidebar-subdeliveries" class="noborderitem list-group-item sidebar-item sidebar-item-subdeliveries">
+		<span class="list-group-submenu">
+			<i class="fa-fw fa fa-envelope fa-lg"></i>
+			Delivery History
+			<span id="sidebar-subdeliveries-badge" class="badge"></span>
+		</span>
+	</a>
+
+			
+
+	<a title="Integrations" href="https://groups.io/g/Emco-CNC-Users/subintegrations" id="sidebar-subintegrations" class="noborderitem list-group-item sidebar-item sidebar-item-subintegrations">
+		<span class="list-group-submenu">
+			<i class="fa-fw fa fa-exchange-alt fa-lg"></i>
+			Integrations
+			<span id="sidebar-subintegrations-badge" class="badge"></span>
+		</span>
+	</a>
+
+		</div>
+	
+
+	
+		<a href="#adminmenu0" class="noborderitem list-group-item sidebar-item navbar-vertical dropdown-indicator" data-toggle="collapse" data-parent="#accordion" aria-expanded="true" aria-controls="adminmenu0">
+			<i class="fa-fw fa fa-cog fa-lg"></i>
+			Admin
+			<span id="sidebar-admin-badge" class="badge"></span>
+		</a>
+		<div class="collapse in" id="adminmenu0">
+			<div class="panel" style="border:0;margin-bottom:0px">
+
+			
+				
+
+	<a title="Pending Messages" href="https://groups.io/g/Emco-CNC-Users/pending" id="sidebar-pending" class="noborderitem list-group-item sidebar-item sidebar-item-pending">
+		<span class="list-group-submenu">
+			<i class="fa-fw fa fa-comments fa-lg"></i>
+			Pending
+			<span id="sidebar-pending-badge" class="badge"></span>
+		</span>
+	</a>
+
+			
+
+			
+
+
+				
+
+	<a title="Group Members" href="https://groups.io/g/Emco-CNC-Users/members" id="sidebar-members" class="noborderitem list-group-item sidebar-item sidebar-item-members">
+		<span class="list-group-submenu">
+			<i class="fa-fw fa fa-users fa-lg"></i>
+			Members
+			<span id="sidebar-members-badge" class="badge"></span>
+		</span>
+	</a>
+
+			
+
+			
+
+	<a title="Activity" href="https://groups.io/g/Emco-CNC-Users/activity" id="sidebar-activity" class="noborderitem list-group-item sidebar-item sidebar-item-activity">
+		<span class="list-group-submenu">
+			<i class="fa-fw fa fa-tachometer-alt fa-lg"></i>
+			Activity
+			<span id="sidebar-activity-badge" class="badge"></span>
+		</span>
+	</a>
+
+
+			
+				<a href="#membershipmenu0" class="noborderitem list-group-item sidebar-item navbar-vertical dropdown-indicator" data-toggle="collapse" data-parent-disabled="#adminmenu0" aria-expanded="false" aria-controls="membershipmenu0">
+					<span class="list-group-submenu">
+						<i class="fa fa-fw fa-user"></i>
+						Membership
+					</span>
+				</a>
+				<div class="collapse panel" id="membershipmenu0" style="border:0;margin-bottom:0px">
+
+					
+						
+
+	<a title="Invite" href="https://groups.io/g/Emco-CNC-Users/sendinvites" id="sidebar-sendinvites" class="noborderitem list-group-item sidebar-item sidebar-item-sendinvites">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-envelope fa-lg"></i>
+			Invite
+			<span id="sidebar-sendinvites-badge" class="badge"></span>
+		</span>
+	</a>
+
+						
+					
+
+					
+						
+
+	<a title="Default Sub Settings" href="https://groups.io/g/Emco-CNC-Users/defaultsubsettings" id="sidebar-defaultsubsettings" class="noborderitem list-group-item sidebar-item sidebar-item-defaultsubsettings">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-pencil-alt fa-lg"></i>
+			Defaults
+			<span id="sidebar-defaultsubsettings-badge" class="badge"></span>
+		</span>
+	</a>
+
+					
+
+					
+						
+							
+
+	<a title="Bulk Remove Members" href="https://groups.io/g/Emco-CNC-Users/bulkremove" id="sidebar-bulkremove" class="noborderitem list-group-item sidebar-item sidebar-item-bulkremove">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-trash-alt fa-lg"></i>
+			Bulk Remove
+			<span id="sidebar-bulkremove-badge" class="badge"></span>
+		</span>
+	</a>
+
+						
+					
+
+					
+						
+						
+							
+
+	<a title="Service Sync" href="https://groups.io/g/Emco-CNC-Users/syncconfig" id="sidebar-syncconfig" class="noborderitem list-group-item sidebar-item sidebar-item-syncconfig">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-exchange-alt fa-lg"></i>
+			Service Sync
+			<span id="sidebar-syncconfig-badge" class="badge"></span>
+		</span>
+	</a>
+
+						
+					
+
+				</div>
+			
+
+
+			
+				<a href="#settingsmenu0" class="noborderitem list-group-item sidebar-item navbar-vertical dropdown-indicator" data-toggle="collapse" data-parent-disabled="#adminmenu0" aria-expanded="true" aria-controls="settingsmenu0">
+					<span class="list-group-submenu">
+						<i class="fa fa-fw fa-cog"></i>
+						Preferences
+					</span>
+				</a>
+				<div class="collapse in panel" id="settingsmenu0" style="border:0;margin-bottom:0px">
+					
+						
+
+	<a title="Group Settings" href="https://groups.io/g/Emco-CNC-Users/settings" id="sidebar-settings" class="noborderitem list-group-item sidebar-item sidebar-item-settings">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-cog fa-lg"></i>
+			Settings
+			<span id="sidebar-settings-badge" class="badge"></span>
+		</span>
+	</a>
+
+						
+
+	<a title="Member Notices" href="https://groups.io/g/Emco-CNC-Users/membernotices" id="sidebar-membernotices" class="noborderitem list-group-item sidebar-item sidebar-item-membernotices">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-envelope fa-lg"></i>
+			Notices
+			<span id="sidebar-membernotices-badge" class="badge"></span>
+		</span>
+	</a>
+
+						
+
+	<a title="Cover Photo" href="https://groups.io/g/Emco-CNC-Users/editcoverphoto" id="sidebar-coverphoto" class="noborderitem list-group-item sidebar-item sidebar-item-coverphoto">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-file-image fa-lg"></i>
+			Cover Photo
+			<span id="sidebar-coverphoto-badge" class="badge"></span>
+		</span>
+	</a>
+
+					
+
+					
+						
+							
+								
+
+	<a title="Upgrade" href="https://groups.io/g/Emco-CNC-Users/billing" id="sidebar-billing" class="noborderitem list-group-item sidebar-item sidebar-item-billing active" hx-boost="false" hx-disinherit="*">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-plus fa-lg"></i>
+			Upgrade
+			<span id="sidebar-billing-badge" class="badge"></span>
+		</span>
+	</a>
+
+							
+						
+						
+					
+
+					
+						
+
+	<a title="Export Group Data" href="https://groups.io/g/Emco-CNC-Users/exportgroup" id="sidebar-exportgroup" class="noborderitem list-group-item sidebar-item sidebar-item-exportgroup">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-arrow-down-to-line fa-lg"></i>
+			Export Group
+			<span id="sidebar-exportgroup-badge" class="badge"></span>
+		</span>
+	</a>
+
+					
+
+					
+						
+
+	<a title="Integrations" href="https://groups.io/g/Emco-CNC-Users/integrations" id="sidebar-integrations" class="noborderitem list-group-item sidebar-item sidebar-item-integrations">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-exchange-alt fa-lg"></i>
+			Integrations
+			<span id="sidebar-integrations-badge" class="badge"></span>
+		</span>
+	</a>
+
+					
+
+					
+
+					
+
+					
+						
+
+	<a title="Promote" href="https://groups.io/g/Emco-CNC-Users/promote" id="sidebar-promote" class="noborderitem list-group-item sidebar-item sidebar-item-promote">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-bullhorn fa-lg"></i>
+			Promote
+			<span id="sidebar-promote-badge" class="badge"></span>
+		</span>
+	</a>
+
+					
+
+					
+				</div>
+			
+
+			
+				<a href="#subgroupmenu0" class="noborderitem list-group-item sidebar-item navbar-vertical dropdown-indicator" data-toggle="collapse" data-parent-disabled="#adminmenu0" aria-expanded="false" aria-controls="subgroupmenu0">
+					<span class="list-group-submenu">
+						<i class="fa-light fa-fw fa-diagram-venn"></i>
+						Subgroups
+					</span>
+				</a>
+				<div class="collapse panel" id="subgroupmenu0" style="border:0;margin-bottom:0px">
+					
+
+	<a title="Create Subgroups" href="https://groups.io/g/Emco-CNC-Users/createsubgroup" id="sidebar-createsubgroup" class="noborderitem list-group-item sidebar-item sidebar-item-createsubgroup">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-plus fa-lg"></i>
+			New Subgroup
+			<span id="sidebar-createsubgroup-badge" class="badge"></span>
+		</span>
+	</a>
+
+					
+
+	<a title="Subgroup Members" href="https://groups.io/g/Emco-CNC-Users/subgroupmembers" id="sidebar-subgroupmembers" class="noborderitem list-group-item sidebar-item sidebar-item-subgroupmembers">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-users fa-lg"></i>
+			Members
+			<span id="sidebar-subgroupmembers-badge" class="badge"></span>
+		</span>
+	</a>
+
+					
+
+	<a title="Subgroup Categories" href="https://groups.io/g/Emco-CNC-Users/subgroupcategories" id="sidebar-subgroupcategories" class="noborderitem list-group-item sidebar-item sidebar-item-subgroupcategories">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-book fa-lg"></i>
+			Categories
+			<span id="sidebar-subgroupcategories-badge" class="badge"></span>
+		</span>
+	</a>
+
+				</div>
+			
+
+		</div>
+		</div>
+
+	
+
+	
+		
+	
+		
+
+	<a title="Messages" href="https://groups.io/g/Emco-CNC-Users/topics?sidebar=true" id="sidebar-archives" class="noborderitem list-group-item sidebar-item sidebar-item-archives"> 
+		<i class="fa-fw fa fa-comments fa-lg"></i>
+		Messages
+		<span id="sidebar-archives-badge" class="badge"></span>
+	</a>
+
+	
+	
+		
+
+	<a title="New Topic" href="https://groups.io/g/Emco-CNC-Users/post" id="sidebar-post" class="noborderitem list-group-item sidebar-item sidebar-item-post"> 
+		<i class="fa-fw fa fa-edit fa-lg"></i>
+		New Topic
+		<span id="sidebar-post-badge" class="badge"></span>
+	</a>
+
+	
+	
+		
+
+	<a title="Drafts" href="https://groups.io/g/Emco-CNC-Users/drafts" id="sidebar-drafts" class="noborderitem list-group-item sidebar-item sidebar-item-drafts"> 
+		<i class="fa-fw fa fa-inbox fa-lg"></i>
+		Drafts
+		<span id="sidebar-drafts-badge" class="badge"></span>
+	</a>
+
+	
+	
+		
+
+	<a title="New Poll" href="https://groups.io/g/Emco-CNC-Users/addpoll" id="sidebar-addpoll" class="noborderitem list-group-item sidebar-item sidebar-item-addpoll"> 
+		<i class="fa-fw fa fa-chart-bar fa-lg"></i>
+		New Poll
+		<span id="sidebar-addpoll-badge" class="badge"></span>
+	</a>
+
+	
+	
+		
+
+	<a title="Hashtags" href="https://groups.io/g/Emco-CNC-Users/hashtags" id="sidebar-hashtags" class="noborderitem list-group-item sidebar-item sidebar-item-hashtags"> 
+		<i class="fa-fw fa fa-hashtag fa-lg"></i>
+		Hashtags
+		<span id="sidebar-hashtags-badge" class="badge"></span>
+	</a>
+
+	
+
+		
+	
+		
+			
+
+	<a title="Chats" href="https://groups.io/g/Emco-CNC-Users/chats" id="sidebar-chats" class="noborderitem list-group-item sidebar-item sidebar-item-chats"> 
+		<i class="fa-fw fa fa-message-dots fa-lg"></i>
+		Chats
+		<span id="sidebar-chats-badge" class="badge chatbadge"></span>
+	</a>
+
+		
+	
+
+	
+
+	
+
+	
+
+	
+		
+	
+
+	
+		
+
+	<a title="Member Directory" href="https://groups.io/g/Emco-CNC-Users/directory" id="sidebar-directory" class="noborderitem list-group-item sidebar-item sidebar-item-directory"> 
+		<i class="fa-fw fa fa-users fa-lg"></i>
+		Directory
+		<span id="sidebar-directory-badge" class="badge"></span>
+	</a>
+
+	
+
+	
+		
+
+	<a title="Calendar" href="https://groups.io/g/Emco-CNC-Users/calendar" id="sidebar-calendar" class="noborderitem list-group-item sidebar-item sidebar-item-calendar"> 
+		<i class="fa-fw fa fa-calendar-alt fa-lg"></i>
+		Calendar
+		<span id="sidebar-calendar-badge" class="badge"></span>
+	</a>
+
+	
+
+	
+		
+			
+
+	<a title="Photos" href="https://groups.io/g/Emco-CNC-Users/photos" id="sidebar-photos" class="noborderitem list-group-item sidebar-item sidebar-item-photos"> 
+		<i class="fa-fw fa fa-file-image fa-lg"></i>
+		Photos
+		<span id="sidebar-photos-badge" class="badge"></span>
+	</a>
+
+		
+		
+			
+
+	<a title="Files" href="https://groups.io/g/Emco-CNC-Users/files" id="sidebar-files" class="noborderitem list-group-item sidebar-item sidebar-item-files"> 
+		<i class="fa-fw fa fa-copy fa-lg"></i>
+		Files
+		<span id="sidebar-files-badge" class="badge"></span>
+	</a>
+
+		
+
+		
+			
+
+	<a title="Databases" href="https://groups.io/g/Emco-CNC-Users/database" id="sidebar-database" class="noborderitem list-group-item sidebar-item sidebar-item-database"> 
+		<i class="fa-fw fa fa-database fa-lg"></i>
+		Databases
+		<span id="sidebar-database-badge" class="badge"></span>
+	</a>
+
+		
+		
+	
+
+	
+		
+
+	<a title="Wiki" href="https://groups.io/g/Emco-CNC-Users/wiki" id="sidebar-wiki" class="noborderitem list-group-item sidebar-item sidebar-item-wiki"> 
+		<i class="fa-fw fa fa-book fa-lg"></i>
+		Wiki
+		<span id="sidebar-wiki-badge" class="badge"></span>
+	</a>
+
+	
+
+	
+		
+
+			
+
+		
+
+	
+
+					</div>
+				</div>
+				
+	<div class="text-center" style="font-size:13px;margin-bottom:30px">
+		<div style="padding-bottom:10px;">
+			<strong>ctrl</strong> + <strong>shift</strong> + <strong>?</strong> for shortcuts
+		</div>
+		<div style="padding-bottom:5px;">
+			<a href="https://groups.io/static/about">
+				About
+			</a> &middot;
+			<a href="https://groups.io/static/features">
+				Features
+			</a> &middot;
+			<a href="https://groups.io/static/pricing">
+				Pricing
+			</a>
+		</div>
+		<div style="padding-bottom:5px;">
+			<a rel="nofollow" href="https://groups.io/g/updates/messages?expanded=1">
+				Updates
+			</a> &middot;
+			<a href="https://groups.io/static/tos">
+				Terms
+			</a> &middot;
+			<a href="https://groups.io/helpcenter" target="_blank">
+				Help
+			</a>
+		</div>
+		<div style="padding-bottom:5px;">
+			&copy; 2024 Groups.io
+		</div>
+	</div>
+
+			</div>
+		</div>
+		<div id="maincontent" class="groupmaincontent">
+			<div id="maincontent-refresh">
+				<div id="maincontent-column" class="col-xs-12 maincontent-column">
+					
+	<div hx-disinherit="*">
+		
+	
+	
+
+	
+		
+		
+	
+
+	
+	<div id="alertdiv"></div>
+	<div class="noticetemplate template">
+		<div class="alert alert-success alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">
+					&times;
+				</span>
+			</button>
+			<span id="msg"></span>
+		</div>
+	</div>
+	<div class="alerttemplate template">
+		<div class="alert alert-danger alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">
+					&times;
+				</span>
+			</button>
+			<span id="msg"></span>
+		</div>
+	</div>
+	<div class="alertnoclosetemplate template">
+		<div class="alert alert-danger" role="alert">
+			<span id="msg"></span>
+		</div>
+	</div>
+
+
+
+ 
+<script>
+function dismiss() {
+    console.log("dismiss");
+    $.get( "/dismissalert");
+}
+
+var $alerttemplate = $(".alerttemplate");
+var $alertnoclosetemplate = $(".alertnoclosetemplate");
+var $noticetemplate = $(".noticetemplate");
+function createAlert(msg, isError, autoClose, noClose) {
+	if (isError == false) {
+		$newPanel = $noticetemplate.clone();
+	} else {
+        if (noClose) {
+		  $newPanel = $alertnoclosetemplate.clone();
+        } else {
+		  $newPanel = $alerttemplate.clone();
+        }
+	}
+	$newPanel.find("#msg").html(msg);
+	if (autoClose == true) {
+		$("#alertdiv").append($newPanel.fadeTo(2000, 500).slideUp(500, function(){
+		    $newPanel.slideUp(500);
+		    $newPanel.remove();
+		}));  	
+	} else {
+		$("#alertdiv").append($newPanel.fadeIn());
+	}
+    return $newPanel;
+}
+
+
+
+
+</script>
+
+
+
+		
+<ol class="breadcrumb">
+  <li><a href="https://groups.io/g/Emco-CNC-Users"><i class="fa fa-home"></i> Emco-CNC-Users</a></li>
+  <li class="active"><i class="fa fa-dollar-sign"></i> Billing</li>
+</ol>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					Current Plan
+				</h3>
+			</div>
+			<div class="panel-body">
+				<div class="pull-right">
+					
+						
+							
+								<a class="btn btn-primary btn-sm bottom10" href="https://groups.io/g/Emco-CNC-Users/plans">
+									<i class="fa fa-cog"></i>
+									View/Change Plan
+								</a>
+								<br>
+								
+							
+						
+					
+				</div>
+				
+					<strong>
+						Free
+					</strong>
+				
+				<br>
+				
+				Using 755 MB total storage out of 1 GB
+				<div class="row">
+					<div class="col-sm-8">
+						<div class="progress">
+							
+								<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="14" aria-valuemin="0" aria-valuemax="100" style="width: 14%;"></div>
+							
+							
+								<div class="progress-bar" role="progressbar" aria-valuenow="8" aria-valuemin="0" aria-valuemax="100" style="width: 8%;"></div>
+							
+							
+							
+								<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="51" aria-valuemin="0" aria-valuemax="100" style="width: 51%;"></div>
+							
+							
+							
+							
+						</div>
+					</div>
+				</div>
+				
+				Attachments: 149 MB - 14% of 1GB
+				[
+				<a href="https://groups.io/g/Emco-CNC-Users/attachments?jump=1">
+					View Attachments
+				</a>
+				]
+				<br>
+				
+				Photos: 87 MB - 8% of 1GB
+				<br>
+				
+				Chat Photos: 0 B - 0% of 1GB
+				<br>
+				
+				Files: 518 MB - 51% of 1GB
+				<br>
+				
+				Database Images: 0 B - 0% of 1GB
+				<br>
+				
+				Member Data Images: 0 B - 0% of 1GB
+				<br>
+				
+				Wiki Images: 0 B - 0% of 1GB
+				<br>
+				
+					
+					Integrations: 0 out of 5 Integrations
+				
+				<br>
+				
+
+				
+			</div>
+		</div>
+		
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					Your Group Features
+				</h3>
+			</div>
+			<div class="panel-body">
+				
+				<ul>
+					<li>
+						Polls:
+						
+							<span class="text-success">
+								Legacy Enabled
+							</span>
+						
+					</li>
+					<li>
+						Calendar:
+						
+							<span class="text-success">
+								Legacy Enabled
+							</span>
+						
+					</li>
+					<li>
+						Chat:
+						
+							<span class="text-success">
+								Legacy Enabled
+							</span>
+						
+					</li>
+					<li>
+						Member Directory:
+						
+							<span class="text-success">
+								Legacy Enabled
+							</span>
+						
+					</li>
+					
+						<li>
+							Subgroups:
+							
+								<span class="text-success">
+									Legacy Enabled
+								</span>
+							
+						</li>
+					
+					<li>
+						Integrations:
+						
+							<span class="text-success">
+								Up to 5
+							</span>
+						
+					</li>
+					<li>
+						Photos:
+						
+							<span class="text-success">
+								Legacy Enabled
+							</span>
+						
+					</li>
+					<li>
+						Files:
+						
+							<span class="text-success">
+								Legacy Enabled
+							</span>
+						
+					</li>
+					<li>
+						Database:
+						
+							<span class="text-success">
+								Legacy Enabled
+							</span>
+						
+					</li>
+					<li>
+						Wiki:
+						
+							<span class="text-success">
+								Legacy Enabled
+							</span>
+						
+					</li>
+					<li>
+						Direct Add Members:
+						<span class="text-danger">
+							Not enabled
+						</span>
+					</li>
+					
+						<li>
+							Event RSVPs:
+							
+								<span class="text-danger">
+									Not enabled
+								</span>
+							
+						</li>
+					
+					<li>
+						Storage:
+						<span class="text-danger">
+							1GB
+						</span>
+					</li>
+					
+						<li>
+							Members:
+							<span class="text-success">
+								Unlimited
+							</span>
+						</li>
+					
+				</ul>
+				<p>
+					<span class="text-success">
+						Legacy Enabled
+					</span>
+					indicates a feature that is not available to new free groups, but is available to your group.
+				</p>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					Invoice History
+				</h3>
+			</div>
+			<div class="panel-body">
+				
+					There have been no payments for this group.
+				
+			</div>
+		</div>
+		<!-- Verify Cancel Downgrade Modal -->
+		<div class="modal fade" id="verifyModal" tabindex="-1" role="dialog" aria-labelledby="verifyModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">
+								&times;
+							</span>
+							<span class="sr-only">
+								Close
+							</span>
+						</button>
+						<h4 class="modal-title" id="verifyModalLabel">
+							Verify Cancel Downgrade
+						</h4>
+					</div>
+					<div class="modal-body">
+						Are you sure you want to cancel the downgrade?
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+							<i class="fa fa-times"></i>
+							Cancel
+						</button>
+						<a class="btn btn-primary btn-sm" href="https://groups.io/g/Emco-CNC-Users/billing?cancel=1&csrf=1770623081655710203">
+							<i class="fa fa-trash-alt"></i>
+							Yes
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Verify Switch To Yearly Modal -->
+		<div class="modal fade" id="verifyYearlyModal" tabindex="-1" role="dialog" aria-labelledby="verifyYearlyModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">
+								&times;
+							</span>
+							<span class="sr-only">
+								Close
+							</span>
+						</button>
+						<h4 class="modal-title" id="verifyYearlyModalLabel">
+							Verify Switch To Yearly
+						</h4>
+					</div>
+					<div class="modal-body">
+						Switch to yearly billing at
+						
+							
+								
+									$2200/year?
+								
+							
+						
+						You will be billed $0.00 immediately.
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+							<i class="fa fa-times"></i>
+							Cancel
+						</button>
+						<a class="btn btn-primary btn-sm" href="https://groups.io/g/Emco-CNC-Users/billing?yearly=1&csrf=1770623081655710203">
+							<i class="fa fa-cog"></i>
+							Yes
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Verify Switch To Monthly Modal -->
+		<div class="modal fade" id="verifyMonthlyModal" tabindex="-1" role="dialog" aria-labelledby="verifyMonthlyModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">
+								&times;
+							</span>
+							<span class="sr-only">
+								Close
+							</span>
+						</button>
+						<h4 class="modal-title" id="verifyMonthlyModalLabel">
+							Verify Switch To Monthly
+						</h4>
+					</div>
+					<div class="modal-body">
+						Switch to monthly billing at
+						
+							
+								
+									$200/month?
+								
+							
+						
+						
+						You will be billed on 01/01/0001.
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+							<i class="fa fa-times"></i>
+							Cancel
+						</button>
+						<a class="btn btn-primary btn-sm" href="https://groups.io/g/Emco-CNC-Users/billing?csrf=1770623081655710203">
+							<i class="fa fa-cog"></i>
+							Yes
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+<script>
+	var stripe = Stripe('pk_live_4YQRFYLeD1Z3OPr2f63M6eXP');
+
+	contentLoaded(  false  , function() {
+		// Create a Stripe client.
+
+		// Create an instance of Elements.
+		var elements = stripe.elements();
+		var card = elements.create('card', {
+			style: {
+				base: {
+					fontSize: '14px',
+					color: '#555',
+					'::placeholder': {
+						color: '#909090',
+					}
+				},
+				invalid: {
+					iconColor: 'rgb(132, 53, 52)',
+					color: '#555',
+				}
+			},
+		});
+		var container = document.querySelector('#card-element');
+
+		// Add an instance of the card Element into the `card-element` <div>.
+		if (container != null) {
+			card.mount('#card-element');
+		}
+
+		// Handle real-time validation errors from the card Element.
+		card.addEventListener('change', function(event) {
+			var displayError = document.getElementById('card-errors');
+			if (event.error) {
+				container.parentNode.classList.add('has-error');
+				displayError.classList.add('text-danger');
+				displayError.textContent = event.error.message;
+			} else {
+				displayError.textContent = '';
+				container.parentNode.classList.remove('has-error');
+				displayError.classList.remove('text-danger');
+			}
+		});
+
+		// Handle form submission.
+		var form = document.getElementById('payment-form');
+		if (form != null) {
+			form.addEventListener('submit', function(event) {
+				event.preventDefault();
+
+				stripe.createToken(card).then(function(result) {
+					if (result.error) {
+						// Inform the user if there was an error.
+						var errorElement = document.getElementById('card-errors');
+						errorElement.textContent = result.error.message;
+					} else {
+						// Send the token to your server.
+						stripeTokenHandler(result.token);
+					}
+				});
+			});
+		}
+		UpdateSidebar("billing");
+	});
+
+	// Submit the form with the token ID.
+	function stripeTokenHandler(token) {
+		// Insert the token ID into the form so it gets submitted to the server
+		var form = document.getElementById('payment-form');
+		var hiddenInput = document.createElement('input');
+		hiddenInput.setAttribute('type', 'hidden');
+		hiddenInput.setAttribute('name', 'stripeToken');
+		hiddenInput.setAttribute('value', token.id);
+		form.appendChild(hiddenInput);
+
+		// Submit the form
+		form.submit();
+	}
+</script>
+		
+	</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row hidden-print" id="mobileSidebar"  hx-boost="true" hx-target="#maincontent-refresh" hx-push-url="true" hx-on::after-request="document.getElementById('maincontent').scrollTo({top: 0, behavior: 'instant'})" >
+		<div id="mobileSidebarSub" class="col-xs-12 hidden-md hidden-lg">
+			<div class="navbar navbar-default navbar-fixed-bottom">
+				<div class="container" style="display: flex; justify-content: space-around;">
+					
+						
+	
+		
+	
+	<div id="mobilesidebar-archives" class="mobilesidebar-item" style="margin-top:10px; padding-bottom:20px; flex: 1; text-align: center;" hx-get="https://groups.io/g/Emco-CNC-Users/topics?sidebar=true"  hx-boost="true" hx-target="#maincontent-refresh" hx-push-url="true" hx-on::after-request="document.getElementById('maincontent').scrollTo({top: 0, behavior: 'instant'})" >
+		<div style="display: inline-block; position: relative;">
+			<div style="position: relative;display: inline-block;">
+			<i class="fa-fw fa-light fa-comments fa-2x"></i>
+			
+			</div><br>
+			<span style="font-size:12px;">Messages</span>
+		</div>
+	</div>
+
+	
+	
+		
+	
+	<div id="mobilesidebar-post" class="mobilesidebar-item" style="margin-top:10px; padding-bottom:20px; flex: 1; text-align: center;" hx-get="https://groups.io/g/Emco-CNC-Users/post"  hx-boost="true" hx-target="#maincontent-refresh" hx-push-url="true" hx-on::after-request="document.getElementById('maincontent').scrollTo({top: 0, behavior: 'instant'})" >
+		<div style="display: inline-block; position: relative;">
+			<div style="position: relative;display: inline-block;">
+			<i class="fa-fw fa-light fa-edit fa-2x"></i>
+			
+			</div><br>
+			<span style="font-size:12px;">New Topic</span>
+		</div>
+	</div>
+
+	
+
+						
+	
+		
+			
+				
+	
+	<div id="mobilesidebar-chats" class="mobilesidebar-item" style="margin-top:10px; padding-bottom:20px; flex: 1; text-align: center;" hx-get="https://groups.io/g/Emco-CNC-Users/chats"  hx-boost="true" hx-target="#maincontent-refresh" hx-push-url="true" hx-on::after-request="document.getElementById('maincontent').scrollTo({top: 0, behavior: 'instant'})" >
+		<div style="display: inline-block; position: relative;">
+			<div style="position: relative;display: inline-block;">
+			<i class="fa-fw fa-light fa-message-dots fa-2x"></i>
+			
+			</div><br>
+			<span style="font-size:12px;">Chat</span>
+		</div>
+	</div>
+
+			
+		
+	
+
+					
+					<div style="flex: 1; text-align: center;margin-top:10px" data-drawer-trigger aria-controls="drawer-name" aria-expanded="false">
+						<i class="fa-fw fa-light fa-bars fa-2x"></i><br>
+						<span style="font-size:12px;">More</span>
+					</div>
+				</div>
+			</div>
+			<section class="drawer drawer-left" id="drawer-name" data-drawer-target>
+				<div class="drawer-overlay" data-drawer-close tabindex="-1"></div>
+				<div class="drawer-wrapper">
+					<div class="drawer-header">
+						<div class="drawer-title">
+							<i class="fa-fw fa-regular fa-bars fa-3x"></i>
+							<span class="sr-only">
+								More Options
+							</span>
+							More
+						</div>
+						<button class="drawer-close" data-drawer-close aria-label="Close Drawer"></button>
+					</div>
+					<div class="drawer-content">
+						<div class="list-group noborderlist">
+							
+
+
+	<a id="sidebar-home" title="Group Home" href="https://groups.io/g/Emco-CNC-Users" class="list-group-item sidebar-item">
+		<i class="fa-fw fa fa-home fa-lg"></i>
+		Home
+		
+			
+				
+				
+					<span class="label label-info">Owner</span>
+				
+			
+		
+	</a>
+
+	
+		<a href="#submenu1" class="noborderitem list-group-item sidebar-section navbar-vertical dropdown-indicator" data-toggle="collapse" data-parent="#accordion" aria-expanded="false" aria-controls="submenu1">
+			<i class="fa-fw fa fa-pencil-alt fa-lg"></i>
+			Subscription
+		</a>
+		<div class="collapse" id="submenu1">
+			
+
+	<a title="Edit Subscription Settings" href="https://groups.io/g/Emco-CNC-Users/editsub" id="sidebar-editsub-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-editsub">
+		<span class="list-group-submenu">
+			<i class="fa-fw fa fa-pencil-alt fa-lg"></i>
+			Settings
+			<span id="sidebar-editsub-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+			
+
+	<a title="Group Profile" href="https://groups.io/g/Emco-CNC-Users//profile/@MichaelWood" id="sidebar-profileview-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-profileview">
+		<span class="list-group-submenu">
+			<i class="fa-fw fa fa-user fa-lg"></i>
+			Group Profile
+			<span id="sidebar-profileview-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+			
+
+	<a title="Delivery History" href="https://groups.io/g/Emco-CNC-Users/subdeliveries" id="sidebar-subdeliveries-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-subdeliveries">
+		<span class="list-group-submenu">
+			<i class="fa-fw fa fa-envelope fa-lg"></i>
+			Delivery History
+			<span id="sidebar-subdeliveries-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+			
+
+	<a title="Integrations" href="https://groups.io/g/Emco-CNC-Users/subintegrations" id="sidebar-subintegrations-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-subintegrations">
+		<span class="list-group-submenu">
+			<i class="fa-fw fa fa-exchange-alt fa-lg"></i>
+			Integrations
+			<span id="sidebar-subintegrations-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+		</div>
+	
+
+	
+		<a href="#adminmenu1" class="noborderitem list-group-item sidebar-item navbar-vertical dropdown-indicator" data-toggle="collapse" data-parent="#accordion" aria-expanded="true" aria-controls="adminmenu1">
+			<i class="fa-fw fa fa-cog fa-lg"></i>
+			Admin
+			<span id="sidebar-admin-mobile-badge" class="badge"></span>
+		</a>
+		<div class="collapse in" id="adminmenu1">
+			<div class="panel" style="border:0;margin-bottom:0px">
+
+			
+				
+
+	<a title="Pending Messages" href="https://groups.io/g/Emco-CNC-Users/pending" id="sidebar-pending-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-pending">
+		<span class="list-group-submenu">
+			<i class="fa-fw fa fa-comments fa-lg"></i>
+			Pending
+			<span id="sidebar-pending-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+			
+
+			
+
+
+				
+
+	<a title="Group Members" href="https://groups.io/g/Emco-CNC-Users/members" id="sidebar-members-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-members">
+		<span class="list-group-submenu">
+			<i class="fa-fw fa fa-users fa-lg"></i>
+			Members
+			<span id="sidebar-members-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+			
+
+			
+
+	<a title="Activity" href="https://groups.io/g/Emco-CNC-Users/activity" id="sidebar-activity-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-activity">
+		<span class="list-group-submenu">
+			<i class="fa-fw fa fa-tachometer-alt fa-lg"></i>
+			Activity
+			<span id="sidebar-activity-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+
+			
+				<a href="#membershipmenu1" class="noborderitem list-group-item sidebar-item navbar-vertical dropdown-indicator" data-toggle="collapse" data-parent-disabled="#adminmenu1" aria-expanded="false" aria-controls="membershipmenu1">
+					<span class="list-group-submenu">
+						<i class="fa fa-fw fa-user"></i>
+						Membership
+					</span>
+				</a>
+				<div class="collapse panel" id="membershipmenu1" style="border:0;margin-bottom:0px">
+
+					
+						
+
+	<a title="Invite" href="https://groups.io/g/Emco-CNC-Users/sendinvites" id="sidebar-sendinvites-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-sendinvites">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-envelope fa-lg"></i>
+			Invite
+			<span id="sidebar-sendinvites-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+						
+					
+
+					
+						
+
+	<a title="Default Sub Settings" href="https://groups.io/g/Emco-CNC-Users/defaultsubsettings" id="sidebar-defaultsubsettings-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-defaultsubsettings">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-pencil-alt fa-lg"></i>
+			Defaults
+			<span id="sidebar-defaultsubsettings-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+					
+
+					
+						
+							
+
+	<a title="Bulk Remove Members" href="https://groups.io/g/Emco-CNC-Users/bulkremove" id="sidebar-bulkremove-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-bulkremove">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-trash-alt fa-lg"></i>
+			Bulk Remove
+			<span id="sidebar-bulkremove-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+						
+					
+
+					
+						
+						
+							
+
+	<a title="Service Sync" href="https://groups.io/g/Emco-CNC-Users/syncconfig" id="sidebar-syncconfig-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-syncconfig">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-exchange-alt fa-lg"></i>
+			Service Sync
+			<span id="sidebar-syncconfig-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+						
+					
+
+				</div>
+			
+
+
+			
+				<a href="#settingsmenu1" class="noborderitem list-group-item sidebar-item navbar-vertical dropdown-indicator" data-toggle="collapse" data-parent-disabled="#adminmenu1" aria-expanded="true" aria-controls="settingsmenu1">
+					<span class="list-group-submenu">
+						<i class="fa fa-fw fa-cog"></i>
+						Preferences
+					</span>
+				</a>
+				<div class="collapse in panel" id="settingsmenu1" style="border:0;margin-bottom:0px">
+					
+						
+
+	<a title="Group Settings" href="https://groups.io/g/Emco-CNC-Users/settings" id="sidebar-settings-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-settings">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-cog fa-lg"></i>
+			Settings
+			<span id="sidebar-settings-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+						
+
+	<a title="Member Notices" href="https://groups.io/g/Emco-CNC-Users/membernotices" id="sidebar-membernotices-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-membernotices">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-envelope fa-lg"></i>
+			Notices
+			<span id="sidebar-membernotices-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+						
+
+	<a title="Cover Photo" href="https://groups.io/g/Emco-CNC-Users/editcoverphoto" id="sidebar-coverphoto-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-coverphoto">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-file-image fa-lg"></i>
+			Cover Photo
+			<span id="sidebar-coverphoto-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+					
+
+					
+						
+							
+								
+
+	<a title="Upgrade" href="https://groups.io/g/Emco-CNC-Users/billing" id="sidebar-billing-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-billing active" hx-boost="false" hx-disinherit="*">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-plus fa-lg"></i>
+			Upgrade
+			<span id="sidebar-billing-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+							
+						
+						
+					
+
+					
+						
+
+	<a title="Export Group Data" href="https://groups.io/g/Emco-CNC-Users/exportgroup" id="sidebar-exportgroup-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-exportgroup">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-arrow-down-to-line fa-lg"></i>
+			Export Group
+			<span id="sidebar-exportgroup-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+					
+
+					
+						
+
+	<a title="Integrations" href="https://groups.io/g/Emco-CNC-Users/integrations" id="sidebar-integrations-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-integrations">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-exchange-alt fa-lg"></i>
+			Integrations
+			<span id="sidebar-integrations-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+					
+
+					
+
+					
+
+					
+						
+
+	<a title="Promote" href="https://groups.io/g/Emco-CNC-Users/promote" id="sidebar-promote-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-promote">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-bullhorn fa-lg"></i>
+			Promote
+			<span id="sidebar-promote-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+					
+
+					
+				</div>
+			
+
+			
+				<a href="#subgroupmenu1" class="noborderitem list-group-item sidebar-item navbar-vertical dropdown-indicator" data-toggle="collapse" data-parent-disabled="#adminmenu1" aria-expanded="false" aria-controls="subgroupmenu1">
+					<span class="list-group-submenu">
+						<i class="fa-light fa-fw fa-diagram-venn"></i>
+						Subgroups
+					</span>
+				</a>
+				<div class="collapse panel" id="subgroupmenu1" style="border:0;margin-bottom:0px">
+					
+
+	<a title="Create Subgroups" href="https://groups.io/g/Emco-CNC-Users/createsubgroup" id="sidebar-createsubgroup-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-createsubgroup">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-plus fa-lg"></i>
+			New Subgroup
+			<span id="sidebar-createsubgroup-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+					
+
+	<a title="Subgroup Members" href="https://groups.io/g/Emco-CNC-Users/subgroupmembers" id="sidebar-subgroupmembers-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-subgroupmembers">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-users fa-lg"></i>
+			Members
+			<span id="sidebar-subgroupmembers-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+					
+
+	<a title="Subgroup Categories" href="https://groups.io/g/Emco-CNC-Users/subgroupcategories" id="sidebar-subgroupcategories-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-subgroupcategories">
+		<span class="list-group-subsubmenu">
+			<i class="fa-fw fa fa-book fa-lg"></i>
+			Categories
+			<span id="sidebar-subgroupcategories-mobile-badge" class="badge"></span>
+		</span>
+	</a>
+
+				</div>
+			
+
+		</div>
+		</div>
+
+	
+
+	
+		
+	
+		
+
+	<a title="Messages" href="https://groups.io/g/Emco-CNC-Users/topics?sidebar=true" id="sidebar-archives-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-archives"> 
+		<i class="fa-fw fa fa-comments fa-lg"></i>
+		Messages
+		<span id="sidebar-archives-mobile-badge" class="badge"></span>
+	</a>
+
+	
+	
+		
+
+	<a title="New Topic" href="https://groups.io/g/Emco-CNC-Users/post" id="sidebar-post-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-post"> 
+		<i class="fa-fw fa fa-edit fa-lg"></i>
+		New Topic
+		<span id="sidebar-post-mobile-badge" class="badge"></span>
+	</a>
+
+	
+	
+		
+
+	<a title="Drafts" href="https://groups.io/g/Emco-CNC-Users/drafts" id="sidebar-drafts-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-drafts"> 
+		<i class="fa-fw fa fa-inbox fa-lg"></i>
+		Drafts
+		<span id="sidebar-drafts-mobile-badge" class="badge"></span>
+	</a>
+
+	
+	
+		
+
+	<a title="New Poll" href="https://groups.io/g/Emco-CNC-Users/addpoll" id="sidebar-addpoll-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-addpoll"> 
+		<i class="fa-fw fa fa-chart-bar fa-lg"></i>
+		New Poll
+		<span id="sidebar-addpoll-mobile-badge" class="badge"></span>
+	</a>
+
+	
+	
+		
+
+	<a title="Hashtags" href="https://groups.io/g/Emco-CNC-Users/hashtags" id="sidebar-hashtags-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-hashtags"> 
+		<i class="fa-fw fa fa-hashtag fa-lg"></i>
+		Hashtags
+		<span id="sidebar-hashtags-mobile-badge" class="badge"></span>
+	</a>
+
+	
+
+		
+	
+		
+			
+
+	<a title="Chats" href="https://groups.io/g/Emco-CNC-Users/chats" id="sidebar-chats-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-chats"> 
+		<i class="fa-fw fa fa-message-dots fa-lg"></i>
+		Chats
+		<span id="sidebar-chats-mobile-badge" class="badge chatbadge"></span>
+	</a>
+
+		
+	
+
+	
+
+	
+
+	
+
+	
+		
+	
+
+	
+		
+
+	<a title="Member Directory" href="https://groups.io/g/Emco-CNC-Users/directory" id="sidebar-directory-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-directory"> 
+		<i class="fa-fw fa fa-users fa-lg"></i>
+		Directory
+		<span id="sidebar-directory-mobile-badge" class="badge"></span>
+	</a>
+
+	
+
+	
+		
+
+	<a title="Calendar" href="https://groups.io/g/Emco-CNC-Users/calendar" id="sidebar-calendar-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-calendar"> 
+		<i class="fa-fw fa fa-calendar-alt fa-lg"></i>
+		Calendar
+		<span id="sidebar-calendar-mobile-badge" class="badge"></span>
+	</a>
+
+	
+
+	
+		
+			
+
+	<a title="Photos" href="https://groups.io/g/Emco-CNC-Users/photos" id="sidebar-photos-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-photos"> 
+		<i class="fa-fw fa fa-file-image fa-lg"></i>
+		Photos
+		<span id="sidebar-photos-mobile-badge" class="badge"></span>
+	</a>
+
+		
+		
+			
+
+	<a title="Files" href="https://groups.io/g/Emco-CNC-Users/files" id="sidebar-files-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-files"> 
+		<i class="fa-fw fa fa-copy fa-lg"></i>
+		Files
+		<span id="sidebar-files-mobile-badge" class="badge"></span>
+	</a>
+
+		
+
+		
+			
+
+	<a title="Databases" href="https://groups.io/g/Emco-CNC-Users/database" id="sidebar-database-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-database"> 
+		<i class="fa-fw fa fa-database fa-lg"></i>
+		Databases
+		<span id="sidebar-database-mobile-badge" class="badge"></span>
+	</a>
+
+		
+		
+	
+
+	
+		
+
+	<a title="Wiki" href="https://groups.io/g/Emco-CNC-Users/wiki" id="sidebar-wiki-mobile" class="noborderitem list-group-item sidebar-item sidebar-item-wiki"> 
+		<i class="fa-fw fa fa-book fa-lg"></i>
+		Wiki
+		<span id="sidebar-wiki-mobile-badge" class="badge"></span>
+	</a>
+
+	
+
+	
+		
+
+			
+
+		
+
+	
+
+							
+								<a class="noborderitem list-group-item sidebar-item" href="https://groups.io/static/about" style="border-top:5px solid #ddd;">
+									<i class="fa-fw fal fa-envelope fa-lg"></i>
+									About
+								</a>
+								<a class="noborderitem list-group-item sidebar-item" href="https://groups.io/static/features">
+									<i class="fa-fw far fa-tasks fa-lg"></i>
+									Features
+								</a>
+								<a class="noborderitem list-group-item sidebar-item" href="https://groups.io/static/pricing">
+									<i class="fa-fw fa fa-dollar-sign fa-lg"></i>
+									Pricing
+								</a>
+								<a class="noborderitem list-group-item sidebar-item" href="https://groups.io/g/updates/messages?expanded=1">
+									<i class="fa-fw far fa-thermometer-three-quarters fa-lg"></i>
+									# Changelog
+								</a>
+								<a class="noborderitem list-group-item sidebar-item" href="https://groups.io/static/tos">
+									<i class="fa-fw fal fa-newspaper fa-lg"></i>
+									Terms
+								</a>
+								<a class="noborderitem list-group-item sidebar-item" href="https://groups.io/helpcenter">
+									<i class="fa-fw fa fa-info-circle fa-lg"></i>
+									Help
+								</a>
+								<a class="noborderitem list-group-item sidebar-item" href="http://twitter.com/groupsio" target="_blank">
+									<i class="fab fa-twitter fa-lg"></i>
+									Twitter
+								</a>
+							
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+
+<!-- Modal Dialog for Autocomplete -->
+<div class="modal fade" id="quickActionsModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <input type="text" class="form-control" id="quickActionsInput" placeholder="Go to page..." style="margin-bottom:10px">
+        <div id="quickActionsContainer" class="autocompleteResults" style="max-height:250px; overflow-y: auto;"></div>
+		<div class="text-center" style="margin-top:10px; font-size:12px;"><i class="fa-sharp fa-arrow-up-arrow-down"></i> to navigate&nbsp;&nbsp;&nbsp;<i class="fa-sharp fa-arrow-turn-down-left"></i> to use&nbsp;&nbsp;&nbsp;<strong>esc</strong> to dismiss</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script>
+	var quickActionsData = [
+		
+			
+				{name: "Pending Messages", url: "https://groups.io/g/Emco-CNC-Users/pending"},
+			
+			
+				{name: "Members", url: "https://groups.io/g/Emco-CNC-Users/members"},
+			
+			{name: "Activity", "url": "https://groups.io/g/Emco-CNC-Users/activity"},
+			
+				{name: "Invite", url: "https://groups.io/g/Emco-CNC-Users/sendinvites"},
+				
+			
+			
+				{name: "Settings", url: "https://groups.io/g/Emco-CNC-Users/settings"},
+				{name: "Member Notices", url: "https://groups.io/g/Emco-CNC-Users/membernotices"},
+				{name: "Subscription Defaults", url: "https://groups.io/g/Emco-CNC-Users/defaultsubsettings"},
+				{name: "Cover Photo", url: "https://groups.io/g/Emco-CNC-Users/editcoverphoto"},
+			
+			
+				
+					
+						{name: "Upgrade", url: "https://groups.io/g/Emco-CNC-Users/billing"},
+					
+				
+				
+			
+			
+			
+				{name: "Bulk Remove", url: "https://groups.io/g/Emco-CNC-Users/bulkremove"},
+			
+			
+				{name: "Download Members", url: "https://groups.io/g/Emco-CNC-Users/memberlist.csv"},
+			
+			
+				
+				
+					{name: "Service Sync", url: "https://groups.io/g/Emco-CNC-Users/syncconfig"},
+				
+			
+			
+				{name: "Export Group", url: "https://groups.io/g/Emco-CNC-Users/exportgroup"},
+			
+			
+				{name: "Group Integrations", url: "https://groups.io/g/Emco-CNC-Users/integrations"},
+			
+			
+				{name: "Promote", url: "https://groups.io/g/Emco-CNC-Users/promote"},
+			
+			
+			
+			
+			
+				{name: "Subgroup Members", url: "https://groups.io/g/Emco-CNC-Users/subgroupmembers"},
+				{name: "Create Subgroup", url: "https://groups.io/g/Emco-CNC-Users/createsubgroup"},
+				{name: "Subgroup Categories", url: "https://groups.io/g/Emco-CNC-Users/subgroupcategories"},
+			
+		
+		
+			{name: "Subscription Settings", url: "https://groups.io/g/Emco-CNC-Users/editsub"},
+			{name: "Group Profile", url: "https://groups.io/g/Emco-CNC-Users/profile/@MichaelWood"},
+			{name: "Delivery History", url: "https://groups.io/g/Emco-CNC-Users/subdeliveries"},
+			{name: "Member Integrations", url: "https://groups.io/g/Emco-CNC-Users/subintegrations"},
+		
+			{name: "Group Home", url: "https://groups.io/g/Emco-CNC-Users"},
+		
+
+		
+			{name: "Topics", url: "https://groups.io/g/Emco-CNC-Users/topics"},
+			{name: "Messages", url: "https://groups.io/g/Emco-CNC-Users/messages"},
+			{name: "Expanded Messages", url: "https://groups.io/g/Emco-CNC-Users/messages?expanded=1"},
+		
+		
+			{name: "Polls", url: "https://groups.io/g/Emco-CNC-Users/polls"},
+		
+		
+			{name: "Hashtags", url: "https://groups.io/g/Emco-CNC-Users/hashtags"},
+		
+		
+			{name: "New Topic", url: "https://groups.io/g/Emco-CNC-Users/post"},
+		
+		
+			{name: "New Poll", url: "https://groups.io/g/Emco-CNC-Users/addpoll"},
+		
+		
+			{name: "Drafts", url: "https://groups.io/g/Emco-CNC-Users/drafts"},
+		
+
+		
+			
+				{name: "Chats", url: "https://groups.io/g/Emco-CNC-Users/chats"},
+			
+		
+
+		
+		
+		
+			{name: "Member Directory", url: "https://groups.io/g/Emco-CNC-Users/directory"},
+		
+
+		
+			{name: "Calendar", url: "https://groups.io/g/Emco-CNC-Users/calendar"},
+		
+
+		
+			
+				{name: "Photos", url: "https://groups.io/g/Emco-CNC-Users/photos"},
+			
+			
+				{name: "Files", url: "https://groups.io/g/Emco-CNC-Users/files"},
+			
+
+			
+				{name: "Databases", url: "https://groups.io/g/Emco-CNC-Users/database"},
+			
+			
+		
+		
+			{name: "Wiki", url: "https://groups.io/g/Emco-CNC-Users/wiki"},
+		
+		
+		/* other pages */
+		{name: "Help", url: "/helpcenter"},
+		{name: "Feed", url: "/feed"},
+		{name: "Your Groups", url: "/groups"},
+		{name: "Your Calendar", url: "/calendar"},
+		{name: "Your Activity", url: "/activity"},
+		{name: "Your Pending Messages", url: "/pendingmsgs"},
+		{name: "Account Login", url: "/account"},
+		{name: "Account Preferences", url: "/account?page=prefs"},
+		{name: "Account Security", url: "/account?page=security"},
+		{name: "Account Identity", url: "/account?page=profile&member_info_id=0"},
+		{name: "Account Notifications", url: "/account?page=notifications"},
+		{name: "Account Other Services", url: "/account?page=oauth"},
+		{name: "Account Bounces", url: "/account?page=bounces"},
+		{name: "Account Billing", url: "/account?page=billing"},
+		{name: "Find a Group", url: "/search?p=SubsCount,,,20,2,0,0"},
+	];
+
+
+	InitAutocomplete("quickActions", quickActionsData);
+
+	document.addEventListener('keydown', function(event) {
+		var tagName = event.target.tagName.toLowerCase();
+		if (tagName === 'input' || tagName === 'textarea' || event.target.isContentEditable) {
+			return;
+		}
+		// check if the viewimages viewer is up
+		let element = document.getElementById('overlay');
+		if (element && element.classList.contains('visible')) {
+			return;
+		}
+		if (event.key.toLowerCase() === '/') {
+			if (navigator.platform.toUpperCase().indexOf('MAC') >= 0) {
+				// For Mac
+				// Check if Command (event.metaKey) is pressed, and either Option (event.altKey) is pressed or not
+				if (event.metaKey) {
+					event.preventDefault();
+					showAutocompleteModal("quickActions");
+					return;
+				}
+			} else {
+				// For Windows and Linux
+				if (event.ctrlKey) {
+					event.preventDefault();
+					showAutocompleteModal("quickActions");
+					return;
+				}
+			}
+		}
+	});
+	function UpdateSidebar(id) {
+		console.log(id + " was clicked");
+		var sidebarItems = document.querySelectorAll('.mobilesidebar-item');
+		sidebarItems.forEach(function(item) {
+			var iElement = item.getElementsByTagName('div')[0].getElementsByTagName('i')[0];
+			if (item.id == "mobilesidebar-" + id) {
+				console.log("making solid " + id)
+				iElement.classList.add('fa-solid');
+				iElement.classList.remove('fa-light');
+			} else {
+				iElement.classList.remove('fa-solid');
+				iElement.classList.add('fa-light');
+			}
+		});
+		var sidebarItems = document.querySelectorAll('.sidebar-item');
+		// remove 'active' class from all 'sidebar-item' elements
+		sidebarItems.forEach(function(item) {
+			if (item.id == "sidebar-" + id) {
+				console.log("making active " + id)
+				item.classList.add('active');
+			} else {
+				item.classList.remove('active');
+			}
+		});
+	}
+</script>
+
+
+			</div>
+			
+				<div id="scroll-top-outer">
+					<div id="scroll-top" class="scroll-top-wrapper hidden-xs">
+						<span class="scroll-top-inner">
+							<i class="fa fa-arrow-circle-up fa-fw fa-2x"></i>
+						</span>
+					</div>
+				</div>
+<script>
+	$(function() {
+		$(document).on('scroll', function() {
+			if ($(window).scrollTop() > 100) {
+				$('.scroll-top-wrapper').addClass('show');
+			} else {
+				$('.scroll-top-wrapper').removeClass('show');
+			}
+		});
+		$('.scroll-top-wrapper').on('click', scrollToTop);
+	});
+
+	function scrollToTop() {
+		verticalOffset = typeof(verticalOffset) != 'undefined' ? verticalOffset : 0;
+		element = $('body');
+		offset = element.offset();
+		offsetTop = offset.top;
+		$('html, body').animate({
+			scrollTop: offsetTop
+		}, 100, 'linear');
+	}
+
+	if (navigator.platform.toUpperCase().indexOf('MAC') >= 0) {
+		let elements = document.querySelectorAll('strong.ctrlmeta');
+		elements.forEach((element) => {
+			// Check if the innerText is "ctrl"
+			if (element.innerText === 'ctrl') {
+				// Create a new "i" element
+				let newElement = document.createElement('i');
+				newElement.classList.add('fa-solid', 'fa-command');
+				
+				// Replace the old "strong" element with the new "i" element
+				element.parentNode.replaceChild(newElement, element);
+			}
+		});
+	}
+</script>
+			
+			
+
+
+		</body>
+	</html>
+

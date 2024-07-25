@@ -1,0 +1,1 @@
+There is a Logitech mouse driver that works with the Emco lathe software when running under win98SE DOS. Please read the Installation file in the Compact 5PC folder for more information on using it.

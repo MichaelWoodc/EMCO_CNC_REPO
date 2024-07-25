@@ -1,0 +1,4 @@
+[Autorun]
+label=WELturn
+icon=setup.exe
+open=setup.exe
